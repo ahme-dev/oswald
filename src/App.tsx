@@ -12,7 +12,9 @@ const rtlCache = createEmotionCache({
 
 // app context to provide rtl and darkmode state
 export const AppContext = createContext({
+	rtl: false,
 	toggleRtl: () => {},
+	darkMode: true,
 	toggleDarkMode: () => {},
 });
 
@@ -27,6 +29,14 @@ function App() {
 		defaultValue: true,
 	});
 
+	// set values to pass to the context
+	const contextValue = {
+		rtl: rtl,
+		toggleRtl: () => setRtl((old) => !old),
+		darkMode: darkMode,
+		toggleDarkMode: () => setDarkMode((old) => !old),
+	};
+
 	return (
 		<MantineProvider
 			withGlobalStyles
@@ -37,12 +47,7 @@ function App() {
 			}}
 			emotionCache={rtl ? rtlCache : undefined}
 		>
-			<AppContext.Provider
-				value={{
-					toggleRtl: () => setRtl((old) => !old),
-					toggleDarkMode: () => setDarkMode((old) => !old),
-				}}
-			>
+			<AppContext.Provider value={contextValue}>
 				<div dir={rtl ? "rtl" : "ltr"}>
 					<Hello></Hello>
 				</div>
