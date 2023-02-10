@@ -6,12 +6,12 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 		<div dir={props.rtl ? "rtl" : "ltr"}>
 			<AppShell
 				header={
-					<Header height={60} p="xs">
+					<Header height={60} p="sm">
 						Header
 					</Header>
 				}
 				navbar={
-					<Navbar width={{ base: 300 }} p="sm">
+					<Navbar width={{ base: 100, md: 300 }} p="sm">
 						Navbar
 					</Navbar>
 				}
