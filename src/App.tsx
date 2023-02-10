@@ -1,10 +1,12 @@
 import { createEmotionCache, MantineProvider } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
-import { createContext, ReactNode, useContext } from "react";
+
 import rtlPlugin from "stylis-plugin-rtl";
+import { createContext, useContext } from "react";
 import { Route } from "wouter";
-import { Hello } from "./components/Hello";
+
 import { Layout } from "./Layout";
+import { AuthPage } from "./pages/AuthPage";
 import { HomePage } from "./pages/MainPage";
 
 // right to left caching for emotion
@@ -53,7 +55,7 @@ function App() {
 			<AppContext.Provider value={contextValue}>
 				<Layout rtl={rtl}>
 					<Route path="/" component={HomePage} />
-					<Route path="*">Not Found</Route>
+					<Route path="/auth" component={AuthPage} />
 				</Layout>
 			</AppContext.Provider>
 		</MantineProvider>
