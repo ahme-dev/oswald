@@ -34,14 +34,6 @@ function App() {
 		defaultValue: true,
 	});
 
-	// set values to pass to the context
-	const contextValue = {
-		rtl: rtl,
-		toggleRtl: () => setRtl((old) => !old),
-		darkMode: darkMode,
-		toggleDarkMode: () => setDarkMode((old) => !old),
-	};
-
 	return (
 		<MantineProvider
 			withGlobalStyles
@@ -52,10 +44,19 @@ function App() {
 			}}
 			emotionCache={rtl ? rtlCache : undefined}
 		>
-			<AppContext.Provider value={contextValue}>
+			<AppContext.Provider
+				value={{
+					rtl: rtl,
+					toggleRtl: () => setRtl((old) => !old),
+					darkMode: darkMode,
+					toggleDarkMode: () => setDarkMode((old) => !old),
+				}}
+			>
 				<Layout rtl={rtl}>
+					{/* Routes */}
 					<Route path="/" component={HomePage} />
 					<Route path="/auth" component={AuthPage} />
+					{/* Routes end */}
 				</Layout>
 			</AppContext.Provider>
 		</MantineProvider>
