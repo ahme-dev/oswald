@@ -2,13 +2,13 @@ import { ReactNode } from "react";
 import {
 	ActionIcon,
 	AppShell,
-	Center,
-	Flex,
+	Avatar,
 	Header,
 	Navbar,
 	Stack,
 } from "@mantine/core";
 import { BookOpenIcon, HomeIcon } from "@heroicons/react/24/solid";
+import { Link } from "wouter";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
@@ -31,23 +31,35 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 						>
 							{/* Upper */}
 							<Stack align={"center"} spacing={16}>
-								<ActionIcon p={2} size={"lg"} mb={"lg"}>
-									<BookOpenIcon></BookOpenIcon>
-								</ActionIcon>
+								<Link to={"/"}>
+									<ActionIcon
+										variant="gradient"
+										radius={"xl"}
+										p={8}
+										size={"xl"}
+										mb={"md"}
+									>
+										<BookOpenIcon></BookOpenIcon>
+									</ActionIcon>
+								</Link>
 								{/* Navigation Items */}
-								<ActionIcon p={2} size={"lg"}>
+								<ActionIcon size={"lg"}>
 									<HomeIcon></HomeIcon>
 								</ActionIcon>
-								<ActionIcon p={2} size={"lg"}>
+								<ActionIcon size={"lg"}>
 									<HomeIcon></HomeIcon>
 								</ActionIcon>
 								{/* Navigation Items End */}
 							</Stack>
 							{/* Upper End */}
 							{/* Lower */}
-							<ActionIcon size={"lg"}>
-								<BookOpenIcon></BookOpenIcon>
-							</ActionIcon>
+							<Link to={"/auth"}>
+								<Avatar
+									style={{ cursor: "pointer" }}
+									radius="xl"
+									variant="gradient"
+								/>
+							</Link>
 							{/* Lower End */}
 						</Stack>
 					</Navbar>
