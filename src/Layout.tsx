@@ -1,26 +1,35 @@
 import { ReactNode } from "react";
 import {
 	ActionIcon,
+	Anchor,
 	AppShell,
 	Avatar,
+	Breadcrumbs,
+	Flex,
 	Header,
 	Navbar,
 	Stack,
+	Title,
 } from "@mantine/core";
 import { BookOpenIcon, HomeIcon } from "@heroicons/react/24/solid";
 import { Link } from "wouter";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
+	const items = [
+		{ title: "Mantine", href: "#" },
+		{ title: "Mantine hooks", href: "#" },
+		{ title: "use-id", href: "#" },
+	].map((item, index) => (
+		<Anchor href={item.href} key={index}>
+			{item.title}
+		</Anchor>
+	));
+
 	return (
 		<div dir={props.rtl ? "rtl" : "ltr"}>
 			<AppShell
 				layout="alt"
-				header={
-					<Header height={60} p="sm">
-						Header
-					</Header>
-				}
 				navbar={
 					<Navbar width={{ base: 50, sm: 75 }} p="md">
 						<Stack
