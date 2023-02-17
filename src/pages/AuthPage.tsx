@@ -5,8 +5,10 @@ import { useForm } from "@mantine/form";
 import { pb } from "../utils/db";
 
 export function AuthPage() {
+	// store user auth state
 	let [user, setUser] = useState<Record | Admin | null>();
 
+	// create form and validation
 	let form = useForm({
 		initialValues: {
 			username: "",
@@ -20,18 +22,24 @@ export function AuthPage() {
 	});
 
 	useEffect(() => {
+		// run something on user auth change
 		pb.authStore.onChange(() => "user changed");
 
+		// get user auth state and assign to user
 		const userAuth = pb.authStore.model;
 		setUser(userAuth);
 	}, []);
 
+	// try to login with form values
 	const doLogin = async () => {
 		await pb
 			.collection("users")
 			.authWithPassword(form.values.username, form.values.password);
 	};
 
+	// render
+
+	// return early if user is logged in
 	if (user instanceof Record) {
 		return (
 			<div>

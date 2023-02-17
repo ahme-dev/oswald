@@ -35,6 +35,7 @@ function App() {
 	});
 
 	return (
+		// provide mantine
 		<MantineProvider
 			withGlobalStyles
 			withNormalizeCSS
@@ -44,6 +45,7 @@ function App() {
 			}}
 			emotionCache={rtl ? rtlCache : undefined}
 		>
+			{/* provide context */}
 			<AppContext.Provider
 				value={{
 					rtl: rtl,
@@ -52,6 +54,7 @@ function App() {
 					toggleDarkMode: () => setDarkMode((old) => !old),
 				}}
 			>
+				{/* provide layout */}
 				<Layout rtl={rtl}>
 					{/* Routes */}
 					<Route path="/" component={HomePage} />
