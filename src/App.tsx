@@ -7,7 +7,7 @@ import { Route } from "wouter";
 
 import { Layout } from "./Layout";
 import { AuthPage } from "./pages/AuthPage";
-import { HomePage } from "./pages/MainPage";
+import { HomePage } from "./pages/HomePage";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
