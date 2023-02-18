@@ -1,4 +1,4 @@
-import { Button, TextInput } from "@mantine/core";
+import { Button, Center, Stack, TextInput } from "@mantine/core";
 import { Admin, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
@@ -32,9 +32,23 @@ export function AuthPage() {
 
 	// try to login with form values
 	const doLogin = async () => {
-		await pb
-			.collection("users")
-			.authWithPassword(form.values.username, form.values.password);
+		let feedback = form.validate();
+
+		if (feedback.hasErrors) return;
+
+		try {
+			// try to login
+			await pb
+				.collection("users")
+				.authWithPassword(form.values.username, form.values.password);
+
+			// set new login data
+			const userAuth = pb.authStore.model;
+			setUser(userAuth);
+		} catch {
+			// if errors on login with pb, set error on form
+			form.setFieldError("username", "Cannot login");
+		}
 	};
 
 	// render
@@ -49,17 +63,19 @@ export function AuthPage() {
 	}
 
 	return (
-		<form onSubmit={form.onSubmit((values) => console.log(values))}>
-			<TextInput
-				placeholder="username"
-				{...form.getInputProps("username")}
-			></TextInput>
-			<TextInput
-				type={"password"}
-				placeholder="password"
-				{...form.getInputProps("password")}
-			></TextInput>
-			<Button onClick={doLogin}>Login</Button>
-		</form>
+		<Center h={"100%"}>
+			<Stack spacing={8}>
+				<TextInput
+					placeholder="username"
+					{...form.getInputProps("username")}
+				></TextInput>
+				<TextInput
+					type={"password"}
+					placeholder="password"
+					{...form.getInputProps("password")}
+				></TextInput>
+				<Button onClick={doLogin}>Login</Button>
+			</Stack>
+		</Center>
 	);
 }
