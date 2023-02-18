@@ -1,10 +1,10 @@
 import { Text } from "@mantine/core";
 
-export function HomePage() {
+export function TransactionsPage() {
 	return (
 		<div>
 			<Text fz={"xl"} weight={"bold"}>
-				Hello
+				transactions
 			</Text>
 		</div>
 	);

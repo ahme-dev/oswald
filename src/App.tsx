@@ -7,7 +7,10 @@ import { Route } from "wouter";
 
 import { Layout } from "./Layout";
 import { AuthPage } from "./pages/AuthPage";
-import { HomePage } from "./pages/HomePage";
+import { MainPage } from "./pages/MainPage";
+import { ProductsPage } from "./pages/ProductsPage";
+import { TransactionsPage } from "./pages/TransactionsPage";
+import { OverviewPage } from "./pages/OverviewPage";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -57,7 +60,10 @@ function App() {
 				{/* provide layout */}
 				<Layout rtl={rtl}>
 					{/* Routes */}
-					<Route path="/" component={HomePage} />
+					<Route path="/" component={MainPage} />
+					<Route path="/products" component={ProductsPage} />
+					<Route path="/transactions" component={TransactionsPage} />
+					<Route path="/overview" component={OverviewPage} />
 					<Route path="/auth" component={AuthPage} />
 					{/* Routes end */}
 				</Layout>
