@@ -46,6 +46,7 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 		<div dir={props.rtl ? "rtl" : "ltr"}>
 			<AppShell
 				layout="alt"
+				padding={"xl"}
 				navbar={
 					<Navbar width={{ base: 50, sm: 75 }} p="md">
 						<Stack
