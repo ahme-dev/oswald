@@ -1,12 +1,5 @@
 import { ReactNode } from "react";
-import {
-	ActionIcon,
-	Anchor,
-	AppShell,
-	Avatar,
-	Navbar,
-	Stack,
-} from "@mantine/core";
+import { ActionIcon, AppShell, Avatar, Navbar, Stack } from "@mantine/core";
 import {
 	BookOpenIcon,
 	ChartPieIcon,
