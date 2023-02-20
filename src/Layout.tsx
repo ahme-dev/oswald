@@ -4,44 +4,21 @@ import {
 	Anchor,
 	AppShell,
 	Avatar,
-	Breadcrumbs,
-	Flex,
-	Header,
 	Navbar,
 	Stack,
-	Title,
 } from "@mantine/core";
 import {
-	AdjustmentsHorizontalIcon,
 	BookOpenIcon,
 	ChartPieIcon,
 	CogIcon,
-	CubeIcon,
 	CurrencyDollarIcon,
-	EyeIcon,
-	GifIcon,
-	HomeIcon,
-	ServerStackIcon,
 	ShoppingCartIcon,
-	SignalIcon,
 	TagIcon,
-	UsersIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "wouter";
-import { MainPage } from "./pages/MainPage";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
-	const items = [
-		{ title: "Mantine", href: "#" },
-		{ title: "Mantine hooks", href: "#" },
-		{ title: "use-id", href: "#" },
-	].map((item, index) => (
-		<Anchor href={item.href} key={index}>
-			{item.title}
-		</Anchor>
-	));
-
 	return (
 		<div dir={props.rtl ? "rtl" : "ltr"}>
 			<AppShell
