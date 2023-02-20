@@ -1,10 +1,11 @@
+import { PlusIcon } from "@heroicons/react/24/solid";
 import {
-	Box,
-	Button,
+	ActionIcon,
+	Affix,
 	Card,
 	Center,
 	Flex,
-	Grid,
+	Input,
 	Loader,
 	SimpleGrid,
 	Stack,
@@ -17,22 +18,21 @@ import { pb } from "../utils/db";
 
 export function ProductsPage() {
 	let [result, setResult] = useState<ListResult<Record>>();
+	let [search, setSearch] = useState("");
 
 	useEffect(() => {
 		(async () => {
-			await fetchProducts();
+			try {
+				const resultList = await pb
+					.collection("products")
+					.getList(1, 50, { filter: `name ~ "%${search}%"` });
+				console.log(resultList);
+				setResult(resultList);
+			} catch {
+				console.log("Error fetching products");
+			}
 		})();
-	}, []);
-
-	const fetchProducts = async () => {
-		try {
-			const resultList = await pb.collection("products").getList(1, 50);
-			console.log(resultList);
-			setResult(resultList);
-		} catch {
-			console.log("Error fetching products");
-		}
-	};
+	}, [search]);
 
 	if (!result)
 		return (
@@ -43,9 +43,15 @@ export function ProductsPage() {
 
 	return (
 		<Stack>
-			<Flex justify={"space-between"}>
-				<Title>Products</Title>
-				<Button>Search</Button>
+			<Flex justify={"space-between"} align="center" gap={"lg"}>
+				<Title size={"h2"} weight="bold">
+					Products
+				</Title>
+				<Input
+					placeholder="search for a product"
+					value={search}
+					onInput={(e: any) => setSearch(e.target.value)}
+				></Input>
 			</Flex>
 			<SimpleGrid
 				cols={4}
@@ -60,11 +66,16 @@ export function ProductsPage() {
 					return (
 						<Card key={item.id}>
 							<Text weight={"bold"}>{item.name}</Text>
-							<Text>{item.price_current}</Text>
+							<Text italic>{item.price_current}</Text>
 						</Card>
 					);
 				})}
 			</SimpleGrid>
+			<Affix position={{ bottom: 20, right: 20 }}>
+				<ActionIcon size={"xl"} variant="gradient" radius={"xl"} p={8}>
+					<PlusIcon></PlusIcon>
+				</ActionIcon>
+			</Affix>
 		</Stack>
 	);
 }
