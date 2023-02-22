@@ -20,13 +20,16 @@ export function ProductsPage() {
 	let [result, setResult] = useState<ListResult<Record>>();
 	let [search, setSearch] = useState("");
 
+	// run everytime search changes
 	useEffect(() => {
 		(async () => {
 			try {
+				// get data from products filtered by search term
 				const resultList = await pb
 					.collection("products")
-					.getList(1, 50, { filter: `name ~ "%${search}%"` });
-				console.log(resultList);
+					.getList(1, 50, { filter: `name ~ "%${search.trim()}%"` });
+
+				// set data to result list
 				setResult(resultList);
 			} catch {
 				console.log("Error fetching products");
@@ -34,6 +37,9 @@ export function ProductsPage() {
 		})();
 	}, [search]);
 
+	// render
+
+	// if result doesn't exist
 	if (!result)
 		return (
 			<Center h={"100%"}>
