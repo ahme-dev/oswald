@@ -7,30 +7,24 @@ import {
 	Button,
 	Group,
 } from "@mantine/core";
+import { ProductList } from "../components/ProductList";
+import { useDBFiltered } from "../utils/useDB";
 
 export function MainPage() {
+	let filterQuery = useDBFiltered({
+		filter: `name ~ "%"`,
+	});
+
 	return (
 		<Stack>
 			<Title size={"h2"} weight="bold">
 				Sell
 			</Title>
 			<SimpleGrid cols={2}>
-				<SimpleGrid
-					cols={4}
-					spacing="lg"
-					breakpoints={[
-						{ maxWidth: 980, cols: 3, spacing: "md" },
-						{ maxWidth: 755, cols: 2, spacing: "sm" },
-						{ maxWidth: 600, cols: 1, spacing: "sm" },
-					]}
-				>
-					<Card>
-						<h3>Item 1</h3>
-					</Card>
-					<Card>
-						<h3>Item 2</h3>
-					</Card>
-				</SimpleGrid>
+				<ProductList
+					data={filterQuery.data}
+					loading={filterQuery.loading}
+				></ProductList>
 				<Card>
 					<Stack spacing={"md"}>
 						<Group position="apart">

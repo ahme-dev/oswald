@@ -42,7 +42,7 @@ export function ProductList(props: {
 		>
 			{props.data.items.map((item) => {
 				return (
-					<Card key={item.id}>
+					<Card key={item.id} h={"fit-content"} sx={{ cursor: "pointer" }}>
 						<Text weight={"bold"}>{item.name}</Text>
 						<Text italic>{item.price_current}</Text>
 					</Card>
