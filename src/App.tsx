@@ -11,6 +11,8 @@ import { MainPage } from "./pages/MainPage";
 import { ProductsPage } from "./pages/ProductsPage";
 import { TransactionsPage } from "./pages/TransactionsPage";
 import { OverviewPage } from "./pages/OverviewPage";
+import { Provider } from "react-redux";
+import { store } from "./stores/root";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -48,26 +50,28 @@ function App() {
 			}}
 			emotionCache={rtl ? rtlCache : undefined}
 		>
-			{/* provide context */}
-			<AppContext.Provider
-				value={{
-					rtl: rtl,
-					toggleRtl: () => setRtl((old) => !old),
-					darkMode: darkMode,
-					toggleDarkMode: () => setDarkMode((old) => !old),
-				}}
-			>
-				{/* provide layout */}
-				<Layout rtl={rtl}>
-					{/* Routes */}
-					<Route path="/" component={MainPage} />
-					<Route path="/products" component={ProductsPage} />
-					<Route path="/transactions" component={TransactionsPage} />
-					<Route path="/overview" component={OverviewPage} />
-					<Route path="/auth" component={AuthPage} />
-					{/* Routes end */}
-				</Layout>
-			</AppContext.Provider>
+			<Provider store={store}>
+				{/* provide context */}
+				<AppContext.Provider
+					value={{
+						rtl: rtl,
+						toggleRtl: () => setRtl((old) => !old),
+						darkMode: darkMode,
+						toggleDarkMode: () => setDarkMode((old) => !old),
+					}}
+				>
+					{/* provide layout */}
+					<Layout rtl={rtl}>
+						{/* Routes */}
+						<Route path="/" component={MainPage} />
+						<Route path="/products" component={ProductsPage} />
+						<Route path="/transactions" component={TransactionsPage} />
+						<Route path="/overview" component={OverviewPage} />
+						<Route path="/auth" component={AuthPage} />
+						{/* Routes end */}
+					</Layout>
+				</AppContext.Provider>
+			</Provider>
 		</MantineProvider>
 	);
 }

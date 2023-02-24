@@ -1,10 +1,15 @@
 import { Card, Center, Loader, SimpleGrid, Text } from "@mantine/core";
 import { ListResult, Record } from "pocketbase";
+import { useDispatch } from "react-redux";
+import { checkoutActions } from "../stores/root";
 
 export function ProductList(props: {
 	loading: boolean;
 	data: ListResult<Record> | undefined;
+	checkout?: boolean;
 }) {
+	const dispatch = useDispatch();
+
 	// if result doesn't exist
 	if (props.loading) {
 		return (
@@ -42,7 +47,15 @@ export function ProductList(props: {
 		>
 			{props.data.items.map((item) => {
 				return (
-					<Card key={item.id} h={"fit-content"} sx={{ cursor: "pointer" }}>
+					<Card
+						onClick={() =>
+							props.checkout &&
+							dispatch(checkoutActions.add({ id: item.id, name: item.name }))
+						}
+						key={item.id}
+						h={"fit-content"}
+						sx={{ cursor: "pointer" }}
+					>
 						<Text weight={"bold"}>{item.name}</Text>
 						<Text italic>{item.price_current}</Text>
 					</Card>
