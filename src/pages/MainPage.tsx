@@ -1,4 +1,3 @@
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import {
 	Card,
 	Stack,
@@ -7,8 +6,8 @@ import {
 	Button,
 	Group,
 	Grid,
-	ActionIcon,
 	Divider,
+	NumberInput,
 } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductList } from "../components/ProductList";
@@ -18,7 +17,7 @@ import { usePBFiltered } from "../utils/usePB";
 export function MainPage() {
 	let filterQuery = usePBFiltered();
 
-	let { items: checkoutItems } = useSelector(checkoutSelector);
+	let checkoutState = useSelector(checkoutSelector);
 	let dispatch = useDispatch();
 
 	return (
@@ -42,25 +41,31 @@ export function MainPage() {
 						</Group>
 						{/* Checkout items from store */}
 						<Stack spacing={"sm"}>
-							{checkoutItems.length === 0 ? (
+							{checkoutState.items.length === 0 ? (
 								<Text>No items in checkout</Text>
 							) : (
-								checkoutItems.map((e) => (
-									<Card key={e.id}>
+								checkoutState.items.map((chItem, k) => (
+									<Card key={chItem.id}>
 										<Group position="apart">
 											<Group>
-												<Text weight={"bold"}>2500</Text>
+												<Text weight={"bold"}>{chItem.price}</Text>
 												<Divider size="md" orientation="vertical"></Divider>
-												<Text weight={"bold"}>{e.name}</Text>
+												<Text weight={"bold"}>{chItem.name}</Text>
 											</Group>
 											<Group spacing={"sm"}>
-												<ActionIcon variant="filled" size={"sm"}>
-													<MinusIcon></MinusIcon>
-												</ActionIcon>
-												<Text>{e.qty}</Text>
-												<ActionIcon variant="filled" size={"sm"}>
-													<PlusIcon></PlusIcon>
-												</ActionIcon>
+												<NumberInput
+													min={1}
+													sx={{ width: "5rem" }}
+													value={chItem.qty}
+													onChange={(evt: any) => {
+														dispatch(
+															checkoutActions.setItemQty({
+																id: chItem.id,
+																qty: evt,
+															}),
+														);
+													}}
+												></NumberInput>
 											</Group>
 										</Group>
 									</Card>
@@ -69,12 +74,15 @@ export function MainPage() {
 						</Stack>
 						{/* Checkout items from store end */}
 						<Group position="apart" align={"center"}>
-							<Title size={"h3"}>Total</Title>
+							<Title size={"h4"}>Totalling {checkoutState.total}</Title>
 							<Group>
-								<Button onClick={() => dispatch(checkoutActions.clear())}>
+								<Button
+									variant="light"
+									onClick={() => dispatch(checkoutActions.clear())}
+								>
 									Clear
 								</Button>
-								<Button>Checkout</Button>
+								<Button variant="light">Checkout</Button>
 							</Group>
 						</Group>
 					</Stack>

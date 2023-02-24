@@ -51,7 +51,13 @@ export function ProductList(props: {
 					<Card
 						onClick={() =>
 							props.checkout &&
-							dispatch(checkoutActions.add({ id: item.id, name: item.name }))
+							dispatch(
+								checkoutActions.add({
+									id: item.id,
+									name: item.name,
+									price: item.price_current,
+								}),
+							)
 						}
 						key={item.id}
 						h={"fit-content"}
