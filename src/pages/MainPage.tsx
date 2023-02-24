@@ -9,12 +9,10 @@ import {
 	Grid,
 } from "@mantine/core";
 import { ProductList } from "../components/ProductList";
-import { useDBFiltered } from "../utils/useDB";
+import { usePBFiltered } from "../utils/usePB";
 
 export function MainPage() {
-	let filterQuery = useDBFiltered({
-		filter: `name ~ "%"`,
-	});
+	let filterQuery = usePBFiltered();
 
 	return (
 		<Stack h={"100%"}>

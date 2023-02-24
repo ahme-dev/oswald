@@ -1,8 +1,8 @@
 import { ListResult, Record } from "pocketbase";
 import { useEffect, useState } from "react";
-import { pb } from "./db";
+import { pb } from "./pb";
 
-export function useDBFiltered(props: { filter: string }) {
+export function usePBFiltered(filter?: string) {
 	let [data, setData] = useState<ListResult<Record>>();
 	let [loading, setLoading] = useState(true);
 	let [error, setError] = useState<unknown>();
@@ -15,7 +15,7 @@ export function useDBFiltered(props: { filter: string }) {
 			try {
 				// get data from products filtered
 				const resultList = await pb.collection("products").getList(1, 25, {
-					filter: props.filter,
+					filter: filter ? filter : ``,
 				});
 
 				// set data to result list
@@ -27,7 +27,7 @@ export function useDBFiltered(props: { filter: string }) {
 				setError(e);
 			}
 		})();
-	}, [props.filter]);
+	}, [filter]);
 
 	return {
 		loading,

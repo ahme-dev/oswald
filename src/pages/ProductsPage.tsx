@@ -2,14 +2,12 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { ActionIcon, Affix, Flex, Input, Stack, Title } from "@mantine/core";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
-import { useDBFiltered } from "../utils/useDB";
+import { usePBFiltered } from "../utils/usePB";
 
 export function ProductsPage() {
 	let [search, setSearch] = useState("");
 
-	let filterQuery = useDBFiltered({
-		filter: `name ~ "%${search.trim()}%"`,
-	});
+	let filterQuery = usePBFiltered(`name ~ "%${search.trim()}%"`);
 
 	// render
 	return (
