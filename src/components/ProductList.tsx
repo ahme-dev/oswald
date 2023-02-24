@@ -7,6 +7,7 @@ export function ProductList(props: {
 	loading: boolean;
 	data: ListResult<Record> | undefined;
 	checkout?: boolean;
+	smaller?: boolean;
 }) {
 	const dispatch = useDispatch();
 
@@ -37,10 +38,10 @@ export function ProductList(props: {
 
 	return (
 		<SimpleGrid
-			cols={4}
+			cols={props.smaller ? 3 : 4}
 			spacing="lg"
 			breakpoints={[
-				{ maxWidth: 980, cols: 3, spacing: "md" },
+				{ maxWidth: 980, cols: props.smaller ? 2 : 3, spacing: "md" },
 				{ maxWidth: 755, cols: 2, spacing: "sm" },
 				{ maxWidth: 600, cols: 1, spacing: "sm" },
 			]}

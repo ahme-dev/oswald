@@ -8,6 +8,7 @@ import {
 	Group,
 	Grid,
 	ActionIcon,
+	Divider,
 } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductList } from "../components/ProductList";
@@ -26,14 +27,15 @@ export function MainPage() {
 				Sell
 			</Title>
 			<Grid h={"100%"}>
-				<Grid.Col span={12} md={7}>
+				<Grid.Col span={12} sm={7}>
 					<ProductList
 						data={filterQuery.data}
 						loading={filterQuery.loading}
 						checkout
+						smaller
 					></ProductList>
 				</Grid.Col>
-				<Grid.Col span={12} md={5}>
+				<Grid.Col span={12} sm={5}>
 					<Stack spacing={"md"} justify={"space-between"}>
 						<Group position="apart">
 							<Title size={"h3"}>Customer</Title>
@@ -46,13 +48,17 @@ export function MainPage() {
 								checkoutItems.map((e) => (
 									<Card key={e.id}>
 										<Group position="apart">
-											<Text weight={"bold"}>{e.name}</Text>
+											<Group>
+												<Text weight={"bold"}>2500</Text>
+												<Divider size="md" orientation="vertical"></Divider>
+												<Text weight={"bold"}>{e.name}</Text>
+											</Group>
 											<Group spacing={"sm"}>
-												<ActionIcon>
+												<ActionIcon variant="filled" size={"sm"}>
 													<MinusIcon></MinusIcon>
 												</ActionIcon>
 												<Text>{e.qty}</Text>
-												<ActionIcon>
+												<ActionIcon variant="filled" size={"sm"}>
 													<PlusIcon></PlusIcon>
 												</ActionIcon>
 											</Group>
@@ -62,7 +68,7 @@ export function MainPage() {
 							)}
 						</Stack>
 						{/* Checkout items from store end */}
-						<Group position="apart">
+						<Group position="apart" align={"center"}>
 							<Title size={"h3"}>Total</Title>
 							<Group>
 								<Button onClick={() => dispatch(checkoutActions.clear())}>
