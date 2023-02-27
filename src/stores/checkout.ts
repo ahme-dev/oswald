@@ -2,8 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // types
 
+export interface CheckoutItem {
+	id: string;
+	name: string;
+	qty: number;
+	price: number;
+}
+
 type CheckoutState = {
-	items: { id: string; name: string; qty: number; price: number }[];
+	items: CheckoutItem[];
 	total: number;
 };
 
