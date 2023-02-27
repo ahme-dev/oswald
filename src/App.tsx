@@ -11,8 +11,8 @@ import { MainPage } from "./pages/MainPage";
 import { ProductsPage } from "./pages/ProductsPage";
 import { TransactionsPage } from "./pages/TransactionsPage";
 import { OverviewPage } from "./pages/OverviewPage";
-import { Provider } from "react-redux";
-import { store } from "./stores/root";
+import { Provider, useSelector } from "react-redux";
+import { settingsSelector, store } from "./stores/root";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -20,58 +20,36 @@ const rtlCache = createEmotionCache({
 	stylisPlugins: [rtlPlugin],
 });
 
-// app context to provide rtl and darkmode state
-export const AppContext = createContext({
-	rtl: false,
-	toggleRtl: () => {},
-	darkMode: true,
-	toggleDarkMode: () => {},
-});
-
-// function to abstract the usecontext hook
-export const useAppContext = () => useContext(AppContext);
-
 function App() {
-	// set both rtl and darkmode in localStorage
-	const [rtl, setRtl] = useLocalStorage({ key: "rtl", defaultValue: false });
-	const [darkMode, setDarkMode] = useLocalStorage({
-		key: "darkMode",
-		defaultValue: true,
-	});
+	return (
+		<Provider store={store}>
+			<AppInner></AppInner>
+		</Provider>
+	);
+}
+
+function AppInner() {
+	const settingsState = useSelector(settingsSelector);
 
 	return (
-		// provide mantine
 		<MantineProvider
 			withGlobalStyles
 			withNormalizeCSS
 			theme={{
-				colorScheme: darkMode ? "dark" : "light",
-				dir: rtl ? "rtl" : "ltr",
+				colorScheme: settingsState.darkMode ? "dark" : "light",
+				dir: settingsState.rightToLeft ? "rtl" : "ltr",
 			}}
-			emotionCache={rtl ? rtlCache : undefined}
+			emotionCache={settingsState.rightToLeft ? rtlCache : undefined}
 		>
-			<Provider store={store}>
-				{/* provide context */}
-				<AppContext.Provider
-					value={{
-						rtl: rtl,
-						toggleRtl: () => setRtl((old) => !old),
-						darkMode: darkMode,
-						toggleDarkMode: () => setDarkMode((old) => !old),
-					}}
-				>
-					{/* provide layout */}
-					<Layout rtl={rtl}>
-						{/* Routes */}
-						<Route path="/" component={MainPage} />
-						<Route path="/products" component={ProductsPage} />
-						<Route path="/transactions" component={TransactionsPage} />
-						<Route path="/overview" component={OverviewPage} />
-						<Route path="/auth" component={AuthPage} />
-						{/* Routes end */}
-					</Layout>
-				</AppContext.Provider>
-			</Provider>
+			<Layout rtl={settingsState.rightToLeft}>
+				{/* Routes */}
+				<Route path="/" component={MainPage} />
+				<Route path="/products" component={ProductsPage} />
+				<Route path="/transactions" component={TransactionsPage} />
+				<Route path="/overview" component={OverviewPage} />
+				<Route path="/auth" component={AuthPage} />
+				{/* Routes end */}
+			</Layout>
 		</MantineProvider>
 	);
 }
