@@ -1,8 +1,4 @@
-import {
-	combineReducers,
-	configureStore,
-	getDefaultMiddleware,
-} from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { checkoutSlice } from "./checkout";
 import { settingsSlice } from "./settings";
 import storage from "reduxjs-toolkit-persist/lib/storage";
