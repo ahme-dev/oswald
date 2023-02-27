@@ -1,17 +1,30 @@
 import { ReactNode } from "react";
-import { ActionIcon, AppShell, Avatar, Navbar, Stack } from "@mantine/core";
+import {
+	ActionIcon,
+	AppShell,
+	Avatar,
+	Menu,
+	Navbar,
+	Stack,
+} from "@mantine/core";
 import {
 	BookOpenIcon,
 	ChartPieIcon,
 	CogIcon,
 	CurrencyDollarIcon,
+	LanguageIcon,
 	ShoppingCartIcon,
+	SunIcon,
 	TagIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "wouter";
+import { useDispatch } from "react-redux";
+import { settingsActions } from "./stores/root";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
+	let dispatch = useDispatch();
+
 	return (
 		<div dir={props.rtl ? "rtl" : "ltr"}>
 			<AppShell
@@ -62,9 +75,29 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 							{/* Upper End */}
 							{/* Lower */}
 							<Stack align={"center"} spacing={16}>
-								<ActionIcon size={"lg"}>
-									<CogIcon></CogIcon>
-								</ActionIcon>
+								<Menu>
+									<Menu.Target>
+										<ActionIcon size={"lg"}>
+											<CogIcon></CogIcon>
+										</ActionIcon>
+									</Menu.Target>
+									<Menu.Dropdown>
+										<Menu.Item
+											icon={<SunIcon height={16} />}
+											onClick={() => dispatch(settingsActions.toggleDarkMode())}
+										>
+											DarkMode
+										</Menu.Item>
+										<Menu.Item
+											icon={<LanguageIcon height={16} />}
+											onClick={() =>
+												dispatch(settingsActions.toggleRightToLeft())
+											}
+										>
+											Right To Left
+										</Menu.Item>
+									</Menu.Dropdown>
+								</Menu>
 								<Link to={"/auth"}>
 									<Avatar
 										style={{ cursor: "pointer" }}

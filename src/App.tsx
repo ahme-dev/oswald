@@ -1,8 +1,6 @@
 import { createEmotionCache, MantineProvider } from "@mantine/core";
-import { useLocalStorage } from "@mantine/hooks";
 
 import rtlPlugin from "stylis-plugin-rtl";
-import { createContext, useContext } from "react";
 import { Route } from "wouter";
 
 import { Layout } from "./Layout";

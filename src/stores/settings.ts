@@ -19,6 +19,7 @@ export const settingsSlice = createSlice<SettingsState, SettingsActions>({
 	initialState: initialSettings,
 	reducers: {
 		toggleDarkMode: (state) => {
+			console.log("Toggling");
 			state.darkMode = !state.darkMode;
 		},
 		toggleRightToLeft: (state) => {
