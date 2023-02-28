@@ -85,7 +85,10 @@ export function MainPage() {
 								</Button>
 								<Button
 									variant="light"
-									onClick={() => dispatch(checkoutActions.process())}
+									onClick={() => {
+										dispatch(checkoutActions.process());
+										dispatch(checkoutActions.clear());
+									}}
 								>
 									Checkout
 								</Button>
