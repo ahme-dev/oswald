@@ -26,7 +26,7 @@ export function MainPage() {
 			<Title size={"h2"} weight="bold">
 				Sell
 			</Title>
-			<Grid h={"100%"}>
+			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList
 						data={filterQuery.data}
