@@ -11,14 +11,14 @@ import {
 } from "@mantine/core";
 import { useDispatch, useSelector } from "react-redux";
 import { ProductList } from "../components/ProductList";
-import { CheckoutItem } from "../stores/checkout";
+import { CheckoutState } from "../stores/checkout";
 import { checkoutActions, checkoutSelector } from "../stores/root";
 import { usePBFiltered } from "../utils/usePB";
 
 export function MainPage() {
 	let filterQuery = usePBFiltered();
 
-	let checkoutState = useSelector(checkoutSelector);
+	let checkoutState: CheckoutState = useSelector(checkoutSelector);
 	let dispatch = useDispatch();
 
 	return (
@@ -45,7 +45,7 @@ export function MainPage() {
 							{checkoutState.items.length === 0 ? (
 								<Text>No items in checkout</Text>
 							) : (
-								checkoutState.items.map((chItem: CheckoutItem) => (
+								checkoutState.items.map((chItem) => (
 									<Card key={chItem.id}>
 										<Group position="apart">
 											<Group>

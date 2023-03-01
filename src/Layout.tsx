@@ -13,17 +13,20 @@ import {
 	CogIcon,
 	CurrencyDollarIcon,
 	LanguageIcon,
+	MoonIcon,
 	ShoppingCartIcon,
 	SunIcon,
 	TagIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "wouter";
-import { useDispatch } from "react-redux";
-import { settingsActions } from "./stores/root";
+import { useDispatch, useSelector } from "react-redux";
+import { settingsActions, settingsSelector } from "./stores/root";
+import { SettingsState } from "./stores/settings";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
 	let dispatch = useDispatch();
+	let settingsState: SettingsState = useSelector(settingsSelector);
 
 	return (
 		<div dir={props.rtl ? "rtl" : "ltr"}>
@@ -83,10 +86,16 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 									</Menu.Target>
 									<Menu.Dropdown>
 										<Menu.Item
-											icon={<SunIcon height={16} />}
+											icon={
+												settingsState.darkMode ? (
+													<MoonIcon height={14}></MoonIcon>
+												) : (
+													<SunIcon height={14} />
+												)
+											}
 											onClick={() => dispatch(settingsActions.toggleDarkMode())}
 										>
-											DarkMode
+											{settingsState.darkMode ? "Dark Theme" : "Light Theme"}
 										</Menu.Item>
 										<Menu.Item
 											icon={<LanguageIcon height={16} />}
@@ -94,7 +103,9 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 												dispatch(settingsActions.toggleRightToLeft())
 											}
 										>
-											Right To Left
+											{settingsState.rightToLeft
+												? "Right To Left"
+												: "Left To Right"}
 										</Menu.Item>
 									</Menu.Dropdown>
 								</Menu>

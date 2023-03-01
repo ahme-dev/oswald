@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-type SettingsState = {
+export type SettingsState = {
 	rightToLeft: boolean;
 	darkMode: boolean;
 };

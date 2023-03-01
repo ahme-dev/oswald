@@ -3,15 +3,13 @@ import { pb } from "../utils/pb";
 
 // types
 
-export interface CheckoutItem {
-	id: string;
-	name: string;
-	qty: number;
-	price: number;
-}
-
-type CheckoutState = {
-	items: CheckoutItem[];
+export type CheckoutState = {
+	items: {
+		id: string;
+		name: string;
+		qty: number;
+		price: number;
+	}[];
 	total: number;
 };
 
