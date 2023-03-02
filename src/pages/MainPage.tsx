@@ -9,6 +9,7 @@ import {
 	Divider,
 	NumberInput,
 } from "@mantine/core";
+import { Trans, useTranslation } from "react-i18next";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { apply, CheckoutState } from "../stores/checkout";
@@ -22,12 +23,13 @@ import { useCollection } from "../utils/pb";
 
 export function MainPage() {
 	let query = useCollection("products");
+	const { t } = useTranslation();
 	let checkoutState: CheckoutState = useAppSelector(checkoutSelector);
 	let dispatch = useAppDispatch();
 
 	return (
 		<Stack h={"100%"}>
-			<TitleText title="Sell" />
+			<TitleText title={t("Sell")} />
 			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList
@@ -41,12 +43,12 @@ export function MainPage() {
 				<Grid.Col span={12} sm={5}>
 					<Stack spacing={"md"} justify={"space-between"}>
 						<Group position="apart">
-							<Title size={"h3"}>Customer</Title>
+							<Title size={"h3"}>{t("Customer")}</Title>
 						</Group>
 						{/* Checkout items from store */}
 						<Stack spacing={"sm"}>
 							{checkoutState.items.length === 0 ? (
-								<Text>No items in checkout</Text>
+								<Text>{t("No items in checkout")}</Text>
 							) : (
 								checkoutState.items.map((chItem) => (
 									<Card key={chItem.id}>
@@ -78,7 +80,10 @@ export function MainPage() {
 						</Stack>
 						{/* Checkout items from store end */}
 						<Group position="apart" align={"center"}>
-							<Title size={"h4"}>Totalling {checkoutState.total}</Title>
+							<Group>
+								<Title size={"h4"}>{t("Totalling")}</Title>
+								<Title size={"h4"}>{checkoutState.total}</Title>
+							</Group>
 							<Group>
 								<Button
 									variant="light"
