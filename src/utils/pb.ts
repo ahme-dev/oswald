@@ -19,7 +19,6 @@ export async function createTransaction(items: any[]) {
 
 	const data = {
 		date: "2023-02-09 12:00:00",
-		customer_id: "sif48ofdvige80p",
 		transaction_product_ids: transactionProducts,
 	};
 

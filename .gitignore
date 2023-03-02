@@ -4,7 +4,6 @@ logs
 npm-debug.log*
 
 pb_data
-pb_migrations
 
 node_modules
 dist
