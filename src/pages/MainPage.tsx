@@ -53,7 +53,7 @@ export function MainPage() {
 								checkoutState.items.map((chItem) => (
 									<Card py="xs" key={chItem.id}>
 										<Group position="apart">
-											<Group>
+											<Group spacing={"sm"}>
 												<Text weight={"bold"}>{chItem.price}</Text>
 												<Divider size="md" orientation="vertical"></Divider>
 												<Text weight={"bold"}>{chItem.name}</Text>
@@ -61,7 +61,7 @@ export function MainPage() {
 											<Group spacing={"sm"}>
 												<NumberInput
 													min={1}
-													sx={{ width: "5rem" }}
+													sx={{ width: "4rem" }}
 													value={chItem.qty}
 													onChange={(evt: any) => {
 														dispatch(

@@ -1,4 +1,4 @@
-import { Card, Center, Loader, SimpleGrid, Text } from "@mantine/core";
+import { Card, Center, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import { ListResult, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { checkoutActions, useAppDispatch } from "../stores/root";
@@ -77,11 +77,13 @@ export function ProductList(props: {
 							)
 						}
 						key={item.id}
-						h={"fit-content"}
 						sx={{ cursor: "pointer" }}
 					>
-						<Text weight={"bold"}>{item.name}</Text>
-						<Text italic>{item.price_current}</Text>
+						<Stack>
+							<Text weight={"bold"}>{item.name}</Text>
+							{!props.smaller && <Text>{item.about}</Text>}
+							<Text italic>{item.price_current}</Text>
+						</Stack>
 					</Card>
 				);
 			})}
