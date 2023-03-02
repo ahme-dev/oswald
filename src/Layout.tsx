@@ -25,10 +25,12 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from "./stores/root";
+import { useLocation } from "wouter";
 import { SettingsState } from "./stores/settings";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
+	let [browserURL] = useLocation();
 	let dispatch = useAppDispatch();
 	let settingsState: SettingsState = useAppSelector(settingsSelector);
 
@@ -57,26 +59,42 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 									<BookOpenIcon></BookOpenIcon>
 								</ActionIcon>
 								{/* Navigation Items */}
-								<Link to={"/"}>
-									<ActionIcon size={"lg"}>
-										<ShoppingCartIcon></ShoppingCartIcon>
-									</ActionIcon>
-								</Link>
-								<Link to={"/products"}>
-									<ActionIcon size={"lg"}>
-										<TagIcon></TagIcon>
-									</ActionIcon>
-								</Link>
-								<Link to={"/transactions"}>
-									<ActionIcon size={"lg"}>
-										<CurrencyDollarIcon></CurrencyDollarIcon>
-									</ActionIcon>
-								</Link>
-								<Link to={"/overview"}>
-									<ActionIcon size={"lg"}>
-										<ChartPieIcon></ChartPieIcon>
-									</ActionIcon>
-								</Link>
+								{[
+									{
+										id: 1,
+										link: "/",
+										icon: <ShoppingCartIcon />,
+									},
+									{
+										id: 2,
+										link: "/products",
+										icon: <TagIcon />,
+									},
+									{
+										id: 3,
+										link: "/transactions",
+										icon: <CurrencyDollarIcon />,
+									},
+									{
+										id: 4,
+										link: "/overview",
+										icon: <ChartPieIcon />,
+									},
+								].map((item) => {
+									return (
+										<Link key={item.id} to={item.link}>
+											<ActionIcon
+												variant={
+													browserURL === item.link ? "gradient" : "transparent"
+												}
+												size="lg"
+												p={2}
+											>
+												{item.icon}
+											</ActionIcon>
+										</Link>
+									);
+								})}
 								{/* Navigation Items End */}
 							</Stack>
 							{/* Upper End */}
