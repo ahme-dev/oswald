@@ -11,6 +11,7 @@ import { TransactionsPage } from "./pages/TransactionsPage";
 import { OverviewPage } from "./pages/OverviewPage";
 import { Provider } from "react-redux";
 import { settingsSelector, store, useAppSelector } from "./stores/root";
+import { CustomFonts } from "./components/CustomFonts";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -34,11 +35,14 @@ function AppInner() {
 			withGlobalStyles
 			withNormalizeCSS
 			theme={{
+				fontFamily: "AbdMeh",
+				headings: { fontFamily: "AbdMeh" },
 				colorScheme: settingsState.darkMode ? "dark" : "light",
 				dir: settingsState.rightToLeft ? "rtl" : "ltr",
 			}}
 			emotionCache={settingsState.rightToLeft ? rtlCache : undefined}
 		>
+			<CustomFonts></CustomFonts>
 			<Layout rtl={settingsState.rightToLeft}>
 				{/* Routes */}
 				<Route path="/" component={MainPage} />
