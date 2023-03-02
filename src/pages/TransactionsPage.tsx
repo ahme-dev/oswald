@@ -1,4 +1,5 @@
-import { Card, Flex, Loader, Stack, Text, Title } from "@mantine/core";
+import { Card, Flex, Loader, Stack, Text } from "@mantine/core";
+import { TitleText } from "../components/TitleText";
 import { useCollection } from "../utils/pb";
 
 export function TransactionsPage() {
@@ -10,9 +11,7 @@ export function TransactionsPage() {
 	return (
 		<Stack h={"100%"}>
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
-				<Title size={"h2"} weight="bold">
-					Transactions
-				</Title>
+				<TitleText title="Transactions" />
 			</Flex>
 			<Stack>
 				{query.data.items.map((item) => {

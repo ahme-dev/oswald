@@ -10,6 +10,7 @@ import {
 	NumberInput,
 } from "@mantine/core";
 import { ProductList } from "../components/ProductList";
+import { TitleText } from "../components/TitleText";
 import { apply, CheckoutState } from "../stores/checkout";
 import {
 	checkoutActions,
@@ -26,9 +27,7 @@ export function MainPage() {
 
 	return (
 		<Stack h={"100%"}>
-			<Title size={"h2"} weight="bold">
-				Sell
-			</Title>
+			<TitleText title="Sell" />
 			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList

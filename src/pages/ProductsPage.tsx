@@ -1,7 +1,8 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
-import { ActionIcon, Affix, Flex, Input, Stack, Title } from "@mantine/core";
+import { ActionIcon, Affix, Flex, Input, Stack } from "@mantine/core";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
+import { TitleText } from "../components/TitleText";
 import { useCollection } from "../utils/pb";
 
 export function ProductsPage() {
@@ -13,9 +14,7 @@ export function ProductsPage() {
 	return (
 		<Stack h={"100%"}>
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
-				<Title size={"h2"} weight="bold">
-					Products
-				</Title>
+				<TitleText title="Products" />
 				<Input
 					placeholder="search for a product"
 					value={search}
