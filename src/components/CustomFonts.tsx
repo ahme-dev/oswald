@@ -1,5 +1,5 @@
 import { Global } from "@mantine/core";
-import abdmeh from "../assets/abdmeh.woff";
+import ubuntuKurdish from "../assets/ubuntuKurdish.woff";
 
 export function CustomFonts() {
 	return (
@@ -7,9 +7,9 @@ export function CustomFonts() {
 			styles={[
 				{
 					"@font-face": {
-						fontFamily: "AbdMeh",
-						src: `url('${abdmeh}') format("woff2")`,
-						fontWeight: 700,
+						fontFamily: "Ubuntu Kurdish",
+						src: `url('${ubuntuKurdish}') format("woff")`,
+						fontWeight: "normal",
 						fontStyle: "normal",
 					},
 				},

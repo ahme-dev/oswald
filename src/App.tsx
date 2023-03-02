@@ -44,8 +44,8 @@ function AppInner() {
 			withGlobalStyles
 			withNormalizeCSS
 			theme={{
-				fontFamily: "AbdMeh",
-				headings: { fontFamily: "AbdMeh" },
+				fontFamily: "Ubuntu Kurdish",
+				headings: { fontFamily: "Ubuntu Kurdish" },
 				colorScheme: settingsState.darkMode ? "dark" : "light",
 				dir: settingsState.rightToLeft ? "rtl" : "ltr",
 			}}
