@@ -20,7 +20,7 @@ import {
 import { useCollection } from "../utils/pb";
 
 export function MainPage() {
-	let filterQuery = useCollection("products");
+	let query = useCollection("products");
 	let checkoutState: CheckoutState = useAppSelector(checkoutSelector);
 	let dispatch = useAppDispatch();
 
@@ -32,8 +32,8 @@ export function MainPage() {
 			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList
-						data={filterQuery.data}
-						loading={filterQuery.loading}
+						data={query.data}
+						loading={query.loading}
 						checkout
 						smaller
 						name={""}

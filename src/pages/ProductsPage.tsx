@@ -7,7 +7,7 @@ import { useCollection } from "../utils/pb";
 export function ProductsPage() {
 	let [search, setSearch] = useState("");
 
-	let filterQuery = useCollection("products");
+	let query = useCollection("products");
 
 	// render
 	return (
@@ -22,7 +22,11 @@ export function ProductsPage() {
 					onInput={(e: any) => setSearch(e.target.value)}
 				></Input>
 			</Flex>
-			<ProductList {...filterQuery} name={search}></ProductList>
+			<ProductList
+				data={query.data}
+				loading={query.loading}
+				name={search}
+			></ProductList>
 			<Affix position={{ bottom: 20, right: 20 }}>
 				<ActionIcon size={"xl"} variant="gradient" radius={"xl"} p={8}>
 					<PlusIcon></PlusIcon>
