@@ -8,6 +8,15 @@ const resources = {
 			Customer: "کڕیار",
 			Sell: "بفرۆشە",
 			"No items in checkout": "هیچ شتێکت دانەنراوە",
+			Clear: "بەتاڵبکرەوە",
+			Checkout: "پەسەندبکە",
+
+			username: "ناوی بەکارهێنەر",
+			password: "وشەی نهێنی",
+			Login: "بچۆرەناو",
+			"Cannot login": "ناتوانیت بچیتە ناوەوە",
+			"Username is required": "پێویستە ناوێک داخڵ بکەیت",
+			"Password is required": "پێویستە وشەی نهێنی داخڵ بکەیت",
 		},
 	},
 };

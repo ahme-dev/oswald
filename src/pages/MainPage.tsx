@@ -89,13 +89,13 @@ export function MainPage() {
 									variant="light"
 									onClick={() => dispatch(checkoutActions.clear())}
 								>
-									Clear
+									{t("Clear")}
 								</Button>
 								<Button
 									variant="light"
 									onClick={() => dispatch(apply(checkoutState.items))}
 								>
-									Checkout
+									{t("Checkout")}
 								</Button>
 							</Group>
 						</Group>

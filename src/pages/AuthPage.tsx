@@ -1,12 +1,14 @@
-import { Button, Center, Stack, TextInput } from "@mantine/core";
+import { Button, Center, Group, Stack, TextInput } from "@mantine/core";
 import { Admin, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { pb } from "../utils/pbase";
+import { useTranslation } from "react-i18next";
 
 export function AuthPage() {
 	// store user auth state
 	let [user, setUser] = useState<Record | Admin | null>();
+	const { t } = useTranslation();
 
 	// create form and validation
 	let form = useForm({
@@ -16,8 +18,10 @@ export function AuthPage() {
 		},
 
 		validate: {
-			username: (value) => (value.length > 0 ? null : "Username is required"),
-			password: (value) => (value.length > 0 ? null : "Username is required"),
+			username: (value) =>
+				value.length > 0 ? null : t("Username is required"),
+			password: (value) =>
+				value.length > 0 ? null : t("Password is required"),
 		},
 	});
 
@@ -47,7 +51,7 @@ export function AuthPage() {
 			setUser(userAuth);
 		} catch {
 			// if errors on login with pb, set error on form
-			form.setFieldError("username", "Cannot login");
+			form.setFieldError("username", t("Cannot login"));
 		}
 	};
 
@@ -56,9 +60,10 @@ export function AuthPage() {
 	// return early if user is logged in
 	if (user instanceof Record) {
 		return (
-			<div>
-				<h1>Logged in as {user.username}</h1>
-			</div>
+			<Group>
+				<h1>{t("Logged in as")}</h1>
+				<h1>{user.username}</h1>
+			</Group>
 		);
 	}
 
@@ -66,15 +71,15 @@ export function AuthPage() {
 		<Center h={"100%"}>
 			<Stack spacing={8}>
 				<TextInput
-					placeholder="username"
+					placeholder={t("username") || "username"}
 					{...form.getInputProps("username")}
 				></TextInput>
 				<TextInput
 					type={"password"}
-					placeholder="password"
+					placeholder={t("password") || "password"}
 					{...form.getInputProps("password")}
 				></TextInput>
-				<Button onClick={doLogin}>Login</Button>
+				<Button onClick={doLogin}>{t("Login")}</Button>
 			</Stack>
 		</Center>
 	);
