@@ -50,7 +50,7 @@ export function useCollection(collection: string) {
 				// finally set loading state to false
 				setLoading(false);
 			} catch (e) {
-				console.log("Error in usePBCollection", e);
+				// console.log("Error in useCollection", e);
 			}
 		})();
 	}, []);
