@@ -1,14 +1,4 @@
-import {
-	Card,
-	Stack,
-	Title,
-	Text,
-	Button,
-	Group,
-	Grid,
-	Divider,
-	NumberInput,
-} from "@mantine/core";
+import { Stack, Grid } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
 import { ProductList } from "../components/ProductList";
