@@ -2,12 +2,12 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { ActionIcon, Affix, Flex, Input, Stack, Title } from "@mantine/core";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
-import { usePBFiltered } from "../utils/usePB";
+import { useCollection } from "../utils/pb";
 
 export function ProductsPage() {
 	let [search, setSearch] = useState("");
 
-	let filterQuery = usePBFiltered(`name ~ "%${search.trim()}%"`);
+	let filterQuery = useCollection("products");
 
 	// render
 	return (
@@ -22,7 +22,7 @@ export function ProductsPage() {
 					onInput={(e: any) => setSearch(e.target.value)}
 				></Input>
 			</Flex>
-			<ProductList {...filterQuery}></ProductList>
+			<ProductList {...filterQuery} name={search}></ProductList>
 			<Affix position={{ bottom: 20, right: 20 }}>
 				<ActionIcon size={"xl"} variant="gradient" radius={"xl"} p={8}>
 					<PlusIcon></PlusIcon>

@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { pb } from "../utils/pb";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createTransaction } from "../utils/pb";
 
 // types
 
@@ -23,7 +23,6 @@ type CheckoutActions = {
 		state: CheckoutState,
 		action: PayloadAction<{ id: string; qty: number }>,
 	) => void;
-	process: (state: CheckoutState) => void;
 };
 
 // data
@@ -80,29 +79,20 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 				return total + item.qty * item.price;
 			}, 0);
 		},
-		process: async (state) => {
-			let transactionProducts = [];
-
-			for (let i = 0; i < state.items.length; i++) {
-				const record = await pb.collection("transaction_products").create({
-					product_id: state.items[i].id,
-					quantity: state.items[i].qty,
-				});
-
-				transactionProducts.push(record.id);
-			}
-
-			const data = {
-				date: "2023-02-09 12:00:00",
-				customer_id: "sif48ofdvige80p",
-				transaction_product_ids: transactionProducts,
-			};
-
-			try {
-				await pb.collection("transactions").create(data);
-			} catch (error) {
-				console.log(error);
-			}
-		},
+	},
+	extraReducers: (builder) => {
+		builder.addCase(apply.fulfilled, (state) => {
+			state.items = [];
+			state.total = 0;
+		});
 	},
 });
+
+// thunks
+
+export const apply = createAsyncThunk(
+	"checkout/apply",
+	async (items: CheckoutState["items"]) => {
+		await createTransaction(items);
+	},
+);

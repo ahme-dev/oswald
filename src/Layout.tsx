@@ -19,14 +19,18 @@ import {
 	TagIcon,
 } from "@heroicons/react/24/solid";
 import { Link } from "wouter";
-import { useDispatch, useSelector } from "react-redux";
-import { settingsActions, settingsSelector } from "./stores/root";
+import {
+	settingsActions,
+	settingsSelector,
+	useAppDispatch,
+	useAppSelector,
+} from "./stores/root";
 import { SettingsState } from "./stores/settings";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
-	let dispatch = useDispatch();
-	let settingsState: SettingsState = useSelector(settingsSelector);
+	let dispatch = useAppDispatch();
+	let settingsState: SettingsState = useAppSelector(settingsSelector);
 
 	return (
 		<div dir={props.rtl ? "rtl" : "ltr"}>

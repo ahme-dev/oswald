@@ -12,6 +12,7 @@ import {
 	PURGE,
 	REGISTER,
 } from "reduxjs-toolkit-persist";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const persistedReducers = persistCombineReducers(
 	{
@@ -29,6 +30,7 @@ const persistedReducers = persistCombineReducers(
 export const store = configureStore({
 	reducer: persistedReducers,
 	middleware: getDefaultMiddleware({
+		thunk: true,
 		serializableCheck: {
 			/* ignore persistance actions */
 			ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
@@ -39,6 +41,9 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 type RootState = ReturnType<typeof store.getState>;
+
+export const useAppDispatch: () => typeof store.dispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 // selectors and actions
 

@@ -9,17 +9,20 @@ import {
 	Divider,
 	NumberInput,
 } from "@mantine/core";
-import { useDispatch, useSelector } from "react-redux";
 import { ProductList } from "../components/ProductList";
-import { CheckoutState } from "../stores/checkout";
-import { checkoutActions, checkoutSelector } from "../stores/root";
-import { usePBFiltered } from "../utils/usePB";
+import { apply, CheckoutState } from "../stores/checkout";
+import {
+	checkoutActions,
+	checkoutSelector,
+	useAppDispatch,
+	useAppSelector,
+} from "../stores/root";
+import { useCollection } from "../utils/pb";
 
 export function MainPage() {
-	let filterQuery = usePBFiltered();
-
-	let checkoutState: CheckoutState = useSelector(checkoutSelector);
-	let dispatch = useDispatch();
+	let filterQuery = useCollection("products");
+	let checkoutState: CheckoutState = useAppSelector(checkoutSelector);
+	let dispatch = useAppDispatch();
 
 	return (
 		<Stack h={"100%"}>
@@ -33,6 +36,7 @@ export function MainPage() {
 						loading={filterQuery.loading}
 						checkout
 						smaller
+						name={""}
 					></ProductList>
 				</Grid.Col>
 				<Grid.Col span={12} sm={5}>
@@ -85,10 +89,7 @@ export function MainPage() {
 								</Button>
 								<Button
 									variant="light"
-									onClick={() => {
-										dispatch(checkoutActions.process());
-										dispatch(checkoutActions.clear());
-									}}
+									onClick={() => dispatch(apply(checkoutState.items))}
 								>
 									Checkout
 								</Button>

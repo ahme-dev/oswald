@@ -9,8 +9,8 @@ import { MainPage } from "./pages/MainPage";
 import { ProductsPage } from "./pages/ProductsPage";
 import { TransactionsPage } from "./pages/TransactionsPage";
 import { OverviewPage } from "./pages/OverviewPage";
-import { Provider, useSelector } from "react-redux";
-import { settingsSelector, store } from "./stores/root";
+import { Provider } from "react-redux";
+import { settingsSelector, store, useAppSelector } from "./stores/root";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -27,7 +27,7 @@ function App() {
 }
 
 function AppInner() {
-	const settingsState = useSelector(settingsSelector);
+	const settingsState = useAppSelector(settingsSelector);
 
 	return (
 		<MantineProvider

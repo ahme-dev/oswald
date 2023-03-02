@@ -1,17 +1,39 @@
 import { Card, Center, Loader, SimpleGrid, Text } from "@mantine/core";
 import { ListResult, Record } from "pocketbase";
-import { useDispatch } from "react-redux";
-import { checkoutActions } from "../stores/root";
+import { useEffect, useState } from "react";
+import { checkoutActions, useAppDispatch } from "../stores/root";
 
 export function ProductList(props: {
 	loading: boolean;
 	data: ListResult<Record> | undefined;
+	name: string;
 	checkout?: boolean;
 	smaller?: boolean;
 }) {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
-	// if result doesn't exist
+	// contain the received data but filtered
+	let [filteredData, setFilteredData] = useState<Record[]>([]);
+
+	// filter data on loading finish and filter changes
+	useEffect(() => {
+		// if loading or no data don't filter
+		if (props.loading || !props.data || props.data.items.length === 0) return;
+
+		// make new data using filters
+		let data = props.data.items.filter((item) => {
+			// filter by name
+			if (!item.name.toLowerCase().includes(props.name.toLowerCase()))
+				return false;
+
+			return true;
+		});
+
+		// set filtered data
+		setFilteredData(data);
+	}, [props.name, props.loading]);
+
+	// if result is loading, show loader
 	if (props.loading) {
 		return (
 			<Center h={"100%"}>
@@ -20,15 +42,8 @@ export function ProductList(props: {
 		);
 	}
 
-	if (!props.data) {
-		return (
-			<Center h={"100%"}>
-				<Text>Data: not found</Text>
-			</Center>
-		);
-	}
-
-	if (props.data.items.length === 0) {
+	// if filtered data returns nothing, show not found message
+	if (!filteredData || filteredData.length === 0) {
 		return (
 			<Center h={"100%"}>
 				<Text>No results for the search</Text>
@@ -46,9 +61,11 @@ export function ProductList(props: {
 				{ maxWidth: 600, cols: 1, spacing: "sm" },
 			]}
 		>
-			{props.data.items.map((item) => {
+			{/* filtered data items */}
+			{filteredData.map((item) => {
 				return (
 					<Card
+						// onclick add to checkout if checkout is enabled
 						onClick={() =>
 							props.checkout &&
 							dispatch(
@@ -68,6 +85,7 @@ export function ProductList(props: {
 					</Card>
 				);
 			})}
+			{/* filtered data items end */}
 		</SimpleGrid>
 	);
 }
