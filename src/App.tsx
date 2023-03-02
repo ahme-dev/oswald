@@ -1,7 +1,6 @@
-import { createEmotionCache, MantineProvider } from "@mantine/core";
-
-import rtlPlugin from "stylis-plugin-rtl";
 import { Route } from "wouter";
+
+import { createEmotionCache, MantineProvider } from "@mantine/core";
 
 import { Layout } from "./Layout";
 import { AuthPage } from "./pages/AuthPage";
@@ -9,9 +8,12 @@ import { MainPage } from "./pages/MainPage";
 import { ProductsPage } from "./pages/ProductsPage";
 import { TransactionsPage } from "./pages/TransactionsPage";
 import { OverviewPage } from "./pages/OverviewPage";
+
+import { CustomFonts } from "./components/CustomFonts";
+import rtlPlugin from "stylis-plugin-rtl";
+
 import { Provider } from "react-redux";
 import { settingsSelector, store, useAppSelector } from "./stores/root";
-import { CustomFonts } from "./components/CustomFonts";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
