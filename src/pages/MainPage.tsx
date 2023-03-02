@@ -9,7 +9,7 @@ import {
 	Divider,
 	NumberInput,
 } from "@mantine/core";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { apply, CheckoutState } from "../stores/checkout";
