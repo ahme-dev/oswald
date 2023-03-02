@@ -51,7 +51,7 @@ export function MainPage() {
 								<Text>{t("No items in checkout")}</Text>
 							) : (
 								checkoutState.items.map((chItem) => (
-									<Card key={chItem.id}>
+									<Card py="xs" key={chItem.id}>
 										<Group position="apart">
 											<Group>
 												<Text weight={"bold"}>{chItem.price}</Text>
@@ -80,10 +80,26 @@ export function MainPage() {
 						</Stack>
 						{/* Checkout items from store end */}
 						<Group position="apart" align={"center"}>
-							<Group>
-								<Title size={"h4"}>{t("Totalling")}</Title>
-								<Title size={"h4"}>{checkoutState.total}</Title>
-							</Group>
+							<Card py={"xs"}>
+								<Group>
+									<Group spacing={"xs"}>
+										<Text weight={"bold"}>{checkoutState.total}</Text>
+										<Text weight={"bold"}>{t("in total")}</Text>
+									</Group>
+									<Divider size="md" orientation="vertical"></Divider>
+									<Group spacing={"xs"}>
+										<Text weight={"bold"}>
+											{checkoutState.items.reduce((total, item) => {
+												total += item.qty;
+												return total;
+											}, 0)}
+										</Text>
+										<Text weight={"bold"}>{t("items")}</Text>
+										{/* <Title size={"h4"}>{checkoutState.total}</Title>
+									<Title size={"h4"}>{t("in total")}</Title> */}
+									</Group>
+								</Group>
+							</Card>
 							<Group>
 								<Button
 									variant="light"

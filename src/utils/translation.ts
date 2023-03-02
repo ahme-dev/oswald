@@ -4,10 +4,11 @@ import { initReactI18next } from "react-i18next";
 const resources = {
 	ku: {
 		translation: {
-			Totalling: "بە گشتی",
+			"in total": "بە گشتی",
+			items: "بەرهەم",
 			Customer: "کڕیار",
 			Sell: "بفرۆشە",
-			"No items in checkout": "هیچ شتێکت دانەنراوە",
+			"No items in checkout": "هیچ بەرهەمێک هەڵنەبژێردراوە",
 			Clear: "بەتاڵبکرەوە",
 			Checkout: "پەسەندبکە",
 
