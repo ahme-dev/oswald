@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import i18n from "../utils/translation";
 
 export type SettingsState = {
 	rightToLeft: boolean;
@@ -23,6 +24,8 @@ export const settingsSlice = createSlice<SettingsState, SettingsActions>({
 		},
 		toggleRightToLeft: (state) => {
 			state.rightToLeft = !state.rightToLeft;
+			const toLang = i18n.language == "ku" ? "en" : "ku";
+			i18n.changeLanguage(toLang);
 		},
 	},
 });

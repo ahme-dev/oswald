@@ -1,4 +1,5 @@
 import { Route } from "wouter";
+import { useEffect } from "react";
 
 import { createEmotionCache, MantineProvider } from "@mantine/core";
 
@@ -11,9 +12,11 @@ import { OverviewPage } from "./pages/OverviewPage";
 
 import { CustomFonts } from "./components/CustomFonts";
 import rtlPlugin from "stylis-plugin-rtl";
+import i18n from "./utils/translation";
 
 import { Provider } from "react-redux";
 import { settingsSelector, store, useAppSelector } from "./stores/root";
+import { SettingsState } from "./stores/settings";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -30,7 +33,11 @@ function App() {
 }
 
 function AppInner() {
-	const settingsState = useAppSelector(settingsSelector);
+	const settingsState: SettingsState = useAppSelector(settingsSelector);
+
+	useEffect(() => {
+		i18n.changeLanguage(settingsState.rightToLeft ? "ku" : "en");
+	}, []);
 
 	return (
 		<MantineProvider
