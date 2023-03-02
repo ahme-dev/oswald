@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createTransaction } from "../utils/pb";
+import { createTransaction } from "../utils/pbase";
 
 // types
 

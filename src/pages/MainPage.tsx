@@ -19,7 +19,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
-import { useCollection } from "../utils/pb";
+import { useCollection } from "../utils/pbase";
 
 export function MainPage() {
 	let query = useCollection("products");

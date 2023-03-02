@@ -2,7 +2,7 @@ import { Button, Center, Stack, TextInput } from "@mantine/core";
 import { Admin, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
-import { pb } from "../utils/pb";
+import { pb } from "../utils/pbase";
 
 export function AuthPage() {
 	// store user auth state

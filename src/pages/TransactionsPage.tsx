@@ -1,6 +1,6 @@
 import { Card, Flex, Loader, Stack, Text } from "@mantine/core";
 import { TitleText } from "../components/TitleText";
-import { useCollection } from "../utils/pb";
+import { useCollection } from "../utils/pbase";
 
 export function TransactionsPage() {
 	let query = useCollection("transactions");

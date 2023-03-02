@@ -3,7 +3,7 @@ import { ActionIcon, Affix, Flex, Input, Stack } from "@mantine/core";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
-import { useCollection } from "../utils/pb";
+import { useCollection } from "../utils/pbase";
 
 export function ProductsPage() {
 	let [search, setSearch] = useState("");
