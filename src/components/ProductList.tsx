@@ -79,6 +79,7 @@ export function ProductList(props: {
 							)
 						}
 						key={item.id}
+						withBorder
 						sx={{ cursor: "pointer" }}
 					>
 						<Stack>

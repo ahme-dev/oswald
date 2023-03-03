@@ -50,6 +50,7 @@ function AppInner() {
 				headings: { fontFamily: "Ubuntu Kurdish" },
 				colorScheme: settingsState.darkMode ? "dark" : "light",
 				dir: settingsState.rightToLeft ? "rtl" : "ltr",
+				loader: "bars",
 			}}
 			emotionCache={settingsState.rightToLeft ? rtlCache : undefined}
 		>

@@ -30,11 +30,11 @@ export function Checkout(props: {
 					<Text>{t("No items in checkout")}</Text>
 				) : (
 					props.state.items.map((chItem) => (
-						<Card py="xs" key={chItem.id}>
+						<Card withBorder py="xs" key={chItem.id}>
 							<Group position="apart">
 								<Group spacing={"sm"}>
 									<Text weight={"bold"}>{chItem.price}</Text>
-									<Divider size="md" orientation="vertical"></Divider>
+									<Divider size="sm" orientation="vertical"></Divider>
 									<Text weight={"bold"}>{chItem.name}</Text>
 								</Group>
 								<Group spacing={"sm"}>
@@ -54,13 +54,13 @@ export function Checkout(props: {
 			</Stack>
 			{/* Checkout items from store end */}
 			<Group position="apart" align={"center"}>
-				<Card py={"xs"}>
+				<Card withBorder py={"xs"}>
 					<Group>
 						<Group spacing={"xs"}>
 							<Text weight={"bold"}>{props.state.total}</Text>
 							<Text weight={"bold"}>{t("in total")}</Text>
 						</Group>
-						<Divider size="md" orientation="vertical"></Divider>
+						<Divider size="sm" orientation="vertical"></Divider>
 						<Group spacing={"xs"}>
 							<Text weight={"bold"}>
 								{props.state.items.reduce((total, item) => {
