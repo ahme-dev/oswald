@@ -22,7 +22,7 @@ const resources = {
 			"About the product": "دەربارەی بەرهەم",
 
 			Quantity: "عەدەد",
-			Create: "دروستیبکە",
+			Add: "زیادیبکە",
 			Name: "ناو",
 			About: "دەربارە",
 			Price: "نرخ",

@@ -4,13 +4,11 @@ import {
 	Affix,
 	Drawer,
 	Flex,
-	Text,
 	Group,
 	Input,
 	NumberInput,
 	Stack,
 	TextInput,
-	Box,
 	Button,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -19,7 +17,7 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppSelector } from "../stores/root";
-import { useCollection } from "../utils/pbase";
+import { createProduct, useCollection } from "../utils/pbase";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -43,6 +41,27 @@ export function ProductsPage() {
 			about: (value) => (value.length > 0 ? null : "About is required"),
 		},
 	});
+
+	const tryCreateProduct = async () => {
+		// try to validate the form
+		// if got errors, return
+		let feedback = form.validate();
+		if (feedback.hasErrors) return;
+
+		try {
+			// create a new product using the values
+			createProduct(
+				form.values.name,
+				form.values.price,
+				form.values.quantity,
+				form.values.about,
+			);
+		} catch (e) {
+			console.log("Error in tryCreateProduct", e);
+		}
+
+		setShowDrawer(false);
+	};
 
 	// get data from products collection
 	let query = useCollection("products");
@@ -87,7 +106,7 @@ export function ProductsPage() {
 						withAsterisk
 						label={t("Name")}
 						placeholder={t("Product name") || "Product name"}
-						{...form.getInputProps("username")}
+						{...form.getInputProps("name")}
 					/>
 					<TextInput
 						withAsterisk
@@ -114,7 +133,9 @@ export function ProductsPage() {
 						</Flex>
 					</Group>
 
-					<Button mt={16}>{t("Create")}</Button>
+					<Button onClick={tryCreateProduct} mt={16}>
+						{t("Add")}
+					</Button>
 				</Stack>
 			</Drawer>
 		</Stack>

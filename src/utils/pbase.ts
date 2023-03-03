@@ -29,6 +29,27 @@ export async function createTransaction(items: any[]) {
 	}
 }
 
+// create a new product
+export async function createProduct(
+	name: string,
+	price: number,
+	quantity: number,
+	about: string,
+) {
+	const data = {
+		name,
+		price_current: price,
+		quantity_available: quantity,
+		about,
+	};
+
+	try {
+		await pb.collection("products").create(data);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 // hook to get a collection in the database
 export function useCollection(collection: string) {
 	let [data, setData] = useState<ListResult<Record>>();
