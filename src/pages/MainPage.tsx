@@ -1,5 +1,4 @@
 import { Stack, Grid } from "@mantine/core";
-import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
@@ -13,7 +12,6 @@ import { useCollection } from "../utils/pbase";
 
 export function MainPage() {
 	let query = useCollection("products");
-	const { t } = useTranslation();
 	let checkoutState = useAppSelector((state) => state.checkout);
 	let dispatch = useAppDispatch();
 
@@ -29,7 +27,7 @@ export function MainPage() {
 
 	return (
 		<Stack h={"100%"}>
-			<TitleText title={t("Sell")} />
+			<TitleText title={"Sell"} />
 			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList

@@ -1,6 +1,7 @@
 import { Card, Center, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import { ListResult, Record } from "pocketbase";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { checkoutActions, useAppDispatch } from "../stores/root";
 
 export function ProductList(props: {
@@ -11,6 +12,8 @@ export function ProductList(props: {
 	smaller?: boolean;
 }) {
 	const dispatch = useAppDispatch();
+
+	const { t } = useTranslation();
 
 	// contain the received data but filtered
 	let [filteredData, setFilteredData] = useState<Record[]>([]);
@@ -48,7 +51,7 @@ export function ProductList(props: {
 	if (!filteredData || filteredData.length === 0) {
 		return (
 			<Center h={"100%"}>
-				<Text>No results for the search</Text>
+				<Text>{t("No results for the search")}</Text>
 			</Center>
 		);
 	}

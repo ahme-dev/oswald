@@ -1,5 +1,6 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
 import { ActionIcon, Affix, Flex, Input, Stack } from "@mantine/core";
+import { t } from "i18next";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
@@ -17,7 +18,7 @@ export function ProductsPage() {
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
 				<TitleText title="Products" />
 				<Input
-					placeholder="search for a product"
+					placeholder={t("search for a product")}
 					value={search}
 					onInput={(e: any) => setSearch(e.target.value)}
 				></Input>

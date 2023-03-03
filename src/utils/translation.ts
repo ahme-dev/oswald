@@ -12,6 +12,12 @@ const resources = {
 			Clear: "بەتاڵبکرەوە",
 			Checkout: "پەسەندبکە",
 
+			Products: "بەرهەمەکان",
+			"search for a product": "بەدوای بەرهەمێکدا بگەڕێ",
+			"No results for the search": "گەڕانەکە هیچ ئەنجامێکی نەگەڕاندەوە",
+
+			Transactions: "مامەڵەکان",
+
 			username: "ناوی بەکارهێنەر",
 			password: "وشەی نهێنی",
 			Login: "بچۆرەناو",
