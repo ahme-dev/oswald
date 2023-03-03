@@ -3,10 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
-import { apply, CheckoutState } from "../stores/checkout";
+import { apply } from "../stores/checkout";
 import {
 	checkoutActions,
-	checkoutSelector,
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
@@ -15,7 +14,7 @@ import { useCollection } from "../utils/pbase";
 export function MainPage() {
 	let query = useCollection("products");
 	const { t } = useTranslation();
-	let checkoutState: CheckoutState = useAppSelector(checkoutSelector);
+	let checkoutState = useAppSelector((state) => state.checkout);
 	let dispatch = useAppDispatch();
 
 	const qtyFunc = (id: string, qty: number) => {
