@@ -1,13 +1,48 @@
 import { PlusIcon } from "@heroicons/react/24/solid";
-import { ActionIcon, Affix, Flex, Input, Stack } from "@mantine/core";
+import {
+	ActionIcon,
+	Affix,
+	Drawer,
+	Flex,
+	Text,
+	Group,
+	Input,
+	NumberInput,
+	Stack,
+	TextInput,
+	Box,
+	Button,
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { t } from "i18next";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
+import { useAppSelector } from "../stores/root";
 import { useCollection } from "../utils/pbase";
 
 export function ProductsPage() {
+	let settingsState = useAppSelector((state) => state.settings);
+
+	// search string and create drawe state
 	let [search, setSearch] = useState("");
+	let [showDrawer, setShowDrawer] = useState(false);
+
+	const form = useForm({
+		initialValues: {
+			name: "",
+			price: 1000,
+			quantity: 1,
+			about: "",
+		},
+
+		validate: {
+			name: (value) => (value.length > 0 ? null : "Name is required"),
+			price: (value) => (value > 0 ? null : "Price is required"),
+			quantity: (value) => (value > 0 ? null : "Quantity is required"),
+			about: (value) => (value.length > 0 ? null : "About is required"),
+		},
+	});
 
 	// get data from products collection
 	let query = useCollection("products");
@@ -28,11 +63,60 @@ export function ProductsPage() {
 				loading={query.loading}
 				name={search}
 			></ProductList>
-			<Affix position={{ bottom: 20, right: 20 }}>
+
+			<Affix
+				onClick={() => setShowDrawer(true)}
+				position={{ bottom: 20, right: 20 }}
+			>
 				<ActionIcon size={"xl"} variant="gradient" radius={"xl"} p={8}>
 					<PlusIcon></PlusIcon>
 				</ActionIcon>
 			</Affix>
+
+			<Drawer
+				opened={showDrawer}
+				position={settingsState.rightToLeft ? "right" : "left"}
+				onClose={() => setShowDrawer(false)}
+				title={t("Add a product")}
+				overlayOpacity={0.7}
+				padding="xl"
+				size="xl"
+			>
+				<Stack>
+					<TextInput
+						withAsterisk
+						label={t("Name")}
+						placeholder={t("Product name") || "Product name"}
+						{...form.getInputProps("username")}
+					/>
+					<TextInput
+						withAsterisk
+						label={t("About")}
+						placeholder={t("About the product") || "About the product"}
+						{...form.getInputProps("about")}
+					/>
+
+					<Group position="apart">
+						<Flex direction={"row"} gap="lg">
+							<NumberInput
+								withAsterisk
+								label={t("Price")}
+								step={250}
+								placeholder={t("Product price") || "Product price"}
+								{...form.getInputProps("price")}
+							/>
+							<NumberInput
+								withAsterisk
+								label={t("Quantity")}
+								placeholder={t("Quantity available") || "Quantity available"}
+								{...form.getInputProps("quantity")}
+							/>
+						</Flex>
+					</Group>
+
+					<Button mt={16}>{t("Create")}</Button>
+				</Stack>
+			</Drawer>
 		</Stack>
 	);
 }

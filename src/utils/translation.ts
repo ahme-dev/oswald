@@ -12,9 +12,20 @@ const resources = {
 			Clear: "بەتاڵبکرەوە",
 			Checkout: "پەسەندبکە",
 
+			"Product name": "ناوی بەرهەم",
 			Products: "بەرهەمەکان",
 			"search for a product": "بەدوای بەرهەمێکدا بگەڕێ",
-			"No results for the search": "گەڕانەکە هیچ ئەنجامێکی نەگەڕاندەوە",
+			"No results for the search": "گەڕانەکە هیچ ئەنجامێکی نەهێنایەوە",
+			"Add a product": "بەرهەمێک زیادبکە",
+			"Product price": "نرخی بەرهەم",
+			"Quantity available": "عەدەدی بەردەست",
+			"About the product": "دەربارەی بەرهەم",
+
+			Quantity: "عەدەد",
+			Create: "دروستیبکە",
+			Name: "ناو",
+			About: "دەربارە",
+			Price: "نرخ",
 
 			Transactions: "مامەڵەکان",
 
