@@ -72,6 +72,7 @@ export function Checkout(props: {
 						</Group>
 					</Group>
 				</Card>
+				{/* Buttons */}
 				<Group>
 					<Button variant="light" onClick={() => props.clear()}>
 						{t("Clear")}
@@ -80,6 +81,7 @@ export function Checkout(props: {
 						{t("Checkout")}
 					</Button>
 				</Group>
+				{/* Buttons end */}
 			</Group>
 		</Stack>
 	);

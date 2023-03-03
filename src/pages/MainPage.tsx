@@ -17,6 +17,7 @@ export function MainPage() {
 	let checkoutState = useAppSelector((state) => state.checkout);
 	let dispatch = useAppDispatch();
 
+	// function to dispatch checkout action of set quantity
 	const qtyFunc = (id: string, qty: number) => {
 		dispatch(
 			checkoutActions.setItemQty({

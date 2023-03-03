@@ -36,8 +36,10 @@ export function AuthPage() {
 
 	// try to login with form values
 	const doLogin = async () => {
+		// try to validate the form
 		let feedback = form.validate();
 
+		// if got errors, return
 		if (feedback.hasErrors) return;
 
 		try {

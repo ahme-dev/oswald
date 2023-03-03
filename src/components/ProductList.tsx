@@ -33,6 +33,8 @@ export function ProductList(props: {
 		setFilteredData(data);
 	}, [props.name, props.loading]);
 
+	// render
+
 	// if result is loading, show loader
 	if (props.loading) {
 		return (

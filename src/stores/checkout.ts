@@ -36,6 +36,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 	name: "checkout",
 	initialState: initialCheckout,
 	reducers: {
+		// add an item to checkout
 		add: (state, action) => {
 			// check if item already exists and return if it does
 			const itemIndex = state.items.findIndex(
@@ -54,10 +55,12 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			// price * quantity
 			state.total += action.payload.price * 1;
 		},
+		// clear all items in checkout and reset total
 		clear: (state) => {
 			state.items = [];
 			state.total = 0;
 		},
+		// set quantity of an item in checkout
 		setItemQty: (state, action) => {
 			// find the item's index in the array
 			let itemIndex = state.items.findIndex(
@@ -81,6 +84,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 		},
 	},
 	extraReducers: (builder) => {
+		// when apply is done, clear out checkout items and reset total
 		builder.addCase(apply.fulfilled, (state) => {
 			state.items = [];
 			state.total = 0;
@@ -90,6 +94,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 
 // thunks
 
+// create a new transaction using the checkout state
 export const apply = createAsyncThunk(
 	"checkout/apply",
 	async (items: CheckoutState["items"]) => {

@@ -8,6 +8,7 @@ import { useCollection } from "../utils/pbase";
 export function ProductsPage() {
 	let [search, setSearch] = useState("");
 
+	// get data from products collection
 	let query = useCollection("products");
 
 	// render

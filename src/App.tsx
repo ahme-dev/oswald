@@ -25,6 +25,7 @@ const rtlCache = createEmotionCache({
 
 function App() {
 	return (
+		// provide redux store
 		<Provider store={store}>
 			<AppInner></AppInner>
 		</Provider>
@@ -32,8 +33,10 @@ function App() {
 }
 
 function AppInner() {
+	// get settings state
 	const settingsState = useAppSelector((state) => state.settings);
 
+	// set language on app init according to settings state
 	useEffect(() => {
 		i18n.changeLanguage(settingsState.rightToLeft ? "ku" : "en");
 	}, []);

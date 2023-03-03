@@ -19,16 +19,19 @@ import {
 } from "reduxjs-toolkit-persist";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
+// type of the root state
 interface RootState {
 	checkout: CheckoutState;
 	settings: SettingsState;
 }
 
 const persistedReducers = persistCombineReducers(
+	// persistence configuration
 	{
 		key: "root",
 		storage,
 	},
+	// reducers to put in store and persist
 	{
 		checkout: checkoutSlice.reducer,
 		settings: settingsSlice.reducer,
@@ -50,10 +53,12 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
+// dispatch and selector for app
+
 export const useAppDispatch: () => typeof store.dispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-// selectors and actions
+// actions of each slice
 
 export const checkoutActions = checkoutSlice.actions;
 export const settingsActions = settingsSlice.actions;

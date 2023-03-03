@@ -3,10 +3,14 @@ import { TitleText } from "../components/TitleText";
 import { useCollection } from "../utils/pbase";
 
 export function TransactionsPage() {
+	// get data from transactions collection
 	let query = useCollection("transactions");
 
+	// render
+
 	if (query.loading) return <Loader></Loader>;
-	if (!query.data) return <Text>Hi</Text>;
+
+	if (!query.data) return <Text>No Data</Text>;
 
 	return (
 		<Stack h={"100%"}>
