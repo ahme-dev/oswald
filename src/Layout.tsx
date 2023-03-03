@@ -3,9 +3,12 @@ import {
 	ActionIcon,
 	AppShell,
 	Avatar,
-	Menu,
+	Text,
+	Switch,
 	Navbar,
 	Stack,
+	Popover,
+	Group,
 } from "@mantine/core";
 import {
 	BookOpenIcon,
@@ -97,33 +100,39 @@ function NavBar() {
 				{/* Upper End */}
 				{/* Lower */}
 				<Stack align={"center"} spacing={16}>
-					<Menu>
-						<Menu.Target>
+					<Popover>
+						<Popover.Target>
 							<ActionIcon size={"lg"}>
 								<CogIcon></CogIcon>
 							</ActionIcon>
-						</Menu.Target>
-						<Menu.Dropdown>
-							<Menu.Item
-								icon={
-									settingsState.darkMode ? (
-										<MoonIcon height={14}></MoonIcon>
-									) : (
-										<SunIcon height={14} />
-									)
-								}
-								onClick={() => dispatch(settingsActions.toggleDarkMode())}
-							>
-								{settingsState.darkMode ? "Dark Theme" : "Light Theme"}
-							</Menu.Item>
-							<Menu.Item
-								icon={<LanguageIcon height={16} />}
-								onClick={() => dispatch(settingsActions.toggleRightToLeft())}
-							>
-								{settingsState.rightToLeft ? "Right To Left" : "Left To Right"}
-							</Menu.Item>
-						</Menu.Dropdown>
-					</Menu>
+						</Popover.Target>
+						<Popover.Dropdown>
+							<Stack>
+								<Group w="100%" position="apart">
+									<Text>Theme</Text>
+									<Switch
+										checked={settingsState.darkMode}
+										size="md"
+										onLabel={<MoonIcon height={14} />}
+										offLabel={<SunIcon height={14} />}
+										onChange={() => dispatch(settingsActions.toggleDarkMode())}
+									/>
+								</Group>
+								<Group w="100%" position="apart">
+									<Text>RTL</Text>
+									<Switch
+										checked={settingsState.rightToLeft}
+										size="md"
+										onLabel={<LanguageIcon height={14} />}
+										offLabel={<LanguageIcon height={14} />}
+										onChange={() =>
+											dispatch(settingsActions.toggleRightToLeft())
+										}
+									/>
+								</Group>
+							</Stack>
+						</Popover.Dropdown>
+					</Popover>
 					<Link to={"/auth"}>
 						<Avatar
 							style={{ cursor: "pointer" }}
