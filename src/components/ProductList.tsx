@@ -1,7 +1,19 @@
-import { Card, Center, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
+import { CurrencyEuroIcon, MinusIcon } from "@heroicons/react/24/solid";
+import {
+	ActionIcon,
+	Badge,
+	Card,
+	Center,
+	Group,
+	Loader,
+	SimpleGrid,
+	Stack,
+	Text,
+} from "@mantine/core";
 import { ListResult, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../stores/root";
 
 export function ProductList(props: {
 	loading: boolean;
@@ -17,6 +29,8 @@ export function ProductList(props: {
 	}) => void;
 }) {
 	const { t } = useTranslation();
+
+	const settingsState = useAppSelector((state) => state.settings);
 
 	// contain the received data but filtered
 	let [filteredData, setFilteredData] = useState<Record[]>([]);
@@ -95,9 +109,32 @@ export function ProductList(props: {
 						sx={{ cursor: "pointer" }}
 					>
 						<Stack>
-							<Text weight={"bold"}>{item.name}</Text>
-							{!props.smaller && <Text>{item.about}</Text>}
-							<Text italic>{item.price_current}</Text>
+							<Text weight="bolder">{item.name}</Text>
+							{!props.smaller && <Text italic>{item.about}</Text>}
+							<Group>
+								<Badge
+									pl={0}
+									leftSection={
+										<ActionIcon color={settingsState.color}>
+											<CurrencyEuroIcon />
+										</ActionIcon>
+									}
+									size="lg"
+								>
+									{item.price_current}
+								</Badge>
+								<Badge
+									pl={0}
+									size="lg"
+									leftSection={
+										<ActionIcon color={settingsState.color}>
+											<MinusIcon />
+										</ActionIcon>
+									}
+								>
+									{item.quantity_available}
+								</Badge>
+							</Group>
 						</Stack>
 					</Card>
 				);
