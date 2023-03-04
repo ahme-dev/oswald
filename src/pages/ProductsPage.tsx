@@ -34,15 +34,16 @@ export function ProductsPage() {
 	const addForm = useForm({
 		initialValues: {
 			name: "",
-			price: 1000,
-			quantity: 1,
+			price_current: 1000,
+			quantity_available: 1,
 			about: "",
 		},
 
 		validate: {
 			name: (value) => (value.length > 0 ? null : "Name is required"),
-			price: (value) => (value > 0 ? null : "Price is required"),
-			quantity: (value) => (value > 0 ? null : "Quantity is required"),
+			price_current: (value) => (value > 0 ? null : "Price is required"),
+			quantity_available: (value) =>
+				value > 0 ? null : "Quantity is required",
 			about: (value) => (value.length > 0 ? null : "About is required"),
 		},
 	});
@@ -74,8 +75,8 @@ export function ProductsPage() {
 		dispatch(
 			createProduct({
 				name: addForm.values.name,
-				price: addForm.values.price,
-				quantity: addForm.values.quantity,
+				price_current: addForm.values.price_current,
+				quantity_available: addForm.values.quantity_available,
 				about: addForm.values.about,
 			}),
 		);
@@ -91,11 +92,7 @@ export function ProductsPage() {
 
 		dispatch(
 			editProduct({
-				id: editForm.values.id,
-				name: editForm.values.name,
-				price: editForm.values.price_current,
-				quantity: editForm.values.quantity_available,
-				about: editForm.values.about,
+				...editForm.values,
 			}),
 		);
 
@@ -103,7 +100,7 @@ export function ProductsPage() {
 	};
 
 	const tryDeleteProduct = async () => {
-		dispatch(deleteProduct(editForm.values.id));
+		dispatch(deleteProduct({ id: editForm.values.id }));
 
 		setEditDrawerVisible(false);
 	};
@@ -123,20 +120,10 @@ export function ProductsPage() {
 				data={productsState.list}
 				loading={productsState.loading}
 				filterTerms={search}
-				itemClickFunc={({
-					id,
-					name,
-					quantity_available,
-					price_current,
-					about,
-				}) => {
+				itemClickFunc={(product) => {
 					setEditDrawerVisible(true);
 					editForm.setValues({
-						id,
-						name,
-						quantity_available,
-						price_current,
-						about,
+						...product,
 					});
 				}}
 			></ProductList>

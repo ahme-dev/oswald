@@ -43,36 +43,31 @@ export const productsSlice = createSlice<ProductsState, ProductsActions>({
 // thunks
 
 // get all the products
-export const getProducts = createAsyncThunk("products/get", async () => {
-	let products = await pb.collection("products").getList(1, 25);
-	return products.items.map((product) => {
-		return {
-			id: product.id,
-			name: product.name,
-			quantity_available: product.quantity_available,
-			price_current: product.price_current,
-			about: product.about,
-		};
-	});
-});
+export const getProducts = createAsyncThunk(
+	"products/get",
+	async (): Promise<Product[]> => {
+		let products = await pb.collection("products").getList(1, 25);
+		return products.items.map((product) => {
+			return {
+				id: product.id,
+				name: product.name,
+				about: product.about,
+				price_current: product.price_current,
+				quantity_available: product.quantity_available,
+			};
+		});
+	},
+);
 
 // create a new product
 export const createProduct = createAsyncThunk(
 	"products/create",
-	async (
-		vals: {
-			name: string;
-			price: number;
-			quantity: number;
-			about: string;
-		},
-		{ dispatch },
-	) => {
+	async (product: Omit<Product, "id">, { dispatch }) => {
 		const data = {
-			name: vals.name,
-			price_current: vals.price,
-			quantity_available: vals.quantity,
-			about: vals.about,
+			name: product.name,
+			about: product.about,
+			price_current: product.price_current,
+			quantity_available: product.quantity_available,
 		};
 
 		await pb.collection("products").create(data);
@@ -84,24 +79,15 @@ export const createProduct = createAsyncThunk(
 // edit an existing product using the id
 export const editProduct = createAsyncThunk(
 	"products/edit",
-	async (
-		vals: {
-			id: string;
-			name: string;
-			price: number;
-			quantity: number;
-			about: string;
-		},
-		{ dispatch },
-	) => {
+	async (product: Product, { dispatch }) => {
 		const data = {
-			name: vals.name,
-			price_current: vals.price,
-			quantity_available: vals.quantity,
-			about: vals.about,
+			name: product.name,
+			price_current: product.price_current,
+			quantity_available: product.quantity_available,
+			about: product.about,
 		};
 
-		await pb.collection("products").update(vals.id, data);
+		await pb.collection("products").update(product.id, data);
 
 		dispatch(getProducts());
 	},
@@ -110,8 +96,8 @@ export const editProduct = createAsyncThunk(
 // delete an existing product using the id
 export const deleteProduct = createAsyncThunk(
 	"products/delete",
-	async (id: string, { dispatch }) => {
-		await pb.collection("products").delete(id);
+	async (product: Pick<Product, "id">, { dispatch }) => {
+		await pb.collection("products").delete(product.id);
 
 		dispatch(getProducts());
 	},
