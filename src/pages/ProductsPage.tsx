@@ -81,6 +81,9 @@ export function ProductsPage() {
 				data={query.data}
 				loading={query.loading}
 				name={search}
+				itemClickFunc={(id, name, price) => {
+					console.log("clicked ", name, price);
+				}}
 			></ProductList>
 
 			<Affix

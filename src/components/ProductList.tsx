@@ -8,11 +8,9 @@ export function ProductList(props: {
 	loading: boolean;
 	data: ListResult<Record> | undefined;
 	name: string;
-	checkout?: boolean;
 	smaller?: boolean;
+	itemClickFunc: (id: string, name: string, price: number) => void;
 }) {
-	const dispatch = useAppDispatch();
-
 	const { t } = useTranslation();
 
 	// contain the received data but filtered
@@ -70,16 +68,8 @@ export function ProductList(props: {
 			{filteredData.map((item) => {
 				return (
 					<Card
-						// onclick add to checkout if checkout is enabled
 						onClick={() =>
-							props.checkout &&
-							dispatch(
-								checkoutActions.add({
-									id: item.id,
-									name: item.name,
-									price: item.price_current,
-								}),
-							)
+							props.itemClickFunc(item.id, item.name, item.price_current)
 						}
 						key={item.id}
 						withBorder

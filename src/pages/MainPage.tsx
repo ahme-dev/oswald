@@ -33,7 +33,15 @@ export function MainPage() {
 					<ProductList
 						data={query.data}
 						loading={query.loading}
-						checkout
+						itemClickFunc={(id, name, price) =>
+							dispatch(
+								checkoutActions.add({
+									id,
+									name,
+									price,
+								}),
+							)
+						}
 						smaller
 						name={""}
 					></ProductList>
