@@ -50,6 +50,30 @@ export async function createProduct(
 	}
 }
 
+// create a new product
+export async function editProduct(
+	id: string,
+	name: string,
+	price: number,
+	quantity: number,
+	about: string,
+) {
+	const data = {
+		name,
+		price_current: price,
+		quantity_available: quantity,
+		about,
+	};
+
+	try {
+		await pb.collection("products").update(id, data);
+	} catch (e) {
+		console.log(e);
+	}
+
+	console.log(data);
+}
+
 // hook to get a collection in the database
 export function useCollection(collection: string) {
 	let [data, setData] = useState<ListResult<Record>>();

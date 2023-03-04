@@ -33,12 +33,12 @@ export function MainPage() {
 					<ProductList
 						data={query.data}
 						loading={query.loading}
-						itemClickFunc={(id, name, price) =>
+						itemClickFunc={({ id, name, price_current }) =>
 							dispatch(
 								checkoutActions.add({
 									id,
 									name,
-									price,
+									price: price_current,
 								}),
 							)
 						}

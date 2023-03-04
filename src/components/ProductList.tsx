@@ -8,7 +8,13 @@ export function ProductList(props: {
 	data: ListResult<Record> | undefined;
 	filterTerms: string;
 	smaller?: boolean;
-	itemClickFunc: (id: string, name: string, price: number) => void;
+	itemClickFunc: ({}: {
+		id: string;
+		name: string;
+		price_current: number;
+		quantity_available: number;
+		about: string;
+	}) => void;
 }) {
 	const { t } = useTranslation();
 
@@ -75,9 +81,15 @@ export function ProductList(props: {
 			{filteredData.map((item) => {
 				return (
 					<Card
-						onClick={() =>
-							props.itemClickFunc(item.id, item.name, item.price_current)
-						}
+						onClick={() => {
+							props.itemClickFunc({
+								id: item.id,
+								name: item.name,
+								price_current: item.price_current,
+								about: item.about,
+								quantity_available: item.quantity_available,
+							});
+						}}
 						key={item.id}
 						withBorder
 						sx={{ cursor: "pointer" }}

@@ -17,16 +17,20 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppSelector } from "../stores/root";
-import { createProduct, useCollection } from "../utils/pbase";
+import { createProduct, editProduct, useCollection } from "../utils/pbase";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
 
-	// search string and create drawe state
+	// search string and drawer visiblity state
 	let [search, setSearch] = useState("");
-	let [showDrawer, setShowDrawer] = useState(false);
+	let [addDrawerVisible, setAddDrawerVisible] = useState(false);
+	let [editDrawerVisible, setEditDrawerVisible] = useState(false);
 
-	const form = useForm({
+	// get data from products collection
+	let query = useCollection("products");
+
+	const addForm = useForm({
 		initialValues: {
 			name: "",
 			price: 1000,
@@ -42,29 +46,66 @@ export function ProductsPage() {
 		},
 	});
 
-	const tryCreateProduct = async () => {
+	const editForm = useForm({
+		initialValues: {
+			id: "",
+			name: "",
+			price_current: 0,
+			quantity_available: 0,
+			about: "",
+		},
+
+		validate: {
+			name: (value) => (value.length > 0 ? null : "Name is required"),
+			price_current: (value) => (value > 0 ? null : "Price is required"),
+			quantity_available: (value) =>
+				value > 0 ? null : "Quantity is required",
+			about: (value) => (value.length > 0 ? null : "About is required"),
+		},
+	});
+
+	const tryAddProduct = async () => {
 		// try to validate the form
 		// if got errors, return
-		let feedback = form.validate();
+		let feedback = addForm.validate();
 		if (feedback.hasErrors) return;
 
 		try {
 			// create a new product using the values
 			createProduct(
-				form.values.name,
-				form.values.price,
-				form.values.quantity,
-				form.values.about,
+				addForm.values.name,
+				addForm.values.price,
+				addForm.values.quantity,
+				addForm.values.about,
 			);
 		} catch (e) {
-			console.log("Error in tryCreateProduct", e);
+			console.log("Error in tryAddProduct", e);
 		}
 
-		setShowDrawer(false);
+		setAddDrawerVisible(false);
 	};
 
-	// get data from products collection
-	let query = useCollection("products");
+	const tryEditProduct = async () => {
+		// try to validate the form
+		// if got errors, return
+		let feedback = editForm.validate();
+		if (feedback.hasErrors) return;
+
+		try {
+			// create a new product using the values
+			editProduct(
+				editForm.values.id,
+				editForm.values.name,
+				editForm.values.price_current,
+				editForm.values.quantity_available,
+				editForm.values.about,
+			);
+		} catch (e) {
+			console.log("Error in tryEditProduct", e);
+		}
+
+		setAddDrawerVisible(false);
+	};
 
 	// render
 	return (
@@ -81,13 +122,26 @@ export function ProductsPage() {
 				data={query.data}
 				loading={query.loading}
 				filterTerms={search}
-				itemClickFunc={(id, name, price) => {
-					console.log("clicked ", name, price);
+				itemClickFunc={({
+					id,
+					name,
+					quantity_available,
+					price_current,
+					about,
+				}) => {
+					setEditDrawerVisible(true);
+					editForm.setValues({
+						id,
+						name,
+						quantity_available,
+						price_current,
+						about,
+					});
 				}}
 			></ProductList>
 
 			<Affix
-				onClick={() => setShowDrawer(true)}
+				onClick={() => setAddDrawerVisible(true)}
 				position={{ bottom: 20, right: 20 }}
 			>
 				<ActionIcon size={"xl"} variant="gradient" radius={"xl"} p={8}>
@@ -95,10 +149,59 @@ export function ProductsPage() {
 				</ActionIcon>
 			</Affix>
 
+			{/* Drawer for editing a product */}
 			<Drawer
-				opened={showDrawer}
+				opened={editDrawerVisible}
 				position={settingsState.rightToLeft ? "right" : "left"}
-				onClose={() => setShowDrawer(false)}
+				onClose={() => setEditDrawerVisible(false)}
+				title={t("Edit a product")}
+				overlayOpacity={0.7}
+				padding="xl"
+				size="xl"
+			>
+				<Stack>
+					<TextInput
+						withAsterisk
+						label={t("Name")}
+						placeholder={t("Product name") || "Product name"}
+						{...editForm.getInputProps("name")}
+					/>
+					<TextInput
+						withAsterisk
+						label={t("About")}
+						placeholder={t("About the product") || "About the product"}
+						{...editForm.getInputProps("about")}
+					/>
+
+					<Group position="apart">
+						<Flex direction={"row"} gap="lg">
+							<NumberInput
+								withAsterisk
+								label={t("Price")}
+								step={250}
+								placeholder={t("Product price") || "Product price"}
+								{...editForm.getInputProps("price_current")}
+							/>
+							<NumberInput
+								withAsterisk
+								label={t("Quantity")}
+								placeholder={t("Quantity available") || "Quantity available"}
+								{...editForm.getInputProps("quantity_available")}
+							/>
+						</Flex>
+					</Group>
+
+					<Button onClick={() => tryEditProduct()} mt={16}>
+						{t("Change")}
+					</Button>
+				</Stack>
+			</Drawer>
+
+			{/* Drawer for adding a product */}
+			<Drawer
+				opened={addDrawerVisible}
+				position={settingsState.rightToLeft ? "right" : "left"}
+				onClose={() => setAddDrawerVisible(false)}
 				title={t("Add a product")}
 				overlayOpacity={0.7}
 				padding="xl"
@@ -109,13 +212,13 @@ export function ProductsPage() {
 						withAsterisk
 						label={t("Name")}
 						placeholder={t("Product name") || "Product name"}
-						{...form.getInputProps("name")}
+						{...addForm.getInputProps("name")}
 					/>
 					<TextInput
 						withAsterisk
 						label={t("About")}
 						placeholder={t("About the product") || "About the product"}
-						{...form.getInputProps("about")}
+						{...addForm.getInputProps("about")}
 					/>
 
 					<Group position="apart">
@@ -125,18 +228,18 @@ export function ProductsPage() {
 								label={t("Price")}
 								step={250}
 								placeholder={t("Product price") || "Product price"}
-								{...form.getInputProps("price")}
+								{...addForm.getInputProps("price")}
 							/>
 							<NumberInput
 								withAsterisk
 								label={t("Quantity")}
 								placeholder={t("Quantity available") || "Quantity available"}
-								{...form.getInputProps("quantity")}
+								{...addForm.getInputProps("quantity")}
 							/>
 						</Flex>
 					</Group>
 
-					<Button onClick={tryCreateProduct} mt={16}>
+					<Button onClick={tryAddProduct} mt={16}>
 						{t("Add")}
 					</Button>
 				</Stack>
