@@ -18,8 +18,7 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppDispatch, useAppSelector } from "../stores/root";
-import { createProduct } from "../stores/products";
-import { deleteProduct, editProduct } from "../utils/pbase";
+import { createProduct, editProduct, deleteProduct } from "../stores/products";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -90,19 +89,22 @@ export function ProductsPage() {
 		let feedback = editForm.validate();
 		if (feedback.hasErrors) return;
 
-		await editProduct(
-			editForm.values.id,
-			editForm.values.name,
-			editForm.values.price_current,
-			editForm.values.quantity_available,
-			editForm.values.about,
+		dispatch(
+			editProduct({
+				id: editForm.values.id,
+				name: editForm.values.name,
+				price: editForm.values.price_current,
+				quantity: editForm.values.quantity_available,
+				about: editForm.values.about,
+			}),
 		);
 
 		setEditDrawerVisible(false);
 	};
 
 	const tryDeleteProduct = async () => {
-		await deleteProduct(editForm.values.id);
+		dispatch(deleteProduct(editForm.values.id));
+
 		setEditDrawerVisible(false);
 	};
 

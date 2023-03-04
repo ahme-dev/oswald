@@ -80,3 +80,39 @@ export const createProduct = createAsyncThunk(
 		dispatch(getProducts());
 	},
 );
+
+// edit an existing product using the id
+export const editProduct = createAsyncThunk(
+	"products/edit",
+	async (
+		vals: {
+			id: string;
+			name: string;
+			price: number;
+			quantity: number;
+			about: string;
+		},
+		{ dispatch },
+	) => {
+		const data = {
+			name: vals.name,
+			price_current: vals.price,
+			quantity_available: vals.quantity,
+			about: vals.about,
+		};
+
+		await pb.collection("products").update(vals.id, data);
+
+		dispatch(getProducts());
+	},
+);
+
+// delete an existing product using the id
+export const deleteProduct = createAsyncThunk(
+	"products/delete",
+	async (id: string, { dispatch }) => {
+		await pb.collection("products").delete(id);
+
+		dispatch(getProducts());
+	},
+);
