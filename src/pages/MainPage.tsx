@@ -8,11 +8,11 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
-import { useCollection } from "../utils/pbase";
 
 export function MainPage() {
-	let query = useCollection("products");
 	let checkoutState = useAppSelector((state) => state.checkout);
+	let productsState = useAppSelector((state) => state.products);
+
 	let dispatch = useAppDispatch();
 
 	// function to dispatch checkout action of set quantity
@@ -31,8 +31,8 @@ export function MainPage() {
 			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList
-						data={query.data}
-						loading={query.loading}
+						data={productsState.list}
+						loading={productsState.loading}
 						itemClickFunc={({ id, name, price_current }) =>
 							dispatch(
 								checkoutActions.add({

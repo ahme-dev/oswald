@@ -18,11 +18,13 @@ import {
 	REGISTER,
 } from "reduxjs-toolkit-persist";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { productsSlice, ProductsState } from "./products";
 
 // type of the root state
 interface RootState {
 	checkout: CheckoutState;
 	settings: SettingsState;
+	products: ProductsState;
 }
 
 const persistedReducers = persistCombineReducers(
@@ -35,6 +37,7 @@ const persistedReducers = persistCombineReducers(
 	{
 		checkout: checkoutSlice.reducer,
 		settings: settingsSlice.reducer,
+		products: productsSlice.reducer,
 	},
 );
 
@@ -61,4 +64,5 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 // actions of each slice
 
 export const checkoutActions = checkoutSlice.actions;
+export const productsActions = productsSlice.actions;
 export const settingsActions = settingsSlice.actions;

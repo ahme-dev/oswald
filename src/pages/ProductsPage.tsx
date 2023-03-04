@@ -17,24 +17,20 @@ import { t } from "i18next";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
-import { useAppSelector } from "../stores/root";
-import {
-	createProduct,
-	deleteProduct,
-	editProduct,
-	useCollection,
-} from "../utils/pbase";
+import { useAppDispatch, useAppSelector } from "../stores/root";
+import { createProduct } from "../stores/products";
+import { deleteProduct, editProduct } from "../utils/pbase";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
+	let productsState = useAppSelector((state) => state.products);
+
+	let dispatch = useAppDispatch();
 
 	// search string and drawer visiblity state
 	let [search, setSearch] = useState("");
 	let [addDrawerVisible, setAddDrawerVisible] = useState(false);
 	let [editDrawerVisible, setEditDrawerVisible] = useState(false);
-
-	// get data from products collection
-	let query = useCollection("products");
 
 	const addForm = useForm({
 		initialValues: {
@@ -76,11 +72,13 @@ export function ProductsPage() {
 		let feedback = addForm.validate();
 		if (feedback.hasErrors) return;
 
-		await createProduct(
-			addForm.values.name,
-			addForm.values.price,
-			addForm.values.quantity,
-			addForm.values.about,
+		dispatch(
+			createProduct({
+				name: addForm.values.name,
+				price: addForm.values.price,
+				quantity: addForm.values.quantity,
+				about: addForm.values.about,
+			}),
 		);
 
 		setAddDrawerVisible(false);
@@ -120,8 +118,8 @@ export function ProductsPage() {
 				></Input>
 			</Flex>
 			<ProductList
-				data={query.data}
-				loading={query.loading}
+				data={productsState.list}
+				loading={productsState.loading}
 				filterTerms={search}
 				itemClickFunc={({
 					id,

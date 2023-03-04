@@ -10,14 +10,14 @@ import {
 	Stack,
 	Text,
 } from "@mantine/core";
-import { ListResult, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Product } from "../stores/products";
 import { useAppSelector } from "../stores/root";
 
 export function ProductList(props: {
 	loading: boolean;
-	data: ListResult<Record> | undefined;
+	data: Product[];
 	filterTerms: string;
 	smaller?: boolean;
 	itemClickFunc: ({}: {
@@ -33,15 +33,15 @@ export function ProductList(props: {
 	const settingsState = useAppSelector((state) => state.settings);
 
 	// contain the received data but filtered
-	let [filteredData, setFilteredData] = useState<Record[]>([]);
+	let [filteredData, setFilteredData] = useState<Product[]>([]);
 
 	// filter data on loading finish and filter changes
 	useEffect(() => {
 		// if loading or no data don't filter
-		if (props.loading || !props.data || props.data.items.length === 0) return;
+		if (props.loading || !props.data || props.data.length === 0) return;
 
 		// make new data using filters
-		let data = props.data.items.filter((item) => {
+		let data = props.data.filter((item) => {
 			// does name field match filterTerms
 			const filterTermsInName = item.name
 				.toLowerCase()

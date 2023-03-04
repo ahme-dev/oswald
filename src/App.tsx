@@ -15,7 +15,8 @@ import rtlPlugin from "stylis-plugin-rtl";
 import i18n from "./utils/translation";
 
 import { Provider } from "react-redux";
-import { store, useAppSelector } from "./stores/root";
+import { store, useAppDispatch, useAppSelector } from "./stores/root";
+import { getProducts } from "./stores/products";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -36,9 +37,12 @@ function AppInner() {
 	// get settings state
 	const settingsState = useAppSelector((state) => state.settings);
 
+	const dispatch = useAppDispatch();
+
 	// set language on app init according to settings state
 	useEffect(() => {
 		i18n.changeLanguage(settingsState.rightToLeft ? "ku" : "en");
+		dispatch(getProducts());
 	}, []);
 
 	return (
