@@ -35,6 +35,8 @@ const resources = {
 			"Cannot login": "ناتوانیت بچیتە ناوەوە",
 			"Username is required": "پێویستە ناوێک داخڵ بکەیت",
 			"Password is required": "پێویستە وشەی نهێنی داخڵ بکەیت",
+
+			Overview: "گشتی",
 		},
 	},
 };
