@@ -2,7 +2,6 @@ import { Card, Center, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import { ListResult, Record } from "pocketbase";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { checkoutActions, useAppDispatch } from "../stores/root";
 
 export function ProductList(props: {
 	loading: boolean;
