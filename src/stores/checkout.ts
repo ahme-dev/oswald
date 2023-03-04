@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createTransaction } from "../utils/pbase";
+import { pb } from "../utils/pbase";
+import { getProducts } from "./products";
 
 // types
 
@@ -97,10 +98,41 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 
 // thunks
 
-// create a new transaction using the checkout state
+// create a new transaction using the items (transactionProducts)
 export const apply = createAsyncThunk(
 	"checkout/apply",
-	async (items: CheckoutState["items"]) => {
-		await createTransaction(items);
+	async (items: CheckoutState["items"], { dispatch }) => {
+		let transactionProductsIDs = [];
+
+		// go through each item
+		for (let i = 0; i < items.length; i++) {
+			// create a new transactionProduct with the item
+			const transactionProduct = await pb
+				.collection("transaction_products")
+				.create({
+					product_id: items[i].id,
+					quantity: items[i].qty,
+				});
+
+			// get the product record
+			const product = await pb.collection("products").getOne(items[i].id);
+
+			// substract the transaction quantity from the product available quantity
+			await pb.collection("products").update(items[i].id, {
+				quantity_available: product.quantity_available - items[i].qty,
+			});
+
+			// add the product id to the transactionProductsIDs array
+			transactionProductsIDs.push(transactionProduct.id);
+		}
+
+		// create the transaction data using the transactionProductsIDs array
+		const data = {
+			date: "2023-02-09 12:00:00",
+			transaction_product_ids: transactionProductsIDs,
+		};
+		await pb.collection("transactions").create(data);
+
+		dispatch(getProducts());
 	},
 );
