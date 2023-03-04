@@ -9,6 +9,7 @@ import {
 	Stack,
 	Popover,
 	Group,
+	Select,
 } from "@mantine/core";
 import {
 	BookOpenIcon,
@@ -24,6 +25,8 @@ import {
 import { Link } from "wouter";
 import { settingsActions, useAppDispatch, useAppSelector } from "./stores/root";
 import { useLocation } from "wouter";
+import { Colours } from "./stores/settings";
+import { useTranslation } from "react-i18next";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
@@ -37,6 +40,8 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 }
 
 function NavBar() {
+	const { t } = useTranslation();
+
 	// get browser url (i.e. /products)
 	let [browserURL] = useLocation();
 
@@ -50,7 +55,8 @@ function NavBar() {
 				{/* Upper */}
 				<Stack align={"center"} spacing={16}>
 					<ActionIcon
-						variant="gradient"
+						variant="filled"
+						color={settingsState.color}
 						radius={"xl"}
 						p={8}
 						size={"xl"}
@@ -83,15 +89,20 @@ function NavBar() {
 					].map((item) => {
 						return (
 							<Link key={item.id} to={item.link}>
-								<ActionIcon
-									variant={
-										browserURL === item.link ? "gradient" : "transparent"
-									}
-									size="lg"
-									p={2}
-								>
-									{item.icon}
-								</ActionIcon>
+								{browserURL === item.link ? (
+									<ActionIcon
+										variant={"filled"}
+										color={settingsState.color}
+										size="lg"
+										p={2}
+									>
+										{item.icon}
+									</ActionIcon>
+								) : (
+									<ActionIcon size="lg" p={2}>
+										{item.icon}
+									</ActionIcon>
+								)}
 							</Link>
 						);
 					})}
@@ -107,6 +118,7 @@ function NavBar() {
 							</ActionIcon>
 						</Popover.Target>
 						<Popover.Dropdown>
+							{/* Settings menu */}
 							<Stack>
 								<Group w="100%" position="apart">
 									<Text>Theme</Text>
@@ -130,14 +142,30 @@ function NavBar() {
 										}
 									/>
 								</Group>
+								<Group w="100%" position="apart">
+									<Text>{t("Colour")}</Text>
+									<Select
+										w="6rem"
+										data={Colours.map((e) => ({
+											value: e.toLowerCase(),
+											label: t(e) || e,
+										}))}
+										onChange={(e: any) =>
+											dispatch(settingsActions.changeColor(e))
+										}
+										value={settingsState.color}
+									/>
+								</Group>
 							</Stack>
+							{/* Settings menu end */}
 						</Popover.Dropdown>
 					</Popover>
 					<Link to={"/auth"}>
 						<Avatar
+							variant="filled"
+							color={settingsState.color}
 							style={{ cursor: "pointer" }}
 							radius="xl"
-							variant="gradient"
 						/>
 					</Link>
 				</Stack>

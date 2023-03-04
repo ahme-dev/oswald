@@ -69,11 +69,11 @@ export function Checkout(props: {
 				</Card>
 				{/* Buttons */}
 				<Group>
+					<Button variant="filled" onClick={() => props.apply()}>
+						{t("Checkout")}
+					</Button>
 					<Button variant="light" onClick={() => props.clear()}>
 						{t("Clear")}
-					</Button>
-					<Button variant="light" onClick={() => props.apply()}>
-						{t("Checkout")}
 					</Button>
 				</Group>
 				{/* Buttons end */}

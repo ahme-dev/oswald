@@ -4,6 +4,13 @@ import { initReactI18next } from "react-i18next";
 const resources = {
 	ku: {
 		translation: {
+			Colour: "ڕەنگ",
+			Red: "سوور",
+			Blue: "شین",
+			Green: "سەوز",
+			Indigo: "مۆر",
+			Teal: "پیرۆزەیی",
+
 			"in total": "بە گشتی",
 			items: "بەرهەم",
 			Customer: "کڕیار",

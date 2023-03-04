@@ -49,6 +49,7 @@ function AppInner() {
 				fontFamily: "Ubuntu Kurdish",
 				headings: { fontFamily: "Ubuntu Kurdish" },
 				colorScheme: settingsState.darkMode ? "dark" : "light",
+				primaryColor: settingsState.color,
 				dir: settingsState.rightToLeft ? "rtl" : "ltr",
 				loader: "bars",
 			}}

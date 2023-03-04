@@ -145,7 +145,13 @@ export function ProductsPage() {
 				onClick={() => setAddDrawerVisible(true)}
 				position={{ bottom: 20, right: 20 }}
 			>
-				<ActionIcon size={"xl"} variant="gradient" radius={"xl"} p={8}>
+				<ActionIcon
+					color={settingsState.color}
+					size={"xl"}
+					variant="filled"
+					radius={"xl"}
+					p={8}
+				>
 					<PlusIcon></PlusIcon>
 				</ActionIcon>
 			</Affix>
@@ -194,7 +200,9 @@ export function ProductsPage() {
 
 					<SimpleGrid cols={2} mt={16}>
 						<Button onClick={() => tryEditProduct()}>{t("Change")}</Button>
-						<Button onClick={() => tryDeleteProduct()}>{t("Delete")}</Button>
+						<Button variant="light" onClick={() => tryDeleteProduct()}>
+							{t("Delete")}
+						</Button>
 					</SimpleGrid>
 				</Stack>
 			</Drawer>
@@ -241,7 +249,7 @@ export function ProductsPage() {
 						</Flex>
 					</Group>
 
-					<Button onClick={tryAddProduct} mt={16}>
+					<Button color={settingsState.color} onClick={tryAddProduct} mt={16}>
 						{t("Add")}
 					</Button>
 				</Stack>
