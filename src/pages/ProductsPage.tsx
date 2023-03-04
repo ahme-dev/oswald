@@ -10,6 +10,7 @@ import {
 	Stack,
 	TextInput,
 	Button,
+	SimpleGrid,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -17,7 +18,12 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppSelector } from "../stores/root";
-import { createProduct, editProduct, useCollection } from "../utils/pbase";
+import {
+	createProduct,
+	deleteProduct,
+	editProduct,
+	useCollection,
+} from "../utils/pbase";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -70,17 +76,12 @@ export function ProductsPage() {
 		let feedback = addForm.validate();
 		if (feedback.hasErrors) return;
 
-		try {
-			// create a new product using the values
-			createProduct(
-				addForm.values.name,
-				addForm.values.price,
-				addForm.values.quantity,
-				addForm.values.about,
-			);
-		} catch (e) {
-			console.log("Error in tryAddProduct", e);
-		}
+		await createProduct(
+			addForm.values.name,
+			addForm.values.price,
+			addForm.values.quantity,
+			addForm.values.about,
+		);
 
 		setAddDrawerVisible(false);
 	};
@@ -91,20 +92,20 @@ export function ProductsPage() {
 		let feedback = editForm.validate();
 		if (feedback.hasErrors) return;
 
-		try {
-			// create a new product using the values
-			editProduct(
-				editForm.values.id,
-				editForm.values.name,
-				editForm.values.price_current,
-				editForm.values.quantity_available,
-				editForm.values.about,
-			);
-		} catch (e) {
-			console.log("Error in tryEditProduct", e);
-		}
+		await editProduct(
+			editForm.values.id,
+			editForm.values.name,
+			editForm.values.price_current,
+			editForm.values.quantity_available,
+			editForm.values.about,
+		);
 
-		setAddDrawerVisible(false);
+		setEditDrawerVisible(false);
+	};
+
+	const tryDeleteProduct = async () => {
+		await deleteProduct(editForm.values.id);
+		setEditDrawerVisible(false);
 	};
 
 	// render
@@ -191,9 +192,10 @@ export function ProductsPage() {
 						</Flex>
 					</Group>
 
-					<Button onClick={() => tryEditProduct()} mt={16}>
-						{t("Change")}
-					</Button>
+					<SimpleGrid cols={2} mt={16}>
+						<Button onClick={() => tryEditProduct()}>{t("Change")}</Button>
+						<Button onClick={() => tryDeleteProduct()}>{t("Delete")}</Button>
+					</SimpleGrid>
 				</Stack>
 			</Drawer>
 

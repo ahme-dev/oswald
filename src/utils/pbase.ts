@@ -50,7 +50,7 @@ export async function createProduct(
 	}
 }
 
-// create a new product
+// edit an existing product using the id
 export async function editProduct(
 	id: string,
 	name: string,
@@ -70,8 +70,15 @@ export async function editProduct(
 	} catch (e) {
 		console.log(e);
 	}
+}
 
-	console.log(data);
+// delete an existing product using the id
+export async function deleteProduct(id: string) {
+	try {
+		await pb.collection("products").delete(id);
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 // hook to get a collection in the database
