@@ -5,6 +5,8 @@ const resources = {
 	ku: {
 		translation: {
 			Colour: "ڕەنگ",
+			Theme: "شێواز",
+			RTL: "ڕاست بۆ چەپ",
 			Red: "سوور",
 			Blue: "شین",
 			Green: "سەوز",
@@ -27,7 +29,9 @@ const resources = {
 			"Product price": "نرخی بەرهەم",
 			"Quantity available": "عەدەدی بەردەست",
 			"About the product": "دەربارەی بەرهەم",
-
+			"Edit a product": "دەسکاری بەرهەمەکە بکە",
+			Delete: "بیسڕەوە",
+			Change: "بیگۆڕە",
 			Quantity: "عەدەد",
 			Add: "زیادیبکە",
 			Name: "ناو",

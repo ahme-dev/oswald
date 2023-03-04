@@ -121,7 +121,7 @@ function NavBar() {
 							{/* Settings menu */}
 							<Stack>
 								<Group w="100%" position="apart">
-									<Text>Theme</Text>
+									<Text>{t("Theme")}</Text>
 									<Switch
 										checked={settingsState.darkMode}
 										size="md"
@@ -131,7 +131,7 @@ function NavBar() {
 									/>
 								</Group>
 								<Group w="100%" position="apart">
-									<Text>RTL</Text>
+									<Text>{t("RTL")}</Text>
 									<Switch
 										checked={settingsState.rightToLeft}
 										size="md"
