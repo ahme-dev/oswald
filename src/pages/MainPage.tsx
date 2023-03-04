@@ -16,10 +16,10 @@ export function MainPage() {
 	let dispatch = useAppDispatch();
 
 	// function to dispatch checkout action of set quantity
-	const qtyFunc = (id: string, qty: number) => {
+	const qtyFunc = (index: number, qty: number) => {
 		dispatch(
 			checkoutActions.setItemQty({
-				id,
+				index,
 				qty,
 			}),
 		);

@@ -15,7 +15,7 @@ export function Checkout(props: {
 	state: CheckoutState;
 	clear: () => void;
 	apply: () => void;
-	changeQuantity: (id: string, qty: number) => void;
+	changeQuantity: (index: number, qty: number) => void;
 }) {
 	const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ export function Checkout(props: {
 				{props.state.items.length === 0 ? (
 					<Text>{t("No items in checkout")}</Text>
 				) : (
-					props.state.items.map((chItem) => (
+					props.state.items.map((chItem, index: number) => (
 						<Card withBorder py="xs" key={chItem.id}>
 							<Group position="apart">
 								<Group spacing={"sm"}>
@@ -43,7 +43,7 @@ export function Checkout(props: {
 										sx={{ width: "4rem" }}
 										value={chItem.qty}
 										onChange={(evt: any) => {
-											props.changeQuantity(chItem.id, evt);
+											props.changeQuantity(index, evt);
 										}}
 									></NumberInput>
 								</Group>

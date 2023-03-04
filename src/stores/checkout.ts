@@ -21,7 +21,7 @@ type CheckoutActions = {
 	clear: (state: CheckoutState) => void;
 	setItemQty: (
 		state: CheckoutState,
-		action: PayloadAction<{ id: string; qty: number }>,
+		action: PayloadAction<{ index: number; qty: number }>,
 	) => void;
 };
 
@@ -62,16 +62,10 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 		},
 		// set quantity of an item in checkout
 		setItemQty: (state, action) => {
-			// find the item's index in the array
-			let itemIndex = state.items.findIndex(
-				(item) => item.id === action.payload.id,
-			);
-
-			// if not found return
-			if (itemIndex === -1) return;
+			const itemIndex = action.payload.index;
 
 			// if requested qty is under 1 then return
-			if (action.payload.qty < 1) return;
+			if (action.payload.qty < 1 || action.payload.qty === undefined) return;
 
 			// calculate qty differerence and total price differerence
 			const qtyDiff = action.payload.qty - state.items[itemIndex].qty;
