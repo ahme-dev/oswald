@@ -69,18 +69,19 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 
 			// if not found return
 			if (itemIndex === -1) return;
-			console.log(action.payload.qty);
 
 			// if requested qty is under 1 then return
 			if (action.payload.qty < 1) return;
 
-			// set the item's qty
-			state.items[itemIndex].qty = action.payload.qty;
+			// calculate qty differerence and total price differerence
+			const qtyDiff = action.payload.qty - state.items[itemIndex].qty;
+			const totalDiff = qtyDiff * state.items[itemIndex].price;
 
-			// recalculate the total
-			state.total = state.items.reduce((total, item) => {
-				return total + item.qty * item.price;
-			}, 0);
+			// add on total price difference to the total
+			state.total += totalDiff;
+
+			// set new qty for item
+			state.items[itemIndex].qty = action.payload.qty;
 		},
 	},
 	extraReducers: (builder) => {
