@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 export function ProductList(props: {
 	loading: boolean;
 	data: ListResult<Record> | undefined;
-	name: string;
+	filterTerms: string;
 	smaller?: boolean;
 	itemClickFunc: (id: string, name: string, price: number) => void;
 }) {
@@ -22,16 +22,24 @@ export function ProductList(props: {
 
 		// make new data using filters
 		let data = props.data.items.filter((item) => {
-			// filter by name
-			if (!item.name.toLowerCase().includes(props.name.toLowerCase()))
-				return false;
+			// does name field match filterTerms
+			const filterTermsInName = item.name
+				.toLowerCase()
+				.includes(props.filterTerms.toLowerCase());
+			// does about field match filterTerms
+			const filterTermsInAbout = item.about
+				.toLowerCase()
+				.includes(props.filterTerms.toLowerCase());
+
+			// if filter term is not in name or about don't include in filtered data
+			if (!filterTermsInName && !filterTermsInAbout) return false;
 
 			return true;
 		});
 
 		// set filtered data
 		setFilteredData(data);
-	}, [props.name, props.loading]);
+	}, [props.filterTerms, props.loading]);
 
 	// render
 

@@ -80,7 +80,7 @@ export function ProductsPage() {
 			<ProductList
 				data={query.data}
 				loading={query.loading}
-				name={search}
+				filterTerms={search}
 				itemClickFunc={(id, name, price) => {
 					console.log("clicked ", name, price);
 				}}
