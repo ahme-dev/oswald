@@ -11,6 +11,7 @@ export type CheckoutState = {
 		price: number;
 	}[];
 	total: number;
+	count: number;
 };
 
 type CheckoutActions = {
@@ -30,6 +31,7 @@ type CheckoutActions = {
 const initialCheckout: CheckoutState = {
 	items: [],
 	total: 0,
+	count: 0,
 };
 
 export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
@@ -54,11 +56,13 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 
 			// price * quantity
 			state.total += action.payload.price * 1;
+			state.count += 1;
 		},
 		// clear all items in checkout and reset total
 		clear: (state) => {
 			state.items = [];
 			state.total = 0;
+			state.count = 0;
 		},
 		// set quantity of an item in checkout
 		setItemQty: (state, action) => {
@@ -70,6 +74,9 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			// calculate qty differerence and total price differerence
 			const qtyDiff = action.payload.qty - state.items[itemIndex].qty;
 			const totalDiff = qtyDiff * state.items[itemIndex].price;
+
+			// add on items count difference to the count
+			state.count += qtyDiff;
 
 			// add on total price difference to the total
 			state.total += totalDiff;
@@ -83,6 +90,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 		builder.addCase(apply.fulfilled, (state) => {
 			state.items = [];
 			state.total = 0;
+			state.count = 0;
 		});
 	},
 });

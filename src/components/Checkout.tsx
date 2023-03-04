@@ -62,12 +62,7 @@ export function Checkout(props: {
 						</Group>
 						<Divider size="sm" orientation="vertical"></Divider>
 						<Group spacing={"xs"}>
-							<Text weight={"bold"}>
-								{props.state.items.reduce((total, item) => {
-									total += item.qty;
-									return total;
-								}, 0)}
-							</Text>
+							<Text weight={"bold"}>{props.state.count}</Text>
 							<Text weight={"bold"}>{t("items")}</Text>
 						</Group>
 					</Group>
