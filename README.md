@@ -1,3 +1,5 @@
+<img src="./logo.png" width="250">
+
 # Oswald
 
 A POS System for small shops, available in kurdish and english.
