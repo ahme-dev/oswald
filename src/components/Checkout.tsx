@@ -41,7 +41,7 @@ export function Checkout(props: {
 									<NumberInput
 										min={1}
 										sx={{ width: "4rem" }}
-										value={chItem.qty}
+										value={chItem.qtyWanted}
 										onChange={(evt: any) => {
 											props.changeQuantity(index, evt);
 										}}

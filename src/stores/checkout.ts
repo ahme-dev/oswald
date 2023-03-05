@@ -8,7 +8,7 @@ export type CheckoutState = {
 	items: {
 		id: string;
 		name: string;
-		qty: number;
+		qtyWanted: number;
 		qtyLimit: number;
 		price: number;
 	}[];
@@ -49,7 +49,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			state.items.push({
 				id: action.payload.id,
 				name: action.payload.name,
-				qty: 1,
+				qtyWanted: 1,
 				qtyLimit: action.payload.quantity_available,
 				price: action.payload.price_current,
 			});
@@ -74,7 +74,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			if (action.payload.qty > state.items[itemIndex].qtyLimit) return;
 
 			// calculate qty differerence and total price differerence
-			const qtyDiff = action.payload.qty - state.items[itemIndex].qty;
+			const qtyDiff = action.payload.qty - state.items[itemIndex].qtyWanted;
 			const totalDiff = qtyDiff * state.items[itemIndex].price;
 
 			// add on items count difference to the count
@@ -84,7 +84,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			state.total += totalDiff;
 
 			// set new qty for item
-			state.items[itemIndex].qty = action.payload.qty;
+			state.items[itemIndex].qtyWanted = action.payload.qty;
 		},
 	},
 	extraReducers: (builder) => {
@@ -112,7 +112,8 @@ export const apply = createAsyncThunk(
 				.collection("transaction_products")
 				.create({
 					product_id: items[i].id,
-					quantity: items[i].qty,
+					price_sold: items[i].price,
+					quantity: items[i].qtyWanted,
 				});
 
 			// get the product record
@@ -120,7 +121,7 @@ export const apply = createAsyncThunk(
 
 			// substract the transaction quantity from the product available quantity
 			await pb.collection("products").update(items[i].id, {
-				quantity_available: product.quantity_available - items[i].qty,
+				quantity_available: product.quantity_available - items[i].qtyWanted,
 			});
 
 			// add the product id to the transactionProductsIDs array
