@@ -102,7 +102,14 @@ export function ProductList(props: {
 						sx={{ cursor: "pointer" }}
 					>
 						<Stack>
-							<Text weight="bolder">{item.name}</Text>
+							<Stack spacing={"xs"}>
+								<Text weight="bolder">{item.name}</Text>
+								{!props.smaller && item.category && (
+									<Text size={"sm"} weight="bold">
+										{item.category}
+									</Text>
+								)}
+							</Stack>
 							{!props.smaller && <Text italic>{item.about}</Text>}
 							<Group>
 								<Badge
