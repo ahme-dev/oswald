@@ -12,6 +12,7 @@ import {
 	Button,
 	SimpleGrid,
 	Select,
+	Textarea,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -194,7 +195,7 @@ export function ProductsPage() {
 						}}
 					/>
 
-					<TextInput
+					<Textarea
 						withAsterisk
 						label={t("About")}
 						placeholder={t("About the product") || "About the product"}
@@ -258,7 +259,7 @@ export function ProductsPage() {
 							};
 						})}
 					/>
-					<TextInput
+					<Textarea
 						withAsterisk
 						label={t("About")}
 						placeholder={t("About the product") || "About the product"}
