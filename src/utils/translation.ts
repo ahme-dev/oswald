@@ -36,6 +36,7 @@ const resources = {
 			Add: "زیادیبکە",
 			Name: "ناو",
 			About: "دەربارە",
+			Category: "جۆری بەرهەم",
 			Price: "نرخ",
 
 			Transactions: "مامەڵەکان",

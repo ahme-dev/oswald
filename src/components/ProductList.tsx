@@ -104,9 +104,9 @@ export function ProductList(props: {
 						<Stack>
 							<Stack spacing={"xs"}>
 								<Text weight="bolder">{item.name}</Text>
-								{!props.smaller && item.category && (
+								{!props.smaller && item.category.name && (
 									<Text size={"sm"} weight="bold">
-										{item.category}
+										{item.category.name}
 									</Text>
 								)}
 							</Stack>

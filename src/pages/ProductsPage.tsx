@@ -11,6 +11,7 @@ import {
 	TextInput,
 	Button,
 	SimpleGrid,
+	Select,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -37,6 +38,10 @@ export function ProductsPage() {
 			price_current: 1000,
 			quantity_available: 1,
 			about: "",
+			category: {
+				id: "",
+				name: "",
+			},
 		},
 
 		validate: {
@@ -55,6 +60,10 @@ export function ProductsPage() {
 			price_current: 0,
 			quantity_available: 0,
 			about: "",
+			category: {
+				id: "",
+				name: "",
+			},
 		},
 
 		validate: {
@@ -74,10 +83,7 @@ export function ProductsPage() {
 
 		dispatch(
 			createProduct({
-				name: addForm.values.name,
-				price_current: addForm.values.price_current,
-				quantity_available: addForm.values.quantity_available,
-				about: addForm.values.about,
+				...addForm.values,
 			}),
 		);
 
@@ -160,6 +166,20 @@ export function ProductsPage() {
 						placeholder={t("Product name") || "Product name"}
 						{...editForm.getInputProps("name")}
 					/>
+					<Select
+						label={t("Category")}
+						clearable
+						{...editForm.getInputProps("category.id")}
+						onChange={(e) => {
+							editForm.setFieldValue("category.id", e);
+						}}
+						data={productsState.categories.map((e) => {
+							return {
+								value: e.id,
+								label: t(e.name) || e.name,
+							};
+						})}
+					/>
 					<TextInput
 						withAsterisk
 						label={t("About")}
@@ -210,6 +230,19 @@ export function ProductsPage() {
 						label={t("Name")}
 						placeholder={t("Product name") || "Product name"}
 						{...addForm.getInputProps("name")}
+					/>
+					<Select
+						label={t("Category")}
+						clearable
+						onChange={(e) => {
+							addForm.setFieldValue("category.id", e);
+						}}
+						data={productsState.categories.map((e) => {
+							return {
+								value: e.id,
+								label: t(e.name) || e.name,
+							};
+						})}
 					/>
 					<TextInput
 						withAsterisk
