@@ -27,7 +27,8 @@ export function ProductList(props: {
 	const settingsState = useAppSelector((state) => state.settings);
 
 	// contain the received data but filtered
-	let [filteredData, setFilteredData] = useState<Product[]>(props.data);
+	let [filteredData, setFilteredData] = useState<Product[]>([]);
+	let [isFiltering, setIsFiltering] = useState(true);
 
 	// filter data on loading finish and filter changes
 	useEffect(() => {
@@ -53,12 +54,14 @@ export function ProductList(props: {
 
 		// set filtered data
 		setFilteredData(data);
+
+		setIsFiltering(false);
 	}, [props.filterTerms, props.loading]);
 
 	// render
 
 	// if result is loading, show loader
-	if (props.loading) {
+	if (props.loading || isFiltering) {
 		return (
 			<Center h={"100%"}>
 				<Loader></Loader>
