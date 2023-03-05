@@ -32,6 +32,7 @@ const persistedReducers = persistCombineReducers(
 	{
 		key: "root",
 		storage,
+		blacklist: ["products"],
 	},
 	// reducers to put in store and persist
 	{
