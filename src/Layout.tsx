@@ -10,9 +10,9 @@ import {
 	Popover,
 	Group,
 	Select,
+	Image,
 } from "@mantine/core";
 import {
-	BookOpenIcon,
 	ChartPieIcon,
 	CogIcon,
 	CurrencyDollarIcon,
@@ -22,6 +22,7 @@ import {
 	SunIcon,
 	TagIcon,
 } from "@heroicons/react/24/solid";
+import AppLogo from "./assets/logo.png";
 import { Link } from "wouter";
 import { settingsActions, useAppDispatch, useAppSelector } from "./stores/root";
 import { useLocation } from "wouter";
@@ -58,11 +59,11 @@ function NavBar() {
 						variant="filled"
 						color={settingsState.color}
 						radius={"xl"}
-						p={8}
+						p={2}
 						size={"xl"}
 						mb={"md"}
 					>
-						<BookOpenIcon></BookOpenIcon>
+						<Image src={AppLogo}></Image>
 					</ActionIcon>
 					{/* Navigation Items */}
 					{[
