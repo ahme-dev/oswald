@@ -90,6 +90,8 @@ export function ProductList(props: {
 		>
 			{/* filtered data items */}
 			{filteredData.map((item) => {
+				if (props.smaller && item.quantity_available === 0) return null;
+
 				return (
 					<Card
 						onClick={() => {

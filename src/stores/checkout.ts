@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
-import { getProducts } from "./products";
+import { getProducts, Product } from "./products";
 
 // types
 
@@ -9,6 +9,7 @@ export type CheckoutState = {
 		id: string;
 		name: string;
 		qty: number;
+		qtyLimit: number;
 		price: number;
 	}[];
 	total: number;
@@ -16,10 +17,7 @@ export type CheckoutState = {
 };
 
 type CheckoutActions = {
-	add: (
-		state: CheckoutState,
-		action: PayloadAction<{ id: string; name: string; price: number }>,
-	) => void;
+	add: (state: CheckoutState, action: PayloadAction<Product>) => void;
 	clear: (state: CheckoutState) => void;
 	setItemQty: (
 		state: CheckoutState,
@@ -52,11 +50,12 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 				id: action.payload.id,
 				name: action.payload.name,
 				qty: 1,
-				price: action.payload.price,
+				qtyLimit: action.payload.quantity_available,
+				price: action.payload.price_current,
 			});
 
 			// price * quantity
-			state.total += action.payload.price * 1;
+			state.total += action.payload.price_current * 1;
 			state.count += 1;
 		},
 		// clear all items in checkout and reset total
@@ -71,6 +70,8 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 
 			// if requested qty is under 1 then return
 			if (action.payload.qty < 1 || action.payload.qty === undefined) return;
+			// if requested qty is over available qty then return
+			if (action.payload.qty > state.items[itemIndex].qtyLimit) return;
 
 			// calculate qty differerence and total price differerence
 			const qtyDiff = action.payload.qty - state.items[itemIndex].qty;
