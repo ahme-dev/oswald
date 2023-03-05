@@ -19,7 +19,12 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppDispatch, useAppSelector } from "../stores/root";
-import { createProduct, editProduct, deleteProduct } from "../stores/products";
+import {
+	createProduct,
+	editProduct,
+	deleteProduct,
+	createCategory,
+} from "../stores/products";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -179,7 +184,16 @@ export function ProductsPage() {
 								label: t(e.name) || e.name,
 							};
 						})}
+						searchable
+						creatable
+						getCreateLabel={(query) => t("Create ") + query}
+						onCreate={(query) => {
+							const item = { name: query };
+							dispatch(createCategory(item));
+							return item.name;
+						}}
 					/>
+
 					<TextInput
 						withAsterisk
 						label={t("About")}

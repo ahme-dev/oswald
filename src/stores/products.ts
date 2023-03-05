@@ -89,23 +89,6 @@ export const getProducts = createAsyncThunk(
 	},
 );
 
-// get all the products
-export const getCategories = createAsyncThunk(
-	"products/getcategories",
-	async () => {
-		let categories = await pb.collection("product_categories").getFullList(1);
-
-		let categoriesList = categories.map((category) => {
-			return {
-				id: category.id,
-				name: category.name,
-			};
-		});
-
-		return categoriesList;
-	},
-);
-
 // create a new product
 export const createProduct = createAsyncThunk(
 	"products/create",
@@ -149,5 +132,36 @@ export const deleteProduct = createAsyncThunk(
 		await pb.collection("products").delete(product.id);
 
 		dispatch(getProducts());
+	},
+);
+
+// get all the categories
+export const getCategories = createAsyncThunk(
+	"products/getCategories",
+	async () => {
+		let categories = await pb.collection("product_categories").getFullList(1);
+
+		let categoriesList = categories.map((category) => {
+			return {
+				id: category.id,
+				name: category.name,
+			};
+		});
+
+		return categoriesList;
+	},
+);
+
+// create a new category
+export const createCategory = createAsyncThunk(
+	"products/createCategory",
+	async (product: { name: string }, { dispatch }) => {
+		const data = {
+			name: product.name,
+		};
+
+		await pb.collection("product_categories").create(data);
+
+		dispatch(getCategories());
 	},
 );
