@@ -27,7 +27,7 @@ export function ProductList(props: {
 	const settingsState = useAppSelector((state) => state.settings);
 
 	// contain the received data but filtered
-	let [filteredData, setFilteredData] = useState<Product[]>([]);
+	let [filteredData, setFilteredData] = useState<Product[]>(props.data);
 
 	// filter data on loading finish and filter changes
 	useEffect(() => {
