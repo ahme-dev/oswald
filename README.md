@@ -22,7 +22,7 @@ A POS System for small shops, available in kurdish and english.
 - Use in multiple languages (currently in english and kurdish).
 - Beautiful modern UI in multiple colours and light/dark themes.
 
-  <img src="img/colours.png" width="250">
+  <img src="img/colours.png" width="450">
 
 - [TODO] View your sales data in elegant charts and diagrams.
 - [TODO] View and modify past transactions or revert them.
