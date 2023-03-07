@@ -33,11 +33,13 @@ const resources = {
 			Delete: "بیسڕەوە",
 			Change: "بیگۆڕە",
 			Quantity: "عەدەد",
+			Qty: "عەدەد",
 			Add: "زیادیبکە",
 			Name: "ناو",
 			About: "دەربارە",
 			Category: "جۆری بەرهەم",
 			Price: "نرخ",
+			Total: "گشتی",
 
 			Transactions: "مامەڵەکان",
 
