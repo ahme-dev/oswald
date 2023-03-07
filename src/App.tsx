@@ -17,6 +17,7 @@ import i18n from "./utils/translation";
 import { Provider } from "react-redux";
 import { store, useAppDispatch, useAppSelector } from "./stores/root";
 import { getCategories, getProducts } from "./stores/products";
+import { getTransactions } from "./stores/transactions";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -44,6 +45,7 @@ function AppInner() {
 		i18n.changeLanguage(settingsState.rightToLeft ? "ku" : "en");
 		dispatch(getProducts());
 		dispatch(getCategories());
+		dispatch(getTransactions());
 	}, []);
 
 	return (

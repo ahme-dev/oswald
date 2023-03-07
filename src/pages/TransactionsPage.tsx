@@ -1,16 +1,26 @@
-import { Card, Flex, Loader, Stack, Text } from "@mantine/core";
+import {
+	Badge,
+	Card,
+	Flex,
+	Grid,
+	Group,
+	List,
+	Loader,
+	SimpleGrid,
+	Stack,
+	Text,
+	Title,
+} from "@mantine/core";
 import { TitleText } from "../components/TitleText";
-import { useCollection } from "../utils/pbase";
+import { useAppDispatch, useAppSelector } from "../stores/root";
 
 export function TransactionsPage() {
-	// get data from transactions collection
-	let query = useCollection("transactions");
+	// const dispatch = useAppDispatch();
+	const transactionsState = useAppSelector((state) => state.transactions);
 
 	// render
 
-	if (query.loading) return <Loader></Loader>;
-
-	if (!query.data) return <Text>No Data</Text>;
+	if (transactionsState.loading) return <Loader></Loader>;
 
 	return (
 		<Stack h={"100%"}>
@@ -18,8 +28,32 @@ export function TransactionsPage() {
 				<TitleText title="Transactions" />
 			</Flex>
 			<Stack>
-				{query.data.items.map((item) => {
-					return <Card key={item.id}>{item.date}</Card>;
+				{transactionsState.list.map((item) => {
+					return (
+						<Card withBorder key={item.id}>
+							<Stack spacing={"sm"}>
+								<Group>
+									<Badge size="lg">{item.date}</Badge>
+									<Badge size="lg">{item.customer.name}</Badge>
+								</Group>
+								{item.transactionProducts.map((trProduct) => (
+									<Card p="xs" withBorder key={trProduct.id}>
+										<Grid>
+											<Grid.Col span={2}>
+												<Text>{trProduct.qty_sold}</Text>
+											</Grid.Col>
+											<Grid.Col span={2}>
+												<Text>{trProduct.price_sold}</Text>
+											</Grid.Col>
+											<Grid.Col span={8}>
+												<Text>{trProduct.product.name}</Text>
+											</Grid.Col>
+										</Grid>
+									</Card>
+								))}
+							</Stack>
+						</Card>
+					);
 				})}
 			</Stack>
 		</Stack>

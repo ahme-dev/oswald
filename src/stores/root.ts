@@ -19,12 +19,14 @@ import {
 } from "reduxjs-toolkit-persist";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { productsSlice, ProductsState } from "./products";
+import { transactionsSlice, TransactionsState } from "./transactions";
 
 // type of the root state
 interface RootState {
 	checkout: CheckoutState;
 	settings: SettingsState;
 	products: ProductsState;
+	transactions: TransactionsState;
 }
 
 const persistedReducers = persistCombineReducers(
@@ -32,20 +34,21 @@ const persistedReducers = persistCombineReducers(
 	{
 		key: "root",
 		storage,
-		blacklist: ["products"],
+		blacklist: ["products", "transactions"],
 	},
 	// reducers to put in store and persist
 	{
 		checkout: checkoutSlice.reducer,
 		settings: settingsSlice.reducer,
 		products: productsSlice.reducer,
+		transactions: transactionsSlice.reducer,
 	},
 );
 
 // root store configuration
 
 export const store = configureStore({
-	reducer: persistedReducers as Reducer<RootState, AnyAction>,
+	reducer: persistedReducers as Reducer<{}, AnyAction>,
 	middleware: getDefaultMiddleware({
 		thunk: true,
 		serializableCheck: {
