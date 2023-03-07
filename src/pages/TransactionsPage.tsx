@@ -4,15 +4,12 @@ import {
 	Flex,
 	Grid,
 	Group,
-	List,
 	Loader,
-	SimpleGrid,
 	Stack,
 	Text,
-	Title,
 } from "@mantine/core";
 import { TitleText } from "../components/TitleText";
-import { useAppDispatch, useAppSelector } from "../stores/root";
+import { useAppSelector } from "../stores/root";
 
 export function TransactionsPage() {
 	// const dispatch = useAppDispatch();
