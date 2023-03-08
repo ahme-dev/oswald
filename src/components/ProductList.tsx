@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Product } from "../stores/products";
 import { useAppSelector } from "../stores/root";
+import { dineroFormat } from "../utils/currency";
 
 export function ProductList(props: {
 	loading: boolean;
@@ -122,7 +123,7 @@ export function ProductList(props: {
 									}
 									size="lg"
 								>
-									{item.price_current}
+									{dineroFormat(item.price_current)}
 								</Badge>
 								<Badge
 									pl={0}

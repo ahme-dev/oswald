@@ -54,7 +54,7 @@ export function ProductsPage() {
 		initialValues: initialForm,
 
 		validate: {
-			name: (value) => (value.length > 3 ? null : "Name is required"),
+			name: (value) => (value.length > 6 ? null : "Name is required"),
 			price_current: (value) =>
 				value >= 250 ? null : "Price must be 250 or higher",
 			quantity_available: (value) =>

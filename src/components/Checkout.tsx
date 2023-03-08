@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { CheckoutState } from "../stores/checkout";
+import { dineroFormat } from "../utils/currency";
 
 export function Checkout(props: {
 	state: CheckoutState;
@@ -33,13 +34,14 @@ export function Checkout(props: {
 						<Card withBorder py="xs" key={chItem.id}>
 							<Group position="apart">
 								<Group spacing={"sm"}>
-									<Text weight={"bold"}>{chItem.price}</Text>
+									<Text weight={"bold"}>{dineroFormat(chItem.price)}</Text>
 									<Divider size="sm" orientation="vertical"></Divider>
 									<Text weight={"bold"}>{chItem.name}</Text>
 								</Group>
 								<Group spacing={"sm"}>
 									<NumberInput
 										min={1}
+										max={chItem.qtyLimit}
 										sx={{ width: "4rem" }}
 										value={chItem.qtyWanted}
 										onChange={(evt: any) => {
@@ -57,7 +59,7 @@ export function Checkout(props: {
 				<Card withBorder py={"xs"}>
 					<Group>
 						<Group spacing={"xs"}>
-							<Text weight={"bold"}>{props.state.total}</Text>
+							<Text weight={"bold"}>{dineroFormat(props.state.total)}</Text>
 							<Text weight={"bold"}>{t("in total")}</Text>
 						</Group>
 						<Divider size="sm" orientation="vertical"></Divider>
