@@ -112,7 +112,6 @@ export function ProductList(props: {
 									</Text>
 								)}
 							</Stack>
-							{!props.smaller && <Text italic>{item.about}</Text>}
 							<Group>
 								<Badge
 									pl={0}
@@ -137,6 +136,7 @@ export function ProductList(props: {
 									{item.quantity_available}
 								</Badge>
 							</Group>
+							{!props.smaller && <Text italic>{item.about}</Text>}
 						</Stack>
 					</Card>
 				);
