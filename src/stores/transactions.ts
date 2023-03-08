@@ -98,8 +98,6 @@ export const getTransactions = createAsyncThunk(
 			} satisfies Transaction;
 		});
 
-		console.log("hi", transactionsList);
-
 		return transactionsList;
 	},
 );
