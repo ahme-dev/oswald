@@ -82,7 +82,7 @@ export function ProductList(props: {
 	return (
 		<SimpleGrid
 			cols={props.smaller ? 3 : 4}
-			spacing="lg"
+			spacing="sm"
 			breakpoints={[
 				{ maxWidth: 980, cols: props.smaller ? 2 : 3, spacing: "md" },
 				{ maxWidth: 755, cols: 2, spacing: "sm" },
