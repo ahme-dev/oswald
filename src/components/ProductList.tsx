@@ -105,14 +105,7 @@ export function ProductList(props: {
 						sx={{ cursor: "pointer" }}
 					>
 						<Stack>
-							<Stack spacing={"xs"}>
-								<Text weight="bolder">{item.name}</Text>
-								{!props.smaller && item.category.name && (
-									<Text size={"sm"} weight="bold">
-										{item.category.name}
-									</Text>
-								)}
-							</Stack>
+							<Text weight="bolder">{item.name}</Text>
 							<Group>
 								<Badge
 									pl={0}
@@ -137,7 +130,17 @@ export function ProductList(props: {
 									{item.quantity_available}
 								</Badge>
 							</Group>
-							{!props.smaller && <Text italic>{item.about}</Text>}
+							{!props.smaller && item.category.name && (
+								<Text size={"sm"} weight="lighter">
+									{item.category.name}
+								</Text>
+							)}
+
+							{!props.smaller && (
+								<Text italic weight="lighter">
+									{item.about}
+								</Text>
+							)}
 						</Stack>
 					</Card>
 				);

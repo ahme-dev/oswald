@@ -1,4 +1,4 @@
-import { Stack, Grid } from "@mantine/core";
+import { Stack, Grid, Space } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
@@ -33,7 +33,7 @@ export function MainPage() {
 		<Stack h={"100%"}>
 			<TitleText title={"Sell"} />
 			<Grid>
-				<Grid.Col span={12} sm={7}>
+				<Grid.Col span={12} sm={6}>
 					<ProductList
 						data={productsState.list}
 						loading={productsState.loading}
@@ -48,7 +48,8 @@ export function MainPage() {
 						filterTerms={""}
 					></ProductList>
 				</Grid.Col>
-				<Grid.Col span={12} sm={5}>
+				<Space w="xl"></Space>
+				<Grid.Col span={12} sm={4}>
 					<Checkout
 						state={checkoutState}
 						apply={() => {
