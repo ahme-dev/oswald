@@ -59,6 +59,7 @@ const resources = {
 
 			Categories: "جۆرەکانی بەرهەم",
 			"New name": "ناوی تازە",
+			"Change name": "ناو بگۆڕە",
 		},
 	},
 };

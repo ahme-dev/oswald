@@ -1,6 +1,7 @@
 import {
 	CheckCircleIcon,
-	PencilIcon,
+	PencilSquareIcon,
+	PlusCircleIcon,
 	PlusIcon,
 	TrashIcon,
 } from "@heroicons/react/24/solid";
@@ -22,6 +23,7 @@ import {
 	Popover,
 	Text,
 	Loader,
+	Menu,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -29,7 +31,14 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppDispatch, useAppSelector } from "../stores/root";
-import { createProduct, editProduct, deleteProduct } from "../stores/products";
+import {
+	createProduct,
+	editProduct,
+	deleteProduct,
+	createCategory,
+	editCategory,
+	deleteCategory,
+} from "../stores/products";
 import { showNotification } from "@mantine/notifications";
 
 export function ProductsPage() {
@@ -147,15 +156,24 @@ export function ProductsPage() {
 	const tryEditCategory = async () => {
 		showNotification({ message: t("Editing category..."), autoClose: 1500 });
 
-		const editCategory = (ob: { id: string }) => {
-			console.log(ob.id);
-		};
+		dispatch(
+			editCategory({
+				id: categoryForm.values.id,
+				name: categoryForm.values.name,
+			}),
+		);
+	};
 
-		editCategory({ id: categoryForm.values.id });
+	const tryAddCategory = async () => {
+		showNotification({ message: t("Adding category..."), autoClose: 1500 });
 
-		// dispatch(editCategory({ id: categoryForm.values.id }));
+		dispatch(createCategory({ name: categoryForm.values.name }));
+	};
 
-		setDrawerVisible(false);
+	const tryDeleteCategory = async (id: string) => {
+		showNotification({ message: t("Deleting category..."), autoClose: 1500 });
+
+		dispatch(deleteCategory({ id: id }));
 	};
 
 	// render
@@ -229,27 +247,32 @@ export function ProductsPage() {
 					{productsState.loading ? (
 						<Loader />
 					) : (
+						// category list
 						productsState.categories.map((category) => {
 							return (
 								<Group key={category.id} position="apart">
 									<Text>{category.name}</Text>
 									<Group spacing={"sm"}>
-										<Popover width={200} shadow="sm">
-											<Popover.Target>
-												<ActionIcon p={2}>
-													<PencilIcon
-														onClick={() => {
-															categoryForm.setValues({
-																id: category.id,
-																name: category.name,
-															});
-														}}
-													></PencilIcon>
+										{/* category edit */}
+										<Menu width={200} shadow="sm">
+											<Menu.Target>
+												<ActionIcon
+													p={2}
+													onClick={() => {
+														categoryForm.setValues({
+															id: category.id,
+															name: category.name,
+														});
+													}}
+													color={settingsState.color}
+													variant="light"
+												>
+													<PencilSquareIcon></PencilSquareIcon>
 												</ActionIcon>
-											</Popover.Target>
-											<Popover.Dropdown>
-												<Stack spacing="xs">
-													<Text>{t("New name")}</Text>
+											</Menu.Target>
+											<Menu.Dropdown>
+												<Stack p={8} spacing="xs">
+													<Text>{t("Change name")}</Text>
 													<Flex align={"center"} gap={"sm"}>
 														<Input
 															variant="filled"
@@ -259,24 +282,68 @@ export function ProductsPage() {
 														<ActionIcon
 															onClick={() => tryEditCategory()}
 															size="lg"
-															color={"green"}
+															variant="light"
+															color={settingsState.color}
 															p={2}
 														>
 															<CheckCircleIcon></CheckCircleIcon>
 														</ActionIcon>
 													</Flex>
 												</Stack>
-											</Popover.Dropdown>
-										</Popover>
-										<ActionIcon size={"md"} p={2}>
+											</Menu.Dropdown>
+										</Menu>
+										{/* category edit end */}
+										{/* category trash */}
+										<ActionIcon
+											p={2}
+											color={settingsState.color}
+											onClick={() => tryDeleteCategory(category.id)}
+											variant="light"
+										>
 											<TrashIcon></TrashIcon>
 										</ActionIcon>
+										{/* category trash end */}
 									</Group>
 								</Group>
-								// <Title key={category.id}>{category.name}</Title>;
 							);
 						})
+						// category list end
 					)}
+					{/* category add */}
+					<Flex justify="center">
+						<Popover width={200} shadow="sm">
+							<Popover.Target>
+								<Group>
+									<Button
+										onClick={() => categoryForm.setValues({ id: "", name: "" })}
+									>
+										Add Category
+									</Button>
+								</Group>
+							</Popover.Target>
+							<Popover.Dropdown>
+								<Stack spacing="xs">
+									<Text>{t("New name")}</Text>
+									<Flex align={"center"} gap={"sm"}>
+										<Input
+											{...categoryForm.getInputProps("name")}
+											variant="filled"
+										></Input>
+										<ActionIcon
+											onClick={() => tryAddCategory()}
+											size="lg"
+											variant="light"
+											color={settingsState.color}
+											p={2}
+										>
+											<PlusCircleIcon></PlusCircleIcon>
+										</ActionIcon>
+									</Flex>
+								</Stack>
+							</Popover.Dropdown>
+						</Popover>
+					</Flex>
+					{/* category add end */}
 				</Stack>
 			</Modal>
 
@@ -312,8 +379,8 @@ function FormElements(props: {
 	modal: boolean;
 	modalToggle: (to: boolean) => void;
 }) {
+	let settingsState = useAppSelector((state) => state.settings);
 	let productsState = useAppSelector((state) => state.products);
-	let dispatch = useAppDispatch();
 
 	return (
 		<>
@@ -323,24 +390,34 @@ function FormElements(props: {
 				placeholder={t("Product name") || "Product name"}
 				{...props.formObject.getInputProps("name")}
 			/>
-			<Select
-				label={t("Category")}
-				clearable
-				{...props.formObject.getInputProps("category.id")}
-				onChange={(e) => {
-					props.formObject.setFieldValue("category.id", e);
-				}}
-				data={productsState.categories.map((e) => {
-					return {
-						value: e.id,
-						label: t(e.name) || e.name,
-					};
-				})}
-				searchable
-				creatable
-				getCreateLabel={(query) => t("Create ") + query}
-				onCreate={() => props.modalToggle(true)}
-			/>
+			<Flex align={"end"} gap={8}>
+				<Select
+					sx={{ flexGrow: 1 }}
+					label={t("Category")}
+					clearable
+					{...props.formObject.getInputProps("category.id")}
+					onChange={(e) => {
+						props.formObject.setFieldValue("category.id", e);
+					}}
+					data={productsState.categories.map((e) => {
+						return {
+							value: e.id,
+							label: t(e.name) || e.name,
+						};
+					})}
+					searchable
+				/>
+				<ActionIcon
+					onClick={() => props.modalToggle(true)}
+					p={2}
+					my={2}
+					size="lg"
+					variant="light"
+					color={settingsState.color}
+				>
+					<PencilSquareIcon></PencilSquareIcon>
+				</ActionIcon>
+			</Flex>
 
 			<Textarea
 				withAsterisk

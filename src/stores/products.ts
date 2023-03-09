@@ -165,3 +165,25 @@ export const createCategory = createAsyncThunk(
 		dispatch(getCategories());
 	},
 );
+
+export const editCategory = createAsyncThunk(
+	"products/editCategory",
+	async (product: { id: string; name: string }, { dispatch }) => {
+		const data = {
+			name: product.name,
+		};
+
+		await pb.collection("product_categories").update(product.id, data);
+
+		dispatch(getCategories());
+	},
+);
+
+export const deleteCategory = createAsyncThunk(
+	"products/deleteCategory",
+	async (product: { id: string }, { dispatch }) => {
+		await pb.collection("product_categories").delete(product.id);
+
+		dispatch(getCategories());
+	},
+);
