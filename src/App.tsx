@@ -2,6 +2,7 @@ import { Route } from "wouter";
 import { useEffect } from "react";
 
 import { createEmotionCache, MantineProvider } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 
 import { Layout } from "./Layout";
 import { AuthPage } from "./pages/AuthPage";
@@ -62,16 +63,18 @@ function AppInner() {
 			}}
 			emotionCache={settingsState.rightToLeft ? rtlCache : undefined}
 		>
-			<CustomFonts></CustomFonts>
-			<Layout rtl={settingsState.rightToLeft}>
-				{/* Routes */}
-				<Route path="/" component={MainPage} />
-				<Route path="/products" component={ProductsPage} />
-				<Route path="/transactions" component={TransactionsPage} />
-				<Route path="/overview" component={OverviewPage} />
-				<Route path="/auth" component={AuthPage} />
-				{/* Routes end */}
-			</Layout>
+			<NotificationsProvider>
+				<CustomFonts></CustomFonts>
+				<Layout rtl={settingsState.rightToLeft}>
+					{/* Routes */}
+					<Route path="/" component={MainPage} />
+					<Route path="/products" component={ProductsPage} />
+					<Route path="/transactions" component={TransactionsPage} />
+					<Route path="/overview" component={OverviewPage} />
+					<Route path="/auth" component={AuthPage} />
+					{/* Routes end */}
+				</Layout>
+			</NotificationsProvider>
 		</MantineProvider>
 	);
 }

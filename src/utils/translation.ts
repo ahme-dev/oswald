@@ -51,6 +51,11 @@ const resources = {
 			"Password is required": "پێویستە وشەی نهێنی داخڵ بکەیت",
 
 			Overview: "گشتی",
+
+			"Adding product...": "بەرهەمەکە زیاد ئەکرێت...",
+			"Editing product...": "بەرهەمەکە دەستکاری ئەکرێت...",
+			"Deleting product...": "بەرهەمەکە ئەسڕدرێتەوە...",
+			"Saving checkout...": "فرۆشەکە جێبەجێدەکرێ...",
 		},
 	},
 };

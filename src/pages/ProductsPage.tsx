@@ -26,6 +26,7 @@ import {
 	deleteProduct,
 	createCategory,
 } from "../stores/products";
+import { showNotification } from "@mantine/notifications";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -64,6 +65,11 @@ export function ProductsPage() {
 	});
 
 	const tryAddProduct = async () => {
+		showNotification({
+			message: t("Adding product..."),
+			autoClose: 1500,
+		});
+
 		// try to validate the form
 		// if got errors, return
 		let feedback = form.validate();
@@ -86,6 +92,11 @@ export function ProductsPage() {
 	};
 
 	const tryEditProduct = async () => {
+		showNotification({
+			message: t("Editing product..."),
+			autoClose: 1500,
+		});
+
 		// try to validate the form
 		// if got errors, return
 		let feedback = form.validate();
@@ -109,6 +120,8 @@ export function ProductsPage() {
 	};
 
 	const tryDeleteProduct = async () => {
+		showNotification({ message: t("Deleting product..."), autoClose: 1500 });
+
 		dispatch(deleteProduct({ id: form.values.id }));
 
 		setDrawerVisible(false);

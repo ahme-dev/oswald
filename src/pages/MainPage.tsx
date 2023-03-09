@@ -1,4 +1,6 @@
 import { Stack, Grid } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
@@ -10,6 +12,8 @@ import {
 } from "../stores/root";
 
 export function MainPage() {
+	const { t } = useTranslation();
+
 	let checkoutState = useAppSelector((state) => state.checkout);
 	let productsState = useAppSelector((state) => state.products);
 
@@ -47,7 +51,13 @@ export function MainPage() {
 				<Grid.Col span={12} sm={5}>
 					<Checkout
 						state={checkoutState}
-						apply={() => dispatch(apply(checkoutState.items))}
+						apply={() => {
+							showNotification({
+								message: t("Saving checkout..."),
+								autoClose: 1500,
+							});
+							dispatch(apply(checkoutState.items));
+						}}
 						clear={() => dispatch(checkoutActions.clear())}
 						changeQuantity={qtyFunc}
 					></Checkout>
