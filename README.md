@@ -1,4 +1,9 @@
-<img src="img/logo.png" width="250">
+<img src="img/logo.png" width="200">
+
+![Lines of code](https://img.shields.io/tokei/lines/github/ahmeddots/oswald?style=flat-square&color=white)
+![GitHub](https://img.shields.io/github/license/ahmeddots/oswald?style=flat-square&color=khaki)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/ahmeddots/oswald/@mantine/core?style=flat-square&color=palegreen)
+![GitHub package.json dependency version (prod)](https://img.shields.io/github/package-json/dependency-version/ahmeddots/oswald/pocketbase?style=flat-square&color=palegreen)
 
 # Oswald
 
