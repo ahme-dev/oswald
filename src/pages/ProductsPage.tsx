@@ -1,4 +1,9 @@
-import { PlusIcon } from "@heroicons/react/24/solid";
+import {
+	CheckCircleIcon,
+	PencilIcon,
+	PlusIcon,
+	TrashIcon,
+} from "@heroicons/react/24/solid";
 import {
 	ActionIcon,
 	Affix,
@@ -13,6 +18,10 @@ import {
 	SimpleGrid,
 	Select,
 	Textarea,
+	Modal,
+	Popover,
+	Text,
+	Loader,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -20,12 +29,7 @@ import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import { useAppDispatch, useAppSelector } from "../stores/root";
-import {
-	createProduct,
-	editProduct,
-	deleteProduct,
-	createCategory,
-} from "../stores/products";
+import { createProduct, editProduct, deleteProduct } from "../stores/products";
 import { showNotification } from "@mantine/notifications";
 
 export function ProductsPage() {
@@ -37,6 +41,19 @@ export function ProductsPage() {
 	// search string and drawer visiblity state
 	let [search, setSearch] = useState("");
 	let [drawerVisible, setDrawerVisible] = useState(false);
+	let [modalVisible, setModalVisible] = useState(false);
+
+	const categoryForm = useForm({
+		initialValues: {
+			name: "",
+			id: "",
+		},
+
+		validate: {
+			name: (value) => (value.length > 6 ? null : "Name is required"),
+			id: (value) => (value.length > 1 ? null : "ID is required"),
+		},
+	});
 
 	const initialForm = {
 		mode: "add",
@@ -127,6 +144,20 @@ export function ProductsPage() {
 		setDrawerVisible(false);
 	};
 
+	const tryEditCategory = async () => {
+		showNotification({ message: t("Editing category..."), autoClose: 1500 });
+
+		const editCategory = (ob: { id: string }) => {
+			console.log(ob.id);
+		};
+
+		editCategory({ id: categoryForm.values.id });
+
+		// dispatch(editCategory({ id: categoryForm.values.id }));
+
+		setDrawerVisible(false);
+	};
+
 	// render
 	return (
 		<Stack h={"100%"}>
@@ -165,7 +196,13 @@ export function ProductsPage() {
 				size="xl"
 			>
 				<Stack>
-					<FormElements formObject={form} />
+					<FormElements
+						modal={modalVisible}
+						modalToggle={(to: boolean) => {
+							setModalVisible(to);
+						}}
+						formObject={form}
+					/>
 
 					{form.values.mode === "edit" ? (
 						<SimpleGrid cols={2} mt={16}>
@@ -181,6 +218,67 @@ export function ProductsPage() {
 					)}
 				</Stack>
 			</Drawer>
+
+			{/* Category add/edit/remove modal */}
+			<Modal
+				title={t("Categories")}
+				opened={modalVisible}
+				onClose={() => setModalVisible(false)}
+			>
+				<Stack p={8}>
+					{productsState.loading ? (
+						<Loader />
+					) : (
+						productsState.categories.map((category) => {
+							return (
+								<Group key={category.id} position="apart">
+									<Text>{category.name}</Text>
+									<Group spacing={"sm"}>
+										<Popover width={200} shadow="sm">
+											<Popover.Target>
+												<ActionIcon p={2}>
+													<PencilIcon
+														onClick={() => {
+															categoryForm.setValues({
+																id: category.id,
+																name: category.name,
+															});
+														}}
+													></PencilIcon>
+												</ActionIcon>
+											</Popover.Target>
+											<Popover.Dropdown>
+												<Stack spacing="xs">
+													<Text>{t("New name")}</Text>
+													<Flex align={"center"} gap={"sm"}>
+														<Input
+															variant="filled"
+															placeholder={category.name}
+															{...categoryForm.getInputProps("name")}
+														></Input>
+														<ActionIcon
+															onClick={() => tryEditCategory()}
+															size="lg"
+															color={"green"}
+															p={2}
+														>
+															<CheckCircleIcon></CheckCircleIcon>
+														</ActionIcon>
+													</Flex>
+												</Stack>
+											</Popover.Dropdown>
+										</Popover>
+										<ActionIcon size={"md"} p={2}>
+											<TrashIcon></TrashIcon>
+										</ActionIcon>
+									</Group>
+								</Group>
+								// <Title key={category.id}>{category.name}</Title>;
+							);
+						})
+					)}
+				</Stack>
+			</Modal>
 
 			{/* Add product button */}
 			<Affix
@@ -209,7 +307,11 @@ export function ProductsPage() {
 	);
 }
 
-function FormElements(props: { formObject: any }) {
+function FormElements(props: {
+	formObject: any;
+	modal: boolean;
+	modalToggle: (to: boolean) => void;
+}) {
 	let productsState = useAppSelector((state) => state.products);
 	let dispatch = useAppDispatch();
 
@@ -237,11 +339,7 @@ function FormElements(props: { formObject: any }) {
 				searchable
 				creatable
 				getCreateLabel={(query) => t("Create ") + query}
-				onCreate={(query) => {
-					const item = { name: query };
-					dispatch(createCategory(item));
-					return item.name;
-				}}
+				onCreate={() => props.modalToggle(true)}
 			/>
 
 			<Textarea

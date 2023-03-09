@@ -56,6 +56,9 @@ const resources = {
 			"Editing product...": "بەرهەمەکە دەستکاری ئەکرێت...",
 			"Deleting product...": "بەرهەمەکە ئەسڕدرێتەوە...",
 			"Saving checkout...": "فرۆشەکە جێبەجێدەکرێ...",
+
+			Categories: "جۆرەکانی بەرهەم",
+			"New name": "ناوی تازە",
 		},
 	},
 };
