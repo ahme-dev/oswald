@@ -59,11 +59,12 @@ export const getTransactions = createAsyncThunk(
 	"transactions/get",
 	async () => {
 		// FIXME fetch all items instead of 25
-		let transactions = await pb.collection("transactions").getList(1, 25, {
+		let transactions = await pb.collection("transactions").getFullList({
 			expand: "transaction_product_ids.product_id.category_id, customer_id",
+			sort: "-date",
 		});
 
-		const t = moveExpandsInline(transactions.items);
+		const t = moveExpandsInline(transactions);
 
 		const transactionsList = t.map((transaction: RecordExpandless) => {
 			// create a list of all the transactionProducts for the transaction

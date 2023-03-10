@@ -128,10 +128,10 @@ export const getProducts = createAsyncThunk(
 		// get the products from the database
 		let products = await pb
 			.collection("products")
-			.getList(1, 25, { expand: "category_id" });
+			.getFullList({ expand: "category_id" });
 
 		// change them into a product list
-		let productList = products.items.map((product) => {
+		let productList = products.map((product) => {
 			// if expanded field has multiple relations take the first one
 			// this is to fix type errors
 			const singleCategory = Array.isArray(product.expand.category_id)

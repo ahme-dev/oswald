@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { getProducts, Product } from "./products";
+import { getTransactions } from "./transactions";
 
 // types
 
@@ -103,6 +104,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 export const apply = createAsyncThunk(
 	"checkout/apply",
 	async (items: CheckoutState["items"], { dispatch }) => {
+		console.log("apply");
 		let transactionProductsIDs = [];
 
 		// go through each item
@@ -113,7 +115,7 @@ export const apply = createAsyncThunk(
 				.create({
 					product_id: items[i].id,
 					price_sold: items[i].price,
-					quantity: items[i].qtyWanted,
+					qty_sold: items[i].qtyWanted,
 				});
 
 			// get the product record
@@ -136,5 +138,6 @@ export const apply = createAsyncThunk(
 		await pb.collection("transactions").create(data);
 
 		dispatch(getProducts());
+		dispatch(getTransactions());
 	},
 );
