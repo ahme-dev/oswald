@@ -48,6 +48,8 @@ export function MainPage() {
 						filterName={""}
 						filterCategories={[]}
 						filterCategoriesChanges={0}
+						filterMinPrice={null}
+						filterMaxPrice={null}
 					></ProductList>
 				</Grid.Col>
 				<Grid.Col span={12} sm={5}>

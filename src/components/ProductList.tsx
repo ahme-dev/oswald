@@ -22,6 +22,8 @@ export function ProductList(props: {
 	filterName: string;
 	filterCategories: string[];
 	filterCategoriesChanges: number;
+	filterMinPrice: number | null;
+	filterMaxPrice: number | null;
 	smaller?: boolean;
 	itemClickFunc: (product: Product) => void;
 }) {
@@ -55,10 +57,23 @@ export function ProductList(props: {
 					? props.filterCategories.every((el) => el === item.category.name)
 					: true;
 
+			// does price field match filterMinPrice and filterMaxPrice
+			// if min or max price is null, don't filter
+			const containsPrice = props.filterMinPrice
+				? item.price_current >= props.filterMinPrice
+				: true && props.filterMaxPrice
+				? item.price_current <= props.filterMaxPrice
+				: true;
+
 			// if filter term is not in name or about
 			// or category is not in filterCategories
 			// don't include in filtered data
-			if ((!containsName && !containsAbout) || !containsCategory) return false;
+			if (
+				(!containsName && !containsAbout) ||
+				!containsCategory ||
+				!containsPrice
+			)
+				return false;
 
 			// if no problems occured
 			return true;
@@ -68,7 +83,13 @@ export function ProductList(props: {
 		setFilteredData(data);
 
 		setIsFiltering(false);
-	}, [props.filterName, props.filterCategoriesChanges, props.loading]);
+	}, [
+		props.filterName,
+		props.filterCategoriesChanges,
+		props.loading,
+		props.filterMinPrice,
+		props.filterMaxPrice,
+	]);
 
 	// render
 

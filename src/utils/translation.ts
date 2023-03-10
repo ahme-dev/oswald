@@ -40,6 +40,8 @@ const resources = {
 			Category: "جۆری بەرهەم",
 			Price: "نرخ",
 			Total: "گشتی",
+			"Min price": "کەمترین نرخ",
+			"Max price": "زۆرترین نرخ",
 
 			"Select some categories": "جۆری بەرهەم هەڵبژێرە",
 			Categories: "جۆرەکانی بەرهەم",

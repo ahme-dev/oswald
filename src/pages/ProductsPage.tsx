@@ -7,6 +7,7 @@ import {
 	Input,
 	Stack,
 	MultiSelect,
+	NumberInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -35,6 +36,8 @@ export function ProductsPage() {
 			name: "",
 			categories: [],
 			categoriesChanges: 0,
+			minPrice: null,
+			maxPrice: null,
 		},
 	});
 
@@ -45,6 +48,22 @@ export function ProductsPage() {
 				<TitleText title="Products" />
 				{/* search section */}
 				<Group>
+					<NumberInput
+						required
+						placeholder={t("Min price") || "Min price"}
+						min={250}
+						step={250}
+						w="7rem"
+						{...searchForm.getInputProps("minPrice")}
+					/>
+					<NumberInput
+						required
+						placeholder={t("Max price") || "Max price"}
+						min={250}
+						step={250}
+						w="7rem"
+						{...searchForm.getInputProps("maxPrice")}
+					/>
 					<ActionIcon
 						onClick={() => setModalVisible(true)}
 						p={4}
@@ -55,10 +74,10 @@ export function ProductsPage() {
 						<PencilSquareIcon></PencilSquareIcon>
 					</ActionIcon>
 					<MultiSelect
+						w="fit-content"
 						placeholder={
 							t("Select some categories") || "Select some categories"
 						}
-						w="18rem"
 						value={searchForm.values.categories}
 						onChange={(e: any) => {
 							searchForm.setFieldValue(
@@ -83,6 +102,8 @@ export function ProductsPage() {
 				filterName={searchForm.values.name}
 				filterCategories={searchForm.values.categories}
 				filterCategoriesChanges={searchForm.values.categoriesChanges}
+				filterMinPrice={searchForm.values.minPrice}
+				filterMaxPrice={searchForm.values.maxPrice}
 				itemClickFunc={(product) => {
 					//  set edit mode with product info on form and oepn drawer
 					dispatch(productsActions.formWithEdit(product));
