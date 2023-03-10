@@ -49,6 +49,7 @@ const resources = {
 
 			Transactions: "مامەڵەکان",
 			"Transaction total": "کۆی گشتی مامەڵەکە",
+			Date: "بەروار",
 
 			username: "ناوی بەکارهێنەر",
 			password: "وشەی نهێنی",

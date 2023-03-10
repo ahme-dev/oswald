@@ -1,5 +1,6 @@
 import { CurrencyEuroIcon } from "@heroicons/react/24/solid";
 import {
+	Accordion,
 	ActionIcon,
 	Badge,
 	Card,
@@ -28,71 +29,84 @@ export function TransactionsPage() {
 				<TitleText title="Transactions" />
 			</Flex>
 			<Stack>
-				{transactionsState.loading ? (
-					<Loader></Loader>
-				) : (
-					transactionsState.list.map((transaction) => {
-						return (
-							// Single transaction
-							<Card withBorder key={transaction.id}>
-								<Stack spacing={"sm"}>
-									<Group>
-										<Badge size="lg">{transaction.date}</Badge>
-										{transaction.customer.name && (
-											<Badge size="lg">{transaction.customer.name}</Badge>
-										)}
-									</Group>
-									{/* Transaction Product list */}
-									{transaction.transactionProducts.map((trProduct) => (
-										<Card p="xs" withBorder key={trProduct.id}>
-											<Group>
-												<Group spacing={"xs"}>
-													<Text>
-														{dineroFormat(
-															trProduct.qty_sold * trProduct.price_sold,
-														)}
-													</Text>
-													<Text>{t("Total")}</Text>
+				<Accordion variant="separated">
+					{transactionsState.loading ? (
+						<Loader></Loader>
+					) : (
+						transactionsState.list.map((transaction) => {
+							return (
+								// Single transaction
+								<Accordion.Item key={transaction.id} value={transaction.id}>
+									<Accordion.Control>
+										<Group spacing={"xl"}>
+											{transaction.customer.name && (
+												<Group spacing={"sm"}>
+													<Badge size="lg">{transaction.customer.name}</Badge>
+													<Divider size="sm" orientation="vertical"></Divider>
 												</Group>
-												<Group>
-													<Divider orientation="vertical"></Divider>
-													<Text>{trProduct.qty_sold}</Text>
-													<Text>{t("Qty")}</Text>
-													<Divider orientation="vertical"></Divider>
-													<Text>{dineroFormat(trProduct.price_sold)}</Text>
-													<Text>{t("Price")}</Text>
-													<Divider orientation="vertical"></Divider>
-												</Group>
-												<Text>{trProduct.product.name}</Text>
-											</Group>
-										</Card>
-									))}
-									{/* Transaction Product list end */}
-									<Group>
-										<Badge
-											size="lg"
-											pl={0}
-											leftSection={
-												<ActionIcon color={settingsState.color}>
-													<CurrencyEuroIcon />
-												</ActionIcon>
-											}
-										>
-											{dineroFormat(
-												transaction.transactionProducts.reduce(
-													(sum, pr) => sum + pr.qty_sold * pr.price_sold,
-													0,
-												),
 											)}
-										</Badge>
-										<Text>{t("Transaction total")}</Text>
-									</Group>
-								</Stack>
-							</Card>
-							// Single transaction end
-						);
-					})
-				)}
+											<Group spacing={"sm"}>
+												<Text>{t("Transaction total")}</Text>
+												<Badge
+													size="lg"
+													pl={0}
+													leftSection={
+														<ActionIcon color={settingsState.color}>
+															<CurrencyEuroIcon />
+														</ActionIcon>
+													}
+												>
+													{dineroFormat(
+														transaction.transactionProducts.reduce(
+															(sum, pr) => sum + pr.qty_sold * pr.price_sold,
+															0,
+														),
+													)}
+												</Badge>
+											</Group>
+											<Divider size="sm" orientation="vertical"></Divider>
+											<Group spacing={"sm"}>
+												<Text>{t("Date")}</Text>
+												<Badge size="lg">{transaction.date}</Badge>
+											</Group>
+										</Group>
+									</Accordion.Control>
+									<Accordion.Panel>
+										<Stack spacing={"sm"}>
+											{/* Transaction Product list */}
+											{transaction.transactionProducts.map((trProduct) => (
+												<Card p="xs" withBorder key={trProduct.id}>
+													<Group>
+														<Group spacing={"xs"}>
+															<Text>
+																{dineroFormat(
+																	trProduct.qty_sold * trProduct.price_sold,
+																)}
+															</Text>
+															<Text>{t("Total")}</Text>
+														</Group>
+														<Group>
+															<Divider orientation="vertical"></Divider>
+															<Text>{trProduct.qty_sold}</Text>
+															<Text>{t("Qty")}</Text>
+															<Divider orientation="vertical"></Divider>
+															<Text>{dineroFormat(trProduct.price_sold)}</Text>
+															<Text>{t("Price")}</Text>
+															<Divider orientation="vertical"></Divider>
+														</Group>
+														<Text>{trProduct.product.name}</Text>
+													</Group>
+												</Card>
+											))}
+											{/* Transaction Product list end */}
+										</Stack>
+									</Accordion.Panel>
+								</Accordion.Item>
+								// Single transaction end
+							);
+						})
+					)}
+				</Accordion>
 			</Stack>
 		</Stack>
 	);
