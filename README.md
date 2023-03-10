@@ -20,7 +20,7 @@ A POS System for small shops, available in kurdish and english.
 ### Features
 
 - Add, edit, and remove products with categories
-- [TODO] Filter through products using names, about, prices and categories.
+- Filter through products using names, about, prices and categories.
 - Add wanted products to checkout, change quantity and get price total.
 - [TODO] Multiple checkouts for multitasking.
 - Create transactions for products.

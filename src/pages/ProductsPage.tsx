@@ -9,17 +9,11 @@ import {
 import {
 	ActionIcon,
 	Affix,
-	Drawer,
 	Flex,
 	Group,
 	Input,
-	NumberInput,
 	Stack,
-	TextInput,
 	Button,
-	SimpleGrid,
-	Select,
-	Textarea,
 	Modal,
 	Popover,
 	Text,
@@ -32,16 +26,18 @@ import { t } from "i18next";
 import { useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
-import { useAppDispatch, useAppSelector } from "../stores/root";
 import {
-	createProduct,
-	editProduct,
-	deleteProduct,
+	useAppDispatch,
+	useAppSelector,
+	productsActions,
+} from "../stores/root";
+import {
 	createCategory,
 	editCategory,
 	deleteCategory,
 } from "../stores/products";
 import { showNotification } from "@mantine/notifications";
+import { ProductDrawer } from "../components/ProductDrawer";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -71,95 +67,6 @@ export function ProductsPage() {
 			id: (value) => (value.length > 1 ? null : "ID is required"),
 		},
 	});
-
-	const productFormDefault = {
-		mode: "add",
-		id: "",
-		name: "",
-		price_current: 250,
-		quantity_available: 1,
-		about: "",
-		category: {
-			id: "",
-			name: "",
-		},
-	};
-
-	const productForm = useForm({
-		initialValues: productFormDefault,
-
-		validate: {
-			name: (value) => (value.length > 6 ? null : "Name is required"),
-			price_current: (value) =>
-				value >= 250 ? null : "Price must be 250 or higher",
-			quantity_available: (value) =>
-				value > 0 ? null : "Quantity is required",
-			about: (value) => (value.length > 0 ? null : "About is required"),
-		},
-	});
-
-	const tryAddProduct = async () => {
-		showNotification({
-			message: t("Adding product..."),
-			autoClose: 1500,
-		});
-
-		// try to validate the form
-		// if got errors, return
-		let feedback = productForm.validate();
-		if (feedback.hasErrors) return;
-
-		dispatch(
-			createProduct({
-				name: productForm.values.name,
-				about: productForm.values.about,
-				category: {
-					name: productForm.values.category.name,
-					id: productForm.values.category.id,
-				},
-				price_current: productForm.values.price_current,
-				quantity_available: productForm.values.quantity_available,
-			}),
-		);
-
-		setDrawerVisible(false);
-	};
-
-	const tryEditProduct = async () => {
-		showNotification({
-			message: t("Editing product..."),
-			autoClose: 1500,
-		});
-
-		// try to validate the form
-		// if got errors, return
-		let feedback = productForm.validate();
-		if (feedback.hasErrors) return;
-
-		dispatch(
-			editProduct({
-				id: productForm.values.id,
-				name: productForm.values.name,
-				about: productForm.values.about,
-				category: {
-					name: productForm.values.category.name,
-					id: productForm.values.category.id,
-				},
-				price_current: productForm.values.price_current,
-				quantity_available: productForm.values.quantity_available,
-			}),
-		);
-
-		setDrawerVisible(false);
-	};
-
-	const tryDeleteProduct = async () => {
-		showNotification({ message: t("Deleting product..."), autoClose: 1500 });
-
-		dispatch(deleteProduct({ id: productForm.values.id }));
-
-		setDrawerVisible(false);
-	};
 
 	const tryEditCategory = async () => {
 		showNotification({ message: t("Editing category..."), autoClose: 1500 });
@@ -231,51 +138,16 @@ export function ProductsPage() {
 				filterCategoriesChanges={searchForm.values.categoriesChanges}
 				itemClickFunc={(product) => {
 					//  set edit mode with product info on form and oepn drawer
-					productForm.setValues({
-						...product,
-						mode: "edit",
-					});
+					dispatch(productsActions.formWithEdit(product));
 					setDrawerVisible(true);
 				}}
 			></ProductList>
 
-			{/* Drawer for adding / editing a product */}
-			<Drawer
-				opened={drawerVisible}
-				position={settingsState.rightToLeft ? "right" : "left"}
-				onClose={() => setDrawerVisible(false)}
-				title={
-					productForm.values.mode === "edit"
-						? t("Edit a product")
-						: t("Add a product")
-				}
-				overlayOpacity={0.7}
-				padding="xl"
-				size="xl"
-			>
-				<Stack>
-					<FormElements
-						modal={modalVisible}
-						modalToggle={(to: boolean) => {
-							setModalVisible(to);
-						}}
-						formObject={productForm}
-					/>
-
-					{productForm.values.mode === "edit" ? (
-						<SimpleGrid cols={2} mt={16}>
-							<Button onClick={() => tryEditProduct()}>{t("Change")}</Button>
-							<Button variant="light" onClick={() => tryDeleteProduct()}>
-								{t("Delete")}
-							</Button>
-						</SimpleGrid>
-					) : (
-						<Button color={settingsState.color} onClick={tryAddProduct} mt={16}>
-							{t("Add")}
-						</Button>
-					)}
-				</Stack>
-			</Drawer>
+			<ProductDrawer
+				drawer={drawerVisible}
+				drawerSwitch={(to: boolean) => setDrawerVisible(to)}
+				modalSwitch={(to: boolean) => setModalVisible(to)}
+			></ProductDrawer>
 
 			{/* Category add/edit/remove modal */}
 			<Modal
@@ -391,10 +263,7 @@ export function ProductsPage() {
 			<Affix
 				onClick={() => {
 					// set add mode with empty form, and open drawer
-					productForm.setValues({
-						...productFormDefault,
-						mode: "add",
-					});
+					dispatch(productsActions.formWithCreate());
 					setDrawerVisible(true);
 				}}
 				position={{ bottom: 20, right: 20 }}
@@ -411,78 +280,5 @@ export function ProductsPage() {
 			</Affix>
 			{/* Add product button end */}
 		</Stack>
-	);
-}
-
-function FormElements(props: {
-	formObject: any;
-	modal: boolean;
-	modalToggle: (to: boolean) => void;
-}) {
-	let settingsState = useAppSelector((state) => state.settings);
-	let productsState = useAppSelector((state) => state.products);
-
-	return (
-		<>
-			<TextInput
-				withAsterisk
-				label={t("Name")}
-				placeholder={t("Product name") || "Product name"}
-				{...props.formObject.getInputProps("name")}
-			/>
-			<Flex align={"end"} gap={16}>
-				<Select
-					sx={{ flexGrow: 1 }}
-					label={t("Category")}
-					clearable
-					{...props.formObject.getInputProps("category.id")}
-					onChange={(e) => {
-						props.formObject.setFieldValue("category.id", e);
-					}}
-					data={productsState.categories.map((e) => {
-						return {
-							value: e.id,
-							label: t(e.name) || e.name,
-						};
-					})}
-					searchable
-				/>
-				<ActionIcon
-					onClick={() => props.modalToggle(true)}
-					p={4}
-					my={2}
-					size="lg"
-					variant="light"
-					color={settingsState.color}
-				>
-					<PencilSquareIcon></PencilSquareIcon>
-				</ActionIcon>
-			</Flex>
-
-			<Textarea
-				withAsterisk
-				label={t("About")}
-				placeholder={t("About the product") || "About the product"}
-				{...props.formObject.getInputProps("about")}
-			/>
-
-			<Group position="apart">
-				<Flex direction={"row"} gap="lg">
-					<NumberInput
-						withAsterisk
-						label={t("Price")}
-						step={250}
-						placeholder={t("Product price") || "Product price"}
-						{...props.formObject.getInputProps("price_current")}
-					/>
-					<NumberInput
-						withAsterisk
-						label={t("Quantity")}
-						placeholder={t("Quantity available") || "Quantity available"}
-						{...props.formObject.getInputProps("quantity_available")}
-					/>
-				</Flex>
-			</Group>
-		</>
 	);
 }

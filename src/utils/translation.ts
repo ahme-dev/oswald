@@ -41,6 +41,12 @@ const resources = {
 			Price: "نرخ",
 			Total: "گشتی",
 
+			"Select some categories": "جۆری بەرهەم هەڵبژێرە",
+			Categories: "جۆرەکانی بەرهەم",
+			"New name": "ناوی تازە",
+			"Change name": "ناو بگۆڕە",
+			"Has no category": "هیچ جۆرێکی بۆ دانەنراوە",
+
 			Transactions: "مامەڵەکان",
 
 			username: "ناوی بەکارهێنەر",
@@ -56,11 +62,6 @@ const resources = {
 			"Editing product...": "بەرهەمەکە دەستکاری ئەکرێت...",
 			"Deleting product...": "بەرهەمەکە ئەسڕدرێتەوە...",
 			"Saving checkout...": "فرۆشەکە جێبەجێدەکرێ...",
-
-			"Select some categories": "جۆری بەرهەم هەڵبژێرە",
-			Categories: "جۆرەکانی بەرهەم",
-			"New name": "ناوی تازە",
-			"Change name": "ناو بگۆڕە",
 		},
 	},
 };

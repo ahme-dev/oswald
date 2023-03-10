@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 
 // types
@@ -15,13 +15,30 @@ export type Product = {
 	price_current: number;
 };
 
+type FormProduct = Product & { mode: "edit" | "add" };
+type FormFields =
+	| "name"
+	| "about"
+	| "category.name"
+	| "category.id"
+	| "quantity_available"
+	| "price_current";
+
 export type ProductsState = {
 	loading: boolean;
 	list: Product[];
 	categories: { id: string; name: string }[];
+	form: FormProduct;
 };
 
-type ProductsActions = {};
+type ProductsActions = {
+	formWithEdit: (state: ProductsState, action: PayloadAction<Product>) => void;
+	formWithCreate: (state: ProductsState) => void;
+	formSetField: (
+		state: ProductsState,
+		action: PayloadAction<{ field: FormFields; value: number | string }>,
+	) => void;
+};
 
 // data
 
@@ -29,12 +46,44 @@ const initialProducts: ProductsState = {
 	loading: false,
 	list: [],
 	categories: [],
+	form: {
+		about: "",
+		category: { id: "", name: "" },
+		id: "",
+		mode: "add",
+		name: "",
+		price_current: 250,
+		quantity_available: 1,
+	},
 };
 
 export const productsSlice = createSlice<ProductsState, ProductsActions>({
 	name: "products",
 	initialState: initialProducts,
-	reducers: {},
+	reducers: {
+		// set form ui to edit mode and product values provided
+		formWithEdit: (state, action) => {
+			state.form = {
+				...action.payload,
+				mode: "edit",
+			};
+		},
+		// set form ui to add mode and empty values
+		formWithCreate: (state) => {
+			state.form = initialProducts.form;
+		},
+		formSetField: (state, action) => {
+			if (action.payload.field === "category.name")
+				state.form.category.name = action.payload.value as string;
+			else if (action.payload.field === "category.id")
+				state.form.category.id = action.payload.value as string;
+			else
+				state.form = {
+					...state.form,
+					[action.payload.field]: action.payload.value,
+				};
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(getProducts.pending, (state) => {
 			state.loading = true;
