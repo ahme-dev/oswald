@@ -72,16 +72,29 @@ export const productsSlice = createSlice<ProductsState, ProductsActions>({
 		formWithCreate: (state) => {
 			state.form = initialProducts.form;
 		},
+		// set a field in the form to a value provided
 		formSetField: (state, action) => {
-			if (action.payload.field === "category.name")
-				state.form.category.name = action.payload.value as string;
-			else if (action.payload.field === "category.id")
-				state.form.category.id = action.payload.value as string;
-			else
-				state.form = {
-					...state.form,
-					[action.payload.field]: action.payload.value,
-				};
+			// better than passing the whole form object
+			switch (action.payload.field) {
+				case "category.id":
+					state.form.category.id = action.payload.value as string;
+					break;
+				case "category.name":
+					state.form.category.name = action.payload.value as string;
+					break;
+				case "quantity_available":
+					state.form.quantity_available = action.payload.value as number;
+					break;
+				case "about":
+					state.form.about = action.payload.value as string;
+					break;
+				case "price_current":
+					state.form.price_current = action.payload.value as number;
+					break;
+				case "name":
+					state.form.name = action.payload.value as string;
+					break;
+			}
 		},
 	},
 	extraReducers: (builder) => {

@@ -85,7 +85,12 @@ export function ProductDrawer(props: {
 					placeholder={t("Product name") || "Product name"}
 					value={productFormState.name}
 					onChange={(e: any) =>
-						dispatch(productsActions.formSetField({ field: "name", value: e }))
+						dispatch(
+							productsActions.formSetField({
+								field: "name",
+								value: e.target.value,
+							}),
+						)
 					}
 				/>
 				<Flex align={"end"} gap={16}>
@@ -128,9 +133,14 @@ export function ProductDrawer(props: {
 					label={t("About")}
 					placeholder={t("About the product") || "About the product"}
 					value={productFormState.about}
-					onChange={(e: any) =>
-						dispatch(productsActions.formSetField({ field: "about", value: e }))
-					}
+					onChange={(e: any) => {
+						dispatch(
+							productsActions.formSetField({
+								field: "about",
+								value: e.target.value,
+							}),
+						);
+					}}
 				/>
 
 				<Group position="apart">
