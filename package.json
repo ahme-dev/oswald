@@ -24,6 +24,7 @@
 		"dayjs": "^1.11.7",
 		"dinero.js": "^1.9.1",
 		"i18next": "^22.4.10",
+		"luxon": "^3.3.0",
 		"pocketbase": "^0.12.0",
 		"pocketbase-expandless": "^0.3.3",
 		"react": "^18.2.0",
@@ -36,6 +37,7 @@
 		"wouter": "^2.10.0"
 	},
 	"devDependencies": {
+		"@types/luxon": "^3.2.0",
 		"@types/react": "^18.0.27",
 		"@types/react-dom": "^18.0.10",
 		"@vitejs/plugin-react": "^3.1.0",

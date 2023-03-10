@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { getProducts, Product } from "./products";
 import { getTransactions } from "./transactions";
+import { DateTime } from "luxon";
 
 // types
 
@@ -130,9 +131,12 @@ export const apply = createAsyncThunk(
 			transactionProductsIDs.push(transactionProduct.id);
 		}
 
+		// get datetime of now
+		const nowDateTime = DateTime.now().toFormat("yyyy-MM-dd HH:mm:ss");
+
 		// create the transaction data using the transactionProductsIDs array
 		const data = {
-			date: "2023-02-09 12:00:00",
+			date: nowDateTime,
 			transaction_product_ids: transactionProductsIDs,
 		};
 		await pb.collection("transactions").create(data);
