@@ -1,5 +1,6 @@
 import {
 	CheckCircleIcon,
+	PencilIcon,
 	PencilSquareIcon,
 	PlusCircleIcon,
 	PlusIcon,
@@ -267,7 +268,7 @@ export function ProductsPage() {
 													color={settingsState.color}
 													variant="light"
 												>
-													<PencilSquareIcon></PencilSquareIcon>
+													<PencilIcon></PencilIcon>
 												</ActionIcon>
 											</Menu.Target>
 											<Menu.Dropdown>
@@ -409,7 +410,7 @@ function FormElements(props: {
 				/>
 				<ActionIcon
 					onClick={() => props.modalToggle(true)}
-					p={2}
+					p={4}
 					my={2}
 					size="lg"
 					variant="light"
