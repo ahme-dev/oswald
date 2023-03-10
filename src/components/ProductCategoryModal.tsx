@@ -81,6 +81,7 @@ export function ProductCategoryModal(props: {
 	return (
 		<Modal
 			title={t("Categories")}
+			size="sm"
 			opened={props.modal}
 			onClose={() => props.modalSwitch(false)}
 			centered
