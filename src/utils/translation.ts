@@ -48,6 +48,7 @@ const resources = {
 			"Has no category": "هیچ جۆرێکی بۆ دانەنراوە",
 
 			Transactions: "مامەڵەکان",
+			"Transaction total": "کۆی گشتی مامەڵەکە",
 
 			username: "ناوی بەکارهێنەر",
 			password: "وشەی نهێنی",

@@ -31,34 +31,27 @@ export function TransactionsPage() {
 				{transactionsState.loading ? (
 					<Loader></Loader>
 				) : (
-					transactionsState.list.map((item) => {
+					transactionsState.list.map((transaction) => {
 						return (
-							<Card withBorder key={item.id}>
+							// Single transaction
+							<Card withBorder key={transaction.id}>
 								<Stack spacing={"sm"}>
 									<Group>
-										<Badge size="lg">{item.date}</Badge>
-										{item.customer.name && (
-											<Badge size="lg">{item.customer.name}</Badge>
+										<Badge size="lg">{transaction.date}</Badge>
+										{transaction.customer.name && (
+											<Badge size="lg">{transaction.customer.name}</Badge>
 										)}
 									</Group>
 									{/* Transaction Product list */}
-									{item.transactionProducts.map((trProduct) => (
+									{transaction.transactionProducts.map((trProduct) => (
 										<Card p="xs" withBorder key={trProduct.id}>
 											<Group>
-												<Group>
-													<Badge
-														pl={0}
-														leftSection={
-															<ActionIcon color={settingsState.color}>
-																<CurrencyEuroIcon />
-															</ActionIcon>
-														}
-														size="lg"
-													>
+												<Group spacing={"xs"}>
+													<Text>
 														{dineroFormat(
 															trProduct.qty_sold * trProduct.price_sold,
 														)}
-													</Badge>
+													</Text>
 													<Text>{t("Total")}</Text>
 												</Group>
 												<Group>
@@ -75,8 +68,28 @@ export function TransactionsPage() {
 										</Card>
 									))}
 									{/* Transaction Product list end */}
+									<Group>
+										<Badge
+											size="lg"
+											pl={0}
+											leftSection={
+												<ActionIcon color={settingsState.color}>
+													<CurrencyEuroIcon />
+												</ActionIcon>
+											}
+										>
+											{dineroFormat(
+												transaction.transactionProducts.reduce(
+													(sum, pr) => sum + pr.qty_sold * pr.price_sold,
+													0,
+												),
+											)}
+										</Badge>
+										<Text>{t("Transaction total")}</Text>
+									</Group>
 								</Stack>
 							</Card>
+							// Single transaction end
 						);
 					})
 				)}
