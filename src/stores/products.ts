@@ -26,6 +26,7 @@ type FormFields =
 
 export type ProductsState = {
 	loading: boolean;
+	loadingCategories: boolean;
 	list: Product[];
 	categories: { id: string; name: string }[];
 	form: FormProduct;
@@ -44,6 +45,7 @@ type ProductsActions = {
 
 const initialProducts: ProductsState = {
 	loading: false,
+	loadingCategories: false,
 	list: [],
 	categories: [],
 	form: {
@@ -107,9 +109,11 @@ export const productsSlice = createSlice<ProductsState, ProductsActions>({
 		});
 		builder.addCase(getCategories.pending, (state) => {
 			state.loading = true;
+			state.loadingCategories = true;
 		});
 		builder.addCase(getCategories.fulfilled, (state, action) => {
 			state.loading = false;
+			state.loadingCategories = false;
 			state.categories = action.payload;
 		});
 	},

@@ -1,11 +1,4 @@
-import {
-	CheckCircleIcon,
-	PencilIcon,
-	PencilSquareIcon,
-	PlusCircleIcon,
-	PlusIcon,
-	TrashIcon,
-} from "@heroicons/react/24/solid";
+import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
 import {
 	ActionIcon,
 	Affix,
@@ -13,12 +6,6 @@ import {
 	Group,
 	Input,
 	Stack,
-	Button,
-	Modal,
-	Popover,
-	Text,
-	Loader,
-	Menu,
 	MultiSelect,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -31,13 +18,8 @@ import {
 	useAppSelector,
 	productsActions,
 } from "../stores/root";
-import {
-	createCategory,
-	editCategory,
-	deleteCategory,
-} from "../stores/products";
-import { showNotification } from "@mantine/notifications";
 import { ProductDrawer } from "../components/ProductDrawer";
+import { ProductCategoryModal } from "../components/ProductCategoryModal";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
@@ -55,41 +37,6 @@ export function ProductsPage() {
 			categoriesChanges: 0,
 		},
 	});
-
-	const categoryForm = useForm({
-		initialValues: {
-			name: "",
-			id: "",
-		},
-
-		validate: {
-			name: (value) => (value.length > 6 ? null : "Name is required"),
-			id: (value) => (value.length > 1 ? null : "ID is required"),
-		},
-	});
-
-	const tryEditCategory = async () => {
-		showNotification({ message: t("Editing category..."), autoClose: 1500 });
-
-		dispatch(
-			editCategory({
-				id: categoryForm.values.id,
-				name: categoryForm.values.name,
-			}),
-		);
-	};
-
-	const tryAddCategory = async () => {
-		showNotification({ message: t("Adding category..."), autoClose: 1500 });
-
-		dispatch(createCategory({ name: categoryForm.values.name }));
-	};
-
-	const tryDeleteCategory = async (id: string) => {
-		showNotification({ message: t("Deleting category..."), autoClose: 1500 });
-
-		dispatch(deleteCategory({ id: id }));
-	};
 
 	// render
 	return (
@@ -149,115 +96,10 @@ export function ProductsPage() {
 				modalSwitch={(to: boolean) => setModalVisible(to)}
 			></ProductDrawer>
 
-			{/* Category add/edit/remove modal */}
-			<Modal
-				title={t("Categories")}
-				opened={modalVisible}
-				onClose={() => setModalVisible(false)}
-			>
-				<Stack p={8}>
-					{productsState.loading ? (
-						<Loader />
-					) : (
-						// category list
-						productsState.categories.map((category) => {
-							return (
-								<Group key={category.id} position="apart">
-									<Text>{category.name}</Text>
-									<Group spacing={"sm"}>
-										{/* category edit */}
-										<Menu width={200} shadow="sm">
-											<Menu.Target>
-												<ActionIcon
-													p={2}
-													onClick={() => {
-														categoryForm.setValues({
-															id: category.id,
-															name: category.name,
-														});
-													}}
-													color={settingsState.color}
-													variant="light"
-												>
-													<PencilIcon></PencilIcon>
-												</ActionIcon>
-											</Menu.Target>
-											<Menu.Dropdown>
-												<Stack p={8} spacing="xs">
-													<Text>{t("Change name")}</Text>
-													<Flex align={"center"} gap={"sm"}>
-														<Input
-															variant="filled"
-															placeholder={category.name}
-															{...categoryForm.getInputProps("name")}
-														></Input>
-														<ActionIcon
-															onClick={() => tryEditCategory()}
-															size="lg"
-															variant="light"
-															color={settingsState.color}
-															p={2}
-														>
-															<CheckCircleIcon></CheckCircleIcon>
-														</ActionIcon>
-													</Flex>
-												</Stack>
-											</Menu.Dropdown>
-										</Menu>
-										{/* category edit end */}
-										{/* category trash */}
-										<ActionIcon
-											p={2}
-											color={settingsState.color}
-											onClick={() => tryDeleteCategory(category.id)}
-											variant="light"
-										>
-											<TrashIcon></TrashIcon>
-										</ActionIcon>
-										{/* category trash end */}
-									</Group>
-								</Group>
-							);
-						})
-						// category list end
-					)}
-					{/* category add */}
-					<Flex justify="center">
-						<Popover width={200} shadow="sm">
-							<Popover.Target>
-								<Group>
-									<Button
-										onClick={() => categoryForm.setValues({ id: "", name: "" })}
-									>
-										Add Category
-									</Button>
-								</Group>
-							</Popover.Target>
-							<Popover.Dropdown>
-								<Stack spacing="xs">
-									<Text>{t("New name")}</Text>
-									<Flex align={"center"} gap={"sm"}>
-										<Input
-											{...categoryForm.getInputProps("name")}
-											variant="filled"
-										></Input>
-										<ActionIcon
-											onClick={() => tryAddCategory()}
-											size="lg"
-											variant="light"
-											color={settingsState.color}
-											p={2}
-										>
-											<PlusCircleIcon></PlusCircleIcon>
-										</ActionIcon>
-									</Flex>
-								</Stack>
-							</Popover.Dropdown>
-						</Popover>
-					</Flex>
-					{/* category add end */}
-				</Stack>
-			</Modal>
+			<ProductCategoryModal
+				modal={modalVisible}
+				modalSwitch={(to: boolean) => setModalVisible(to)}
+			></ProductCategoryModal>
 
 			{/* Add product button */}
 			<Affix
