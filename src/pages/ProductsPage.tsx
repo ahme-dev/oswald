@@ -25,6 +25,7 @@ import {
 	Text,
 	Loader,
 	Menu,
+	MultiSelect,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
@@ -48,10 +49,16 @@ export function ProductsPage() {
 
 	let dispatch = useAppDispatch();
 
-	// search string and drawer visiblity state
-	let [search, setSearch] = useState("");
 	let [drawerVisible, setDrawerVisible] = useState(false);
 	let [modalVisible, setModalVisible] = useState(false);
+
+	const searchForm = useForm({
+		initialValues: {
+			name: "",
+			categories: [],
+			categoriesChanges: 0,
+		},
+	});
 
 	const categoryForm = useForm({
 		initialValues: {
@@ -65,7 +72,7 @@ export function ProductsPage() {
 		},
 	});
 
-	const initialForm = {
+	const productFormDefault = {
 		mode: "add",
 		id: "",
 		name: "",
@@ -78,8 +85,8 @@ export function ProductsPage() {
 		},
 	};
 
-	const form = useForm({
-		initialValues: initialForm,
+	const productForm = useForm({
+		initialValues: productFormDefault,
 
 		validate: {
 			name: (value) => (value.length > 6 ? null : "Name is required"),
@@ -99,19 +106,19 @@ export function ProductsPage() {
 
 		// try to validate the form
 		// if got errors, return
-		let feedback = form.validate();
+		let feedback = productForm.validate();
 		if (feedback.hasErrors) return;
 
 		dispatch(
 			createProduct({
-				name: form.values.name,
-				about: form.values.about,
+				name: productForm.values.name,
+				about: productForm.values.about,
 				category: {
-					name: form.values.category.name,
-					id: form.values.category.id,
+					name: productForm.values.category.name,
+					id: productForm.values.category.id,
 				},
-				price_current: form.values.price_current,
-				quantity_available: form.values.quantity_available,
+				price_current: productForm.values.price_current,
+				quantity_available: productForm.values.quantity_available,
 			}),
 		);
 
@@ -126,20 +133,20 @@ export function ProductsPage() {
 
 		// try to validate the form
 		// if got errors, return
-		let feedback = form.validate();
+		let feedback = productForm.validate();
 		if (feedback.hasErrors) return;
 
 		dispatch(
 			editProduct({
-				id: form.values.id,
-				name: form.values.name,
-				about: form.values.about,
+				id: productForm.values.id,
+				name: productForm.values.name,
+				about: productForm.values.about,
 				category: {
-					name: form.values.category.name,
-					id: form.values.category.id,
+					name: productForm.values.category.name,
+					id: productForm.values.category.id,
 				},
-				price_current: form.values.price_current,
-				quantity_available: form.values.quantity_available,
+				price_current: productForm.values.price_current,
+				quantity_available: productForm.values.quantity_available,
 			}),
 		);
 
@@ -149,7 +156,7 @@ export function ProductsPage() {
 	const tryDeleteProduct = async () => {
 		showNotification({ message: t("Deleting product..."), autoClose: 1500 });
 
-		dispatch(deleteProduct({ id: form.values.id }));
+		dispatch(deleteProduct({ id: productForm.values.id }));
 
 		setDrawerVisible(false);
 	};
@@ -182,19 +189,49 @@ export function ProductsPage() {
 		<Stack h={"100%"}>
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
 				<TitleText title="Products" />
-				<Input
-					placeholder={t("search for a product")}
-					value={search}
-					onInput={(e: any) => setSearch(e.target.value)}
-				></Input>
+				{/* search section */}
+				<Group>
+					<ActionIcon
+						onClick={() => setModalVisible(true)}
+						p={4}
+						size="lg"
+						variant="light"
+						color={settingsState.color}
+					>
+						<PencilSquareIcon></PencilSquareIcon>
+					</ActionIcon>
+					<MultiSelect
+						placeholder={
+							t("Select some categories") || "Select some categories"
+						}
+						w="18rem"
+						value={searchForm.values.categories}
+						onChange={(e: any) => {
+							searchForm.setFieldValue(
+								"categoriesChanges",
+								searchForm.values.categoriesChanges + 1,
+							);
+							searchForm.setFieldValue("categories", e);
+						}}
+						data={productsState.categories.map((cat) => cat.name)}
+					></MultiSelect>
+
+					<Input
+						placeholder={t("search for a product")}
+						{...searchForm.getInputProps("name")}
+					></Input>
+				</Group>
+				{/* search section end */}
 			</Flex>
 			<ProductList
 				data={productsState.list}
 				loading={productsState.loading}
-				filterTerms={search}
+				filterName={searchForm.values.name}
+				filterCategories={searchForm.values.categories}
+				filterCategoriesChanges={searchForm.values.categoriesChanges}
 				itemClickFunc={(product) => {
 					//  set edit mode with product info on form and oepn drawer
-					form.setValues({
+					productForm.setValues({
 						...product,
 						mode: "edit",
 					});
@@ -208,7 +245,9 @@ export function ProductsPage() {
 				position={settingsState.rightToLeft ? "right" : "left"}
 				onClose={() => setDrawerVisible(false)}
 				title={
-					form.values.mode === "edit" ? t("Edit a product") : t("Add a product")
+					productForm.values.mode === "edit"
+						? t("Edit a product")
+						: t("Add a product")
 				}
 				overlayOpacity={0.7}
 				padding="xl"
@@ -220,10 +259,10 @@ export function ProductsPage() {
 						modalToggle={(to: boolean) => {
 							setModalVisible(to);
 						}}
-						formObject={form}
+						formObject={productForm}
 					/>
 
-					{form.values.mode === "edit" ? (
+					{productForm.values.mode === "edit" ? (
 						<SimpleGrid cols={2} mt={16}>
 							<Button onClick={() => tryEditProduct()}>{t("Change")}</Button>
 							<Button variant="light" onClick={() => tryDeleteProduct()}>
@@ -352,8 +391,8 @@ export function ProductsPage() {
 			<Affix
 				onClick={() => {
 					// set add mode with empty form, and open drawer
-					form.setValues({
-						...initialForm,
+					productForm.setValues({
+						...productFormDefault,
 						mode: "add",
 					});
 					setDrawerVisible(true);
@@ -391,7 +430,7 @@ function FormElements(props: {
 				placeholder={t("Product name") || "Product name"}
 				{...props.formObject.getInputProps("name")}
 			/>
-			<Flex align={"end"} gap={8}>
+			<Flex align={"end"} gap={16}>
 				<Select
 					sx={{ flexGrow: 1 }}
 					label={t("Category")}

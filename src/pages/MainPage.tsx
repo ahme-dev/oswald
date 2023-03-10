@@ -45,7 +45,9 @@ export function MainPage() {
 							)
 						}
 						smaller
-						filterTerms={""}
+						filterName={""}
+						filterCategories={[]}
+						filterCategoriesChanges={0}
 					></ProductList>
 				</Grid.Col>
 				<Grid.Col span={12} sm={5}>

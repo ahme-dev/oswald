@@ -57,6 +57,7 @@ const resources = {
 			"Deleting product...": "بەرهەمەکە ئەسڕدرێتەوە...",
 			"Saving checkout...": "فرۆشەکە جێبەجێدەکرێ...",
 
+			"Select some categories": "جۆری بەرهەم هەڵبژێرە",
 			Categories: "جۆرەکانی بەرهەم",
 			"New name": "ناوی تازە",
 			"Change name": "ناو بگۆڕە",

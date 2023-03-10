@@ -19,7 +19,9 @@ import { dineroFormat } from "../utils/currency";
 export function ProductList(props: {
 	loading: boolean;
 	data: Product[];
-	filterTerms: string;
+	filterName: string;
+	filterCategories: string[];
+	filterCategoriesChanges: number;
 	smaller?: boolean;
 	itemClickFunc: (product: Product) => void;
 }) {
@@ -38,18 +40,27 @@ export function ProductList(props: {
 
 		// make new data using filters
 		let data = props.data.filter((item) => {
-			// does name field match filterTerms
-			const filterTermsInName = item.name
+			// does name field match filterName
+			const containsName = item.name
 				.toLowerCase()
-				.includes(props.filterTerms.toLowerCase());
-			// does about field match filterTerms
-			const filterTermsInAbout = item.about
+				.includes(props.filterName.toLowerCase());
+			// does about field match filterName
+			const containsAbout = item.about
 				.toLowerCase()
-				.includes(props.filterTerms.toLowerCase());
+				.includes(props.filterName.toLowerCase());
+			// only if categories are not empty
+			// does category field match filterCategories
+			const containsCategory =
+				props.filterCategories.length > 0
+					? props.filterCategories.every((el) => el === item.category.name)
+					: true;
 
-			// if filter term is not in name or about don't include in filtered data
-			if (!filterTermsInName && !filterTermsInAbout) return false;
+			// if filter term is not in name or about
+			// or category is not in filterCategories
+			// don't include in filtered data
+			if ((!containsName && !containsAbout) || !containsCategory) return false;
 
+			// if no problems occured
 			return true;
 		});
 
@@ -57,7 +68,7 @@ export function ProductList(props: {
 		setFilteredData(data);
 
 		setIsFiltering(false);
-	}, [props.filterTerms, props.loading]);
+	}, [props.filterName, props.filterCategoriesChanges, props.loading]);
 
 	// render
 
