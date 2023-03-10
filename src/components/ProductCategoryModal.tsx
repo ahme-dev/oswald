@@ -83,6 +83,7 @@ export function ProductCategoryModal(props: {
 			title={t("Categories")}
 			opened={props.modal}
 			onClose={() => props.modalSwitch(false)}
+			centered
 		>
 			<Stack p={8}>
 				{productsCategoriesLoading ? (

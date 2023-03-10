@@ -1,8 +1,9 @@
-import { CurrencyEuroIcon } from "@heroicons/react/24/solid";
+import { CalendarDaysIcon, CurrencyEuroIcon } from "@heroicons/react/24/solid";
 import {
 	Accordion,
 	ActionIcon,
 	Badge,
+	Button,
 	Card,
 	Divider,
 	Flex,
@@ -67,7 +68,17 @@ export function TransactionsPage() {
 											<Divider size="sm" orientation="vertical"></Divider>
 											<Group spacing={"sm"}>
 												<Text>{t("Date")}</Text>
-												<Badge size="lg">{transaction.date}</Badge>
+												<Badge
+													size="lg"
+													pl={0}
+													leftSection={
+														<ActionIcon color={settingsState.color}>
+															<CalendarDaysIcon></CalendarDaysIcon>
+														</ActionIcon>
+													}
+												>
+													{transaction.date}
+												</Badge>
 											</Group>
 										</Group>
 									</Accordion.Control>
@@ -99,6 +110,10 @@ export function TransactionsPage() {
 												</Card>
 											))}
 											{/* Transaction Product list end */}
+											<Group>
+												<Button>{t("Edit")}</Button>
+												<Button variant="light">{t("Delete")}</Button>
+											</Group>
 										</Stack>
 									</Accordion.Panel>
 								</Accordion.Item>
