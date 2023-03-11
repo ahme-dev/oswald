@@ -11,11 +11,11 @@ A POS System for small shops, available in kurdish and english.
 
 ### Stack
 
-- Language: Typescript
-- UI: React + Mantine + Heroicons
-- State Manager: Redux Toolkit
-- Translation: React-i18next
-- Backend: Pocketbase
+- Language: **Typescript**
+- UI: **React** + **Mantine** + **Heroicons**
+- State Manager: **Redux Toolkit**
+- Translation: **React-i18next**
+- Backend: **Pocketbase**
 
 ### Features
 
@@ -31,3 +31,4 @@ A POS System for small shops, available in kurdish and english.
 
 - [TODO] View your sales data in elegant charts and diagrams.
 - [TODO] View and modify past transactions or revert them.
+- [TODO] Multiple users and roles with auth between them.
