@@ -63,7 +63,7 @@ export const getTransactions = createAsyncThunk(
 			sort: "-date",
 		});
 
-		const t = moveExpandsInline(transactions);
+		const t = moveExpandsInline(transactions) as RecordExpandless[];
 
 		const transactionsList = t.map((transaction: RecordExpandless) => {
 			// create a list of all the transactionProducts for the transaction
