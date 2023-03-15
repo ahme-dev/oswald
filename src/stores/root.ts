@@ -70,3 +70,4 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const checkoutActions = checkoutSlice.actions;
 export const productsActions = productsSlice.actions;
 export const settingsActions = settingsSlice.actions;
+export const transactionsActions = transactionsSlice.actions;

@@ -105,7 +105,6 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 export const apply = createAsyncThunk(
 	"checkout/apply",
 	async (items: CheckoutState["items"], { dispatch }) => {
-		console.log("apply");
 		let transactionProductsIDs = [];
 
 		// go through each item
@@ -138,6 +137,7 @@ export const apply = createAsyncThunk(
 		const data = {
 			date: nowDateTime,
 			transaction_product_ids: transactionProductsIDs,
+			isRefund: false,
 		};
 		await pb.collection("transactions").create(data);
 

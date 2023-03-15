@@ -1,10 +1,16 @@
-import { CalendarDaysIcon, CurrencyEuroIcon } from "@heroicons/react/24/solid";
+import {
+	CalendarDaysIcon,
+	CurrencyEuroIcon,
+	CurrencyRupeeIcon,
+	HandRaisedIcon,
+} from "@heroicons/react/24/solid";
 import {
 	Accordion,
 	ActionIcon,
 	Badge,
 	Button,
 	Card,
+	Center,
 	Divider,
 	Flex,
 	Group,
@@ -14,10 +20,12 @@ import {
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { TitleText } from "../components/TitleText";
-import { useAppSelector } from "../stores/root";
+import { useAppDispatch, useAppSelector } from "../stores/root";
+import { revertTransaction } from "../stores/transactions";
 import { dineroFormat } from "../utils/currency";
 
 export function TransactionsPage() {
+	let dispatch = useAppDispatch();
 	const { t } = useTranslation();
 
 	// const dispatch = useAppDispatch();
@@ -29,10 +37,16 @@ export function TransactionsPage() {
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
 				<TitleText title="Transactions" />
 			</Flex>
-			<Stack>
-				<Accordion variant="separated">
+			<Stack h={"100%"}>
+				<Accordion variant="separated" h={"100%"}>
 					{transactionsState.loading ? (
-						<Loader></Loader>
+						<Center h={"100%"}>
+							<Loader></Loader>
+						</Center>
+					) : transactionsState.list.length === 0 ? (
+						<Center h={"100%"}>
+							<Text>{t("No transactions found")}</Text>
+						</Center>
 					) : (
 						transactionsState.list.map((transaction) => {
 							return (
@@ -40,31 +54,45 @@ export function TransactionsPage() {
 								<Accordion.Item key={transaction.id} value={transaction.id}>
 									<Accordion.Control>
 										<Group spacing={"xl"}>
+											{transaction.isRefund === true ? (
+												<>
+													<ActionIcon>
+														<HandRaisedIcon />
+													</ActionIcon>
+													<Text>{t("Refund transaction")}</Text>
+												</>
+											) : (
+												<ActionIcon>
+													<CurrencyRupeeIcon />
+												</ActionIcon>
+											)}
 											{transaction.customer.name && (
 												<Group spacing={"sm"}>
 													<Badge size="lg">{transaction.customer.name}</Badge>
 													<Divider size="sm" orientation="vertical"></Divider>
 												</Group>
 											)}
-											<Group spacing={"sm"}>
-												<Text>{t("Transaction total")}</Text>
-												<Badge
-													size="lg"
-													pl={0}
-													leftSection={
-														<ActionIcon color={settingsState.color}>
-															<CurrencyEuroIcon />
-														</ActionIcon>
-													}
-												>
-													{dineroFormat(
-														transaction.transactionProducts.reduce(
-															(sum, pr) => sum + pr.qty_sold * pr.price_sold,
-															0,
-														),
-													)}
-												</Badge>
-											</Group>
+											{transaction.isRefund === false && (
+												<Group spacing={"sm"}>
+													<Text>{t("Transaction total")}</Text>
+													<Badge
+														size="lg"
+														pl={0}
+														leftSection={
+															<ActionIcon color={settingsState.color}>
+																<CurrencyEuroIcon />
+															</ActionIcon>
+														}
+													>
+														{dineroFormat(
+															transaction.transactionProducts.reduce(
+																(sum, pr) => sum + pr.qty_sold * pr.price_sold,
+																0,
+															),
+														)}
+													</Badge>
+												</Group>
+											)}
 											<Divider size="sm" orientation="vertical"></Divider>
 											<Group spacing={"sm"}>
 												<Text>{t("Date")}</Text>
@@ -111,8 +139,19 @@ export function TransactionsPage() {
 											))}
 											{/* Transaction Product list end */}
 											<Group>
-												<Button>{t("Edit")}</Button>
-												<Button variant="light">{t("Delete")}</Button>
+												{transaction.isRefund === false && (
+													<Button
+														disabled={transaction.wasRefunded}
+														onClick={() =>
+															dispatch(
+																revertTransaction({ id: transaction.id }),
+															)
+														}
+														variant="light"
+													>
+														{t("Refund")}
+													</Button>
+												)}
 											</Group>
 										</Stack>
 									</Accordion.Panel>

@@ -53,6 +53,9 @@ const resources = {
 			"Transaction total": "کۆی گشتی مامەڵەکە",
 			Date: "بەروار",
 			Edit: "دەستکاری بکە",
+			Refund: "پوچەڵکەرەوە",
+			"Refund transaction": "پوچەلکردنەوەی مامەڵە",
+			"No transactions found": "هیچ مامەڵەیەک نەدۆزرایەوە",
 
 			username: "ناوی بەکارهێنەر",
 			password: "وشەی نهێنی",
