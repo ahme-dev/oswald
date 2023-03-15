@@ -19,11 +19,26 @@ A POS System for small shops, available in kurdish and english.
 
 ### Features
 
-- Add, edit, and remove products with categories
+- Add wanted products to checkout, change quantity and get price total and create transactions on checkout.
+
+  <img src="img/checkout.png" width="650">
+
 - Filter through products using names, about, prices and categories.
-- Add wanted products to checkout, change quantity and get price total.
+
+  <img src="img/products.png" width="650">
+  <img src="img/productsFilter.png" width="650">
+
+- Add, edit, and remove products with categories
+
+  <img src="img/productsEdit.png" width="650">
+  <img src="img/categories.png" width="650">
+
 - [TODO] Multiple checkouts for multitasking.
-- Create transactions for products.
+
+- View transactions and refund them.
+
+  <img src="img/transactions.png" width="650">
+
 - Use in multiple languages (currently in english and kurdish).
 - Beautiful modern UI in multiple colours and light/dark themes.
 
