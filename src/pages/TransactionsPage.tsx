@@ -1,9 +1,4 @@
-import {
-	CalendarDaysIcon,
-	CurrencyEuroIcon,
-	CurrencyRupeeIcon,
-	HandRaisedIcon,
-} from "@heroicons/react/24/solid";
+import { CalendarDaysIcon, CurrencyEuroIcon } from "@heroicons/react/24/solid";
 import {
 	Accordion,
 	ActionIcon,
@@ -54,45 +49,33 @@ export function TransactionsPage() {
 								<Accordion.Item key={transaction.id} value={transaction.id}>
 									<Accordion.Control>
 										<Group spacing={"xl"}>
-											{transaction.isRefund === true ? (
-												<>
-													<ActionIcon>
-														<HandRaisedIcon />
-													</ActionIcon>
-													<Text>{t("Refund transaction")}</Text>
-												</>
-											) : (
-												<ActionIcon>
-													<CurrencyRupeeIcon />
-												</ActionIcon>
-											)}
 											{transaction.customer.name && (
 												<Group spacing={"sm"}>
 													<Badge size="lg">{transaction.customer.name}</Badge>
 													<Divider size="sm" orientation="vertical"></Divider>
 												</Group>
 											)}
-											{transaction.isRefund === false && (
-												<Group spacing={"sm"}>
-													<Text>{t("Transaction total")}</Text>
-													<Badge
-														size="lg"
-														pl={0}
-														leftSection={
-															<ActionIcon color={settingsState.color}>
-																<CurrencyEuroIcon />
-															</ActionIcon>
-														}
-													>
-														{dineroFormat(
-															transaction.transactionProducts.reduce(
-																(sum, pr) => sum + pr.qty_sold * pr.price_sold,
-																0,
-															),
-														)}
-													</Badge>
-												</Group>
-											)}
+
+											<Group spacing={"sm"}>
+												<Text>{t("Transaction total")}</Text>
+												<Badge
+													size="lg"
+													pl={0}
+													leftSection={
+														<ActionIcon color={settingsState.color}>
+															<CurrencyEuroIcon />
+														</ActionIcon>
+													}
+												>
+													{dineroFormat(
+														transaction.transactionProducts.reduce(
+															(sum, pr) => sum + pr.qty_sold * pr.price_sold,
+															0,
+														),
+													)}
+												</Badge>
+											</Group>
+
 											<Divider size="sm" orientation="vertical"></Divider>
 											<Group spacing={"sm"}>
 												<Text>{t("Date")}</Text>
@@ -108,6 +91,10 @@ export function TransactionsPage() {
 													{transaction.date}
 												</Badge>
 											</Group>
+
+											{transaction.wasRefunded && (
+												<Badge size="lg">{t("Refunded")}</Badge>
+											)}
 										</Group>
 									</Accordion.Control>
 									<Accordion.Panel>
@@ -139,19 +126,15 @@ export function TransactionsPage() {
 											))}
 											{/* Transaction Product list end */}
 											<Group>
-												{transaction.isRefund === false && (
-													<Button
-														disabled={transaction.wasRefunded}
-														onClick={() =>
-															dispatch(
-																revertTransaction({ id: transaction.id }),
-															)
-														}
-														variant="light"
-													>
-														{t("Refund")}
-													</Button>
-												)}
+												<Button
+													disabled={transaction.wasRefunded}
+													onClick={() =>
+														dispatch(revertTransaction({ id: transaction.id }))
+													}
+													variant="light"
+												>
+													{t("Refund")}
+												</Button>
 											</Group>
 										</Stack>
 									</Accordion.Panel>

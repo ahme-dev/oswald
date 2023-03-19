@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { moveExpandsInline, RecordExpandless } from "pocketbase-expandless";
-import { DateTime } from "luxon";
 import { getProducts } from "./products";
 
 // trypes
@@ -23,7 +22,6 @@ export type TransactionProduct = {
 export type Transaction = {
 	id: string;
 	date: string;
-	isRefund: boolean;
 	wasRefunded: boolean;
 	customer: { id: string; name: string };
 	transactionProducts: TransactionProduct[];
@@ -98,7 +96,6 @@ export const getTransactions = createAsyncThunk(
 				id: transaction.id,
 				date: transaction.date,
 				customer,
-				isRefund: transaction.isRefund,
 				wasRefunded: transaction.wasRefunded,
 				transactionProducts,
 			} satisfies Transaction;
@@ -134,16 +131,6 @@ export const revertTransaction = createAsyncThunk(
 			// add id to list to remove later
 			transactionProductIDs.push(transactionProduct.id);
 		}
-
-		// get datetime of now
-		const nowDateTime = DateTime.now().toFormat("yyyy-MM-dd HH:mm:ss");
-
-		// create a refund transaction
-		await pb.collection("transactions").create({
-			date: nowDateTime,
-			transaction_product_ids: transactionProductIDs,
-			isRefund: true,
-		});
 
 		// add wasRefunded flag to transaction
 		await pb.collection("transactions").update(t.id, {
