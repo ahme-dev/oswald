@@ -33,39 +33,29 @@ export function ProductDrawer(props: {
 	let productsState = useAppSelector((state) => state.products);
 	let productFormState = useAppSelector((state) => state.products.form);
 
-	const tryAddProduct = async () => {
+	const notify = (message: string) => {
 		showNotification({
-			message: t("Adding product..."),
+			message: t(message),
 			autoClose: 1500,
 			loading: true,
 		});
+	};
 
+	const tryAddProduct = async () => {
+		notify("Adding product...");
 		dispatch(createProduct(productFormState));
-
 		props.drawerSwitch(false);
 	};
 
 	const tryEditProduct = async () => {
-		showNotification({
-			message: t("Editing product..."),
-			autoClose: 1500,
-			loading: true,
-		});
-
+		notify("Editing product...");
 		dispatch(editProduct(productFormState));
-
 		props.drawerSwitch(false);
 	};
 
 	const tryDeleteProduct = async () => {
-		showNotification({
-			message: t("Deleting product..."),
-			autoClose: 1500,
-			loading: true,
-		});
-
+		notify("Deleting product...");
 		dispatch(deleteProduct({ id: productFormState.id }));
-
 		props.drawerSwitch(false);
 	};
 
