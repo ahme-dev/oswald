@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { moveExpandsInline, RecordExpandless } from "pocketbase-expandless";
 import { getProducts } from "./products";
-import { isError, returnError } from "../utils/errors";
+import { isError, result } from "../utils/errors";
 
 // trypes
 
@@ -120,16 +120,14 @@ export const getTransactions = createAsyncThunk(
 export const revertTransaction = createAsyncThunk(
 	"transactions/refund",
 	async (transaction: { id: string }, { dispatch, rejectWithValue }) => {
-		const transactionData = await pb
-			.collection("transactions")
-			.getOne(transaction.id + "3f", {
+		const transactionData = await result(
+			pb.collection("transactions").getOne(transaction.id + "3f", {
 				expand: "transaction_product_ids.product_id.category_id, customer_id",
-			})
-			.catch(returnError);
+			}),
+		);
 
-		if (isError(transactionData)) {
+		if (isError(transactionData))
 			return rejectWithValue("Could not find transaction to revert");
-		}
 
 		const t = moveExpandsInline(transactionData) as RecordExpandless;
 
@@ -139,14 +137,13 @@ export const revertTransaction = createAsyncThunk(
 		// go through each transaction product
 		for (const transactionProduct of t.transaction_product_ids) {
 			// update quantity using qty_sold
-			const qtyUpdateError = await pb
-				.collection("products")
-				.update(transactionProduct.product_id.id, {
+			const qtyUpdateError = await result(
+				pb.collection("products").update(transactionProduct.product_id.id, {
 					quantity_available:
 						transactionProduct.qty_sold +
 						transactionProduct.product_id.quantity_available,
-				})
-				.catch(returnError);
+				}),
+			);
 
 			if (isError(qtyUpdateError))
 				return rejectWithValue("Could not revert product quantity");
@@ -156,12 +153,11 @@ export const revertTransaction = createAsyncThunk(
 		}
 
 		// add wasRefunded flag to transaction
-		const refundFlagError = await pb
-			.collection("transactions")
-			.update(t.id, {
+		const refundFlagError = await result(
+			pb.collection("transactions").update(t.id, {
 				wasRefunded: true,
-			})
-			.catch(returnError);
+			}),
+		);
 
 		if (isError(refundFlagError))
 			return rejectWithValue("Could not set refund flag on transaction");
