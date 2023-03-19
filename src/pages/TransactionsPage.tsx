@@ -26,7 +26,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
-import { revertTransaction } from "../stores/transactions";
+import { refundTransaction } from "../stores/transactions";
 import { dineroFormat } from "../utils/currency";
 
 export function TransactionsPage() {
@@ -150,7 +150,7 @@ export function TransactionsPage() {
 												<Button
 													disabled={transaction.wasRefunded}
 													onClick={() =>
-														dispatch(revertTransaction({ id: transaction.id }))
+														dispatch(refundTransaction({ id: transaction.id }))
 													}
 													variant="light"
 												>

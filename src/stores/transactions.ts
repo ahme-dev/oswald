@@ -59,11 +59,14 @@ export const transactionsSlice = createSlice<
 		builder.addCase(getTransactions.pending, (state) => {
 			state.loading = true;
 		});
+		builder.addCase(getTransactions.rejected, (state, action) => {
+			state.error = action.payload as string;
+		});
 		builder.addCase(getTransactions.fulfilled, (state, action) => {
 			state.loading = false;
 			state.list = action.payload;
 		});
-		builder.addCase(revertTransaction.rejected, (state, action) => {
+		builder.addCase(refundTransaction.rejected, (state, action) => {
 			state.error = action.payload as string;
 		});
 	},
@@ -71,11 +74,16 @@ export const transactionsSlice = createSlice<
 
 export const getTransactions = createAsyncThunk(
 	"transactions/get",
-	async () => {
-		let transactions = await pb.collection("transactions").getFullList({
-			expand: "transaction_product_ids.product_id.category_id, customer_id",
-			sort: "-date",
-		});
+	async (_, { rejectWithValue }) => {
+		let transactions = await result(
+			pb.collection("transactions").getFullList({
+				expand: "transaction_product_ids.product_id.category_id, customer_id",
+				sort: "-date",
+			}),
+		);
+
+		if (isError(transactions))
+			return rejectWithValue("Could not fetch transactions list");
 
 		const t = moveExpandsInline(transactions) as RecordExpandless[];
 
@@ -117,17 +125,17 @@ export const getTransactions = createAsyncThunk(
 	},
 );
 
-export const revertTransaction = createAsyncThunk(
+export const refundTransaction = createAsyncThunk(
 	"transactions/refund",
 	async (transaction: { id: string }, { dispatch, rejectWithValue }) => {
 		const transactionData = await result(
-			pb.collection("transactions").getOne(transaction.id + "3f", {
+			pb.collection("transactions").getOne(transaction.id, {
 				expand: "transaction_product_ids.product_id.category_id, customer_id",
 			}),
 		);
 
 		if (isError(transactionData))
-			return rejectWithValue("Could not find transaction to revert");
+			return rejectWithValue("Could not find transaction to refund");
 
 		const t = moveExpandsInline(transactionData) as RecordExpandless;
 

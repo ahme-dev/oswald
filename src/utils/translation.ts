@@ -56,6 +56,10 @@ const resources = {
 			Refund: "پوچەڵکەرەوە",
 			Refunded: "پوچەڵکراوەتەوە",
 			"No transactions found": "هیچ مامەڵەیەک نەدۆزرایەوە",
+			"Could not fetch transactions list": "لیستی مامەڵەکان نەکرا ڕابکێشرێ",
+			"Could not find transaction to refund": "مامەڵەکە نەکرا پوچەڵبکرێتەوە",
+			"Could not revert product quantity":
+				"ژمارەی بەرهەمەکە نەکرا بگەڕێتەوە ڕێژەی خۆی",
 
 			username: "ناوی بەکارهێنەر",
 			password: "وشەی نهێنی",
