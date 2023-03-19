@@ -1,4 +1,8 @@
-import { CalendarDaysIcon, CurrencyEuroIcon } from "@heroicons/react/24/solid";
+import {
+	CalendarDaysIcon,
+	CurrencyEuroIcon,
+	XMarkIcon,
+} from "@heroicons/react/24/solid";
 import {
 	Accordion,
 	ActionIcon,
@@ -13,9 +17,15 @@ import {
 	Stack,
 	Text,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { TitleText } from "../components/TitleText";
-import { useAppDispatch, useAppSelector } from "../stores/root";
+import {
+	transactionsActions,
+	useAppDispatch,
+	useAppSelector,
+} from "../stores/root";
 import { revertTransaction } from "../stores/transactions";
 import { dineroFormat } from "../utils/currency";
 
@@ -26,6 +36,17 @@ export function TransactionsPage() {
 	// const dispatch = useAppDispatch();
 	const transactionsState = useAppSelector((state) => state.transactions);
 	const settingsState = useAppSelector((state) => state.settings);
+
+	useEffect(() => {
+		if (transactionsState.error === null) return;
+
+		showNotification({
+			message: t(transactionsState.error),
+			icon: <XMarkIcon />,
+			autoClose: false,
+			onClose: async () => dispatch(transactionsActions.clearError()),
+		});
+	}, [transactionsState.error]);
 
 	return (
 		<Stack h={"100%"}>

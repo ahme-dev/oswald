@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { moveExpandsInline, RecordExpandless } from "pocketbase-expandless";
 import { getProducts } from "./products";
+import { isError, returnError } from "../utils/errors";
 
 // trypes
 
@@ -28,11 +29,14 @@ export type Transaction = {
 };
 
 export type TransactionsState = {
+	error: string | null;
 	loading: boolean;
 	list: Transaction[];
 };
 
-type TransactionsActions = {};
+type TransactionsActions = {
+	clearError: (state: TransactionsState) => void;
+};
 
 // data
 
@@ -42,10 +46,15 @@ export const transactionsSlice = createSlice<
 >({
 	name: "transactions",
 	initialState: {
+		error: null,
 		loading: false,
 		list: [],
 	},
-	reducers: [],
+	reducers: {
+		clearError: (state) => {
+			state.error = null;
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(getTransactions.pending, (state) => {
 			state.loading = true;
@@ -53,6 +62,9 @@ export const transactionsSlice = createSlice<
 		builder.addCase(getTransactions.fulfilled, (state, action) => {
 			state.loading = false;
 			state.list = action.payload;
+		});
+		builder.addCase(revertTransaction.rejected, (state, action) => {
+			state.error = action.payload as string;
 		});
 	},
 });
@@ -107,38 +119,57 @@ export const getTransactions = createAsyncThunk(
 
 export const revertTransaction = createAsyncThunk(
 	"transactions/refund",
-	async (transaction: { id: string }, { dispatch }) => {
-		let transactionData = await pb
+	async (transaction: { id: string }, { dispatch, rejectWithValue }) => {
+		const transactionData = await pb
 			.collection("transactions")
-			.getOne(transaction.id, {
+			.getOne(transaction.id + "3f", {
 				expand: "transaction_product_ids.product_id.category_id, customer_id",
-			});
+			})
+			.catch(returnError);
 
-		let t = moveExpandsInline(transactionData) as RecordExpandless;
+		if (isError(transactionData)) {
+			return rejectWithValue("Could not find transaction to revert");
+		}
+
+		const t = moveExpandsInline(transactionData) as RecordExpandless;
 
 		// list of transaction products to insert into and remove later
-		let transactionProductIDs: string[] = [];
+		const transactionProductIDs: string[] = [];
 
 		// go through each transaction product
 		for (const transactionProduct of t.transaction_product_ids) {
-			// readd quantity using qty_sold
-			await pb.collection("products").update(transactionProduct.product_id.id, {
-				quantity_available:
-					transactionProduct.qty_sold +
-					transactionProduct.product_id.quantity_available,
-			});
+			// update quantity using qty_sold
+			const qtyUpdateError = await pb
+				.collection("products")
+				.update(transactionProduct.product_id.id, {
+					quantity_available:
+						transactionProduct.qty_sold +
+						transactionProduct.product_id.quantity_available,
+				})
+				.catch(returnError);
+
+			if (isError(qtyUpdateError))
+				return rejectWithValue("Could not revert product quantity");
 
 			// add id to list to remove later
 			transactionProductIDs.push(transactionProduct.id);
 		}
 
 		// add wasRefunded flag to transaction
-		await pb.collection("transactions").update(t.id, {
-			wasRefunded: true,
-		});
+		const refundFlagError = await pb
+			.collection("transactions")
+			.update(t.id, {
+				wasRefunded: true,
+			})
+			.catch(returnError);
+
+		if (isError(refundFlagError))
+			return rejectWithValue("Could not set refund flag on transaction");
 
 		// fetch the products and transactions lists again
 		dispatch(getProducts());
 		dispatch(getTransactions());
+
+		return;
 	},
 );

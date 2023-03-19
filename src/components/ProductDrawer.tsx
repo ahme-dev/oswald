@@ -37,6 +37,7 @@ export function ProductDrawer(props: {
 		showNotification({
 			message: t("Adding product..."),
 			autoClose: 1500,
+			loading: true,
 		});
 
 		dispatch(createProduct(productFormState));
@@ -48,6 +49,7 @@ export function ProductDrawer(props: {
 		showNotification({
 			message: t("Editing product..."),
 			autoClose: 1500,
+			loading: true,
 		});
 
 		dispatch(editProduct(productFormState));
@@ -56,7 +58,11 @@ export function ProductDrawer(props: {
 	};
 
 	const tryDeleteProduct = async () => {
-		showNotification({ message: t("Deleting product..."), autoClose: 1500 });
+		showNotification({
+			message: t("Deleting product..."),
+			autoClose: 1500,
+			loading: true,
+		});
 
 		dispatch(deleteProduct({ id: productFormState.id }));
 
