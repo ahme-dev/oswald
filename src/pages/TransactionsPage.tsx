@@ -33,7 +33,6 @@ export function TransactionsPage() {
 	let dispatch = useAppDispatch();
 	const { t } = useTranslation();
 
-	// const dispatch = useAppDispatch();
 	const transactionsState = useAppSelector((state) => state.transactions);
 	const settingsState = useAppSelector((state) => state.settings);
 

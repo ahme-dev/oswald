@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { isError, result } from "../utils/errors";
 import { pb } from "../utils/pbase";
 
 // types
@@ -25,6 +26,7 @@ type FormFields =
 	| "price_current";
 
 export type ProductsState = {
+	error: null | string;
 	loading: boolean;
 	loadingCategories: boolean;
 	list: Product[];
@@ -33,6 +35,7 @@ export type ProductsState = {
 };
 
 type ProductsActions = {
+	clearError: (state: ProductsState) => void;
 	formWithEdit: (state: ProductsState, action: PayloadAction<Product>) => void;
 	formWithCreate: (state: ProductsState) => void;
 	formSetField: (
@@ -44,6 +47,7 @@ type ProductsActions = {
 // data
 
 const initialProducts: ProductsState = {
+	error: null,
 	loading: false,
 	loadingCategories: false,
 	list: [],
@@ -63,6 +67,9 @@ export const productsSlice = createSlice<ProductsState, ProductsActions>({
 	name: "products",
 	initialState: initialProducts,
 	reducers: {
+		clearError: (state) => {
+			state.error = null;
+		},
 		// set form ui to edit mode and product values provided
 		formWithEdit: (state, action) => {
 			state.form = {
@@ -103,13 +110,22 @@ export const productsSlice = createSlice<ProductsState, ProductsActions>({
 		builder.addCase(getProducts.pending, (state) => {
 			state.loading = true;
 		});
+		builder.addCase(getProducts.rejected, (state, action) => {
+			state.error = action.payload as string;
+		});
 		builder.addCase(getProducts.fulfilled, (state, action) => {
 			state.loading = false;
 			state.list = action.payload;
 		});
+		builder.addCase(createProduct.rejected, (state, action) => {
+			state.error = action.payload as string;
+		});
 		builder.addCase(getCategories.pending, (state) => {
 			state.loading = true;
 			state.loadingCategories = true;
+		});
+		builder.addCase(getCategories.rejected, (state, action) => {
+			state.error = action.payload as string;
 		});
 		builder.addCase(getCategories.fulfilled, (state, action) => {
 			state.loading = false;
@@ -124,11 +140,14 @@ export const productsSlice = createSlice<ProductsState, ProductsActions>({
 // get all the products
 export const getProducts = createAsyncThunk(
 	"products/get",
-	async (): Promise<Product[]> => {
+	async (_, { rejectWithValue }): Promise<any> => {
 		// get the products from the database
-		let products = await pb
-			.collection("products")
-			.getFullList({ expand: "category_id" });
+		let products = await result(
+			pb.collection("products").getFullList({ expand: "category_id" }),
+		);
+
+		if (isError(products))
+			return rejectWithValue("Could not fetch products list");
 
 		// change them into a product list
 		let productList = products.map((product) => {
@@ -151,14 +170,14 @@ export const getProducts = createAsyncThunk(
 			};
 		});
 
-		return productList;
+		return productList satisfies Product[];
 	},
 );
 
 // create a new product
 export const createProduct = createAsyncThunk(
 	"products/create",
-	async (product: Omit<Product, "id">, { dispatch }) => {
+	async (product: Omit<Product, "id">, { dispatch, rejectWithValue }) => {
 		const data = {
 			name: product.name,
 			about: product.about,
@@ -167,16 +186,21 @@ export const createProduct = createAsyncThunk(
 			category_id: product.category.id,
 		};
 
-		await pb.collection("products").create(data);
+		const error = await result(pb.collection("products").create(data));
+
+		if (isError(error)) return rejectWithValue("Could not create product");
 
 		dispatch(getProducts());
+
+		// to get rid of warning "not all paths return a value"
+		return;
 	},
 );
 
 // edit an existing product using the id
 export const editProduct = createAsyncThunk(
 	"products/edit",
-	async (product: Product, { dispatch }) => {
+	async (product: Product, { dispatch, rejectWithValue }) => {
 		const data = {
 			name: product.name,
 			price_current: product.price_current,
@@ -185,27 +209,44 @@ export const editProduct = createAsyncThunk(
 			category_id: product.category.id,
 		};
 
-		await pb.collection("products").update(product.id, data);
+		const error = await result(
+			pb.collection("products").update(product.id, data),
+		);
+
+		if (isError(error)) return rejectWithValue("Could not edit product");
 
 		dispatch(getProducts());
+
+		// to get rid of warning "not all paths return a value"
+		return;
 	},
 );
 
 // delete an existing product using the id
 export const deleteProduct = createAsyncThunk(
 	"products/delete",
-	async (product: Pick<Product, "id">, { dispatch }) => {
-		await pb.collection("products").delete(product.id);
+	async (product: Pick<Product, "id">, { dispatch, rejectWithValue }) => {
+		const error = await result(pb.collection("products").delete(product.id));
+
+		if (isError(error)) return rejectWithValue("Could not delete product");
 
 		dispatch(getProducts());
+
+		// to get rid of warning "not all paths return a value"
+		return;
 	},
 );
 
 // get all the categories
 export const getCategories = createAsyncThunk(
 	"products/getCategories",
-	async () => {
-		let categories = await pb.collection("product_categories").getFullList(1);
+	async (_, { rejectWithValue }) => {
+		let categories = await result(
+			pb.collection("product_categories").getFullList(1),
+		);
+
+		if (isError(categories))
+			return rejectWithValue("Could not get categories list");
 
 		let categoriesList = categories.map((category) => {
 			return {
@@ -221,35 +262,59 @@ export const getCategories = createAsyncThunk(
 // create a new category
 export const createCategory = createAsyncThunk(
 	"products/createCategory",
-	async (product: { name: string }, { dispatch }) => {
+	async (product: { name: string }, { dispatch, rejectWithValue }) => {
 		const data = {
 			name: product.name,
 		};
 
-		await pb.collection("product_categories").create(data);
+		const error = await result(
+			pb.collection("product_categories").create(data),
+		);
+
+		if (isError(error)) return rejectWithValue("Could not create category");
 
 		dispatch(getCategories());
+
+		// to get rid of warning "not all paths return a value"
+		return;
 	},
 );
 
 export const editCategory = createAsyncThunk(
 	"products/editCategory",
-	async (product: { id: string; name: string }, { dispatch }) => {
+	async (
+		product: { id: string; name: string },
+		{ dispatch, rejectWithValue },
+	) => {
 		const data = {
 			name: product.name,
 		};
 
-		await pb.collection("product_categories").update(product.id, data);
+		const error = await result(
+			pb.collection("product_categories").update(product.id, data),
+		);
+
+		if (isError(error)) return rejectWithValue("Could not edit category");
 
 		dispatch(getCategories());
+
+		// to get rid of warning "not all paths return a value"
+		return;
 	},
 );
 
 export const deleteCategory = createAsyncThunk(
 	"products/deleteCategory",
-	async (product: { id: string }, { dispatch }) => {
-		await pb.collection("product_categories").delete(product.id);
+	async (product: { id: string }, { dispatch, rejectWithValue }) => {
+		const error = await result(
+			pb.collection("product_categories").delete(product.id),
+		);
+
+		if (isError(error)) return rejectWithValue("Could not delete category");
 
 		dispatch(getCategories());
+
+		// to get rid of warning "not all paths return a value"
+		return;
 	},
 );

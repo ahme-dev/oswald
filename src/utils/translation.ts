@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 const resources = {
 	ku: {
 		translation: {
+			// settings
 			Colour: "ڕەنگ",
 			Theme: "شێواز",
 			RTL: "ڕاست بۆ چەپ",
@@ -13,6 +14,7 @@ const resources = {
 			Indigo: "مۆر",
 			Teal: "پیرۆزەیی",
 
+			// checkout
 			"in total": "بە گشتی",
 			items: "بەرهەم",
 			Customer: "کڕیار",
@@ -21,6 +23,7 @@ const resources = {
 			Clear: "بەتاڵبکرەوە",
 			Checkout: "پەسەندبکە",
 
+			// products
 			"Product name": "ناوی بەرهەم",
 			Products: "بەرهەمەکان",
 			"search for a product": "بەدوای بەرهەمێکدا بگەڕێ",
@@ -43,12 +46,24 @@ const resources = {
 			"Min price": "کەمترین نرخ",
 			"Max price": "زۆرترین نرخ",
 
+			// products errors
+			"Could not fetch products list": "لیستی بەرهەمەکان نەکرا ڕابکێشرێ",
+			"Could not create product": "بەرهەمەکە نەکرا دروستبکرێ",
+			"Could not edit product": "بەرهەمەکە نەکرا دەستکاریبکرێ",
+			"Could not delete product": "بەرهەمەکە نەکرا بسڕدرێتەوە",
+			"Could not get categories list": "لیستی جۆری بەرهەمەکان نەکرا ڕابکێشرێ",
+			"Could not create category": "جۆری بەرهەمەکە نەکرا دروستبکرێ",
+			"Could not edit category": "جۆری بەرهەمەکە نەکرا دەستکاریبرکێ",
+			"Could not delete category": "جۆری بەرهەمەکە نەکرا بسڕدرێتەوە",
+
+			// products categories
 			"Select some categories": "جۆری بەرهەم هەڵبژێرە",
 			Categories: "جۆرەکانی بەرهەم",
 			"New name": "ناوی تازە",
 			"Change name": "ناو بگۆڕە",
 			"Has no category": "هیچ جۆرێکی بۆ دانەنراوە",
 
+			// transactions
 			Transactions: "مامەڵەکان",
 			"Transaction total": "کۆی گشتی مامەڵەکە",
 			Date: "بەروار",
@@ -56,11 +71,16 @@ const resources = {
 			Refund: "پوچەڵکەرەوە",
 			Refunded: "پوچەڵکراوەتەوە",
 			"No transactions found": "هیچ مامەڵەیەک نەدۆزرایەوە",
+
+			// transactions errors
 			"Could not fetch transactions list": "لیستی مامەڵەکان نەکرا ڕابکێشرێ",
-			"Could not find transaction to refund": "مامەڵەکە نەکرا پوچەڵبکرێتەوە",
+			"Could not find transaction to refund": "مامەڵەکە نەکرا بدۆزرێتەوە",
 			"Could not revert product quantity":
 				"ژمارەی بەرهەمەکە نەکرا بگەڕێتەوە ڕێژەی خۆی",
+			"Could not set refund flag on transaction":
+				"مامەڵەکە نەکرا پوچەڵبکرێتەوە",
 
+			// auth
 			username: "ناوی بەکارهێنەر",
 			password: "وشەی نهێنی",
 			Login: "بچۆرەناو",
@@ -68,8 +88,10 @@ const resources = {
 			"Username is required": "پێویستە ناوێک داخڵ بکەیت",
 			"Password is required": "پێویستە وشەی نهێنی داخڵ بکەیت",
 
+			// overview
 			Overview: "گشتی",
 
+			// on actions
 			"Adding product...": "بەرهەمەکە زیاد ئەکرێت...",
 			"Editing product...": "بەرهەمەکە دەستکاری ئەکرێت...",
 			"Deleting product...": "بەرهەمەکە ئەسڕدرێتەوە...",

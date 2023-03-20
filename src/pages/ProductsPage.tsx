@@ -1,4 +1,8 @@
-import { PencilSquareIcon, PlusIcon } from "@heroicons/react/24/solid";
+import {
+	PencilSquareIcon,
+	PlusIcon,
+	XMarkIcon,
+} from "@heroicons/react/24/solid";
 import {
 	ActionIcon,
 	Affix,
@@ -11,7 +15,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { t } from "i18next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
 import {
@@ -21,12 +25,24 @@ import {
 } from "../stores/root";
 import { ProductDrawer } from "../components/ProductDrawer";
 import { ProductCategoryModal } from "../components/ProductCategoryModal";
+import { showNotification } from "@mantine/notifications";
 
 export function ProductsPage() {
 	let settingsState = useAppSelector((state) => state.settings);
 	let productsState = useAppSelector((state) => state.products);
 
 	let dispatch = useAppDispatch();
+
+	useEffect(() => {
+		if (productsState.error === null) return;
+
+		showNotification({
+			message: t(productsState.error),
+			icon: <XMarkIcon />,
+			autoClose: false,
+			onClose: async () => dispatch(productsActions.clearError()),
+		});
+	}, [productsState.error]);
 
 	let [drawerVisible, setDrawerVisible] = useState(false);
 	let [modalVisible, setModalVisible] = useState(false);
