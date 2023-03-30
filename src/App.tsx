@@ -19,6 +19,7 @@ import { Provider } from "react-redux";
 import { store, useAppDispatch, useAppSelector } from "./stores/root";
 import { getCategories, getProducts } from "./stores/products";
 import { getTransactions } from "./stores/transactions";
+import { AboutPage } from "./pages/AboutPage";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -68,6 +69,7 @@ function AppInner() {
 				<Layout rtl={settingsState.rightToLeft}>
 					{/* Routes */}
 					<Route path="/" component={MainPage} />
+					<Route path="/about" component={AboutPage} />
 					<Route path="/products" component={ProductsPage} />
 					<Route path="/transactions" component={TransactionsPage} />
 					<Route path="/overview" component={OverviewPage} />

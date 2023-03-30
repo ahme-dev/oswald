@@ -55,16 +55,18 @@ function NavBar() {
 			<Stack align={"center"} justify={"space-between"} spacing={16} h={"100%"}>
 				{/* Upper */}
 				<Stack align={"center"} spacing={16}>
-					<ActionIcon
-						variant="filled"
-						color={settingsState.color}
-						radius={"xl"}
-						p={2}
-						size={"xl"}
-						mb={"md"}
-					>
-						<Image src={AppLogo}></Image>
-					</ActionIcon>
+					<Link to={"/about"}>
+						<ActionIcon
+							variant="filled"
+							color={settingsState.color}
+							radius={"xl"}
+							p={2}
+							size={"xl"}
+							mb={"md"}
+						>
+							<Image src={AppLogo}></Image>
+						</ActionIcon>
+					</Link>
 					{/* Navigation Items */}
 					{[
 						{

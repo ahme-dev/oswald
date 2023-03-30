@@ -99,6 +99,14 @@ const resources = {
 			"Editing category...": "جۆرەکە دەسکاری ئەکرێت...",
 			"Deleting category...": "جۆرەکە ئەسڕدرێتەوە...",
 			"Saving checkout...": "فرۆشەکە جێبەجێدەکرێ...",
+
+			// about
+			"Created by ": "دروستکراوە لە لایەن ",
+			"Open Source on ": "کۆدی کراوەیە لە ",
+			"POS system for small shops": "سیستەمێکی فرۆشتن بۆ فرۆشگای بچووک",
+			"Uses React and Pocketbase":
+				"دروستکراوە بە بەکارهێنانی ڕیاکت و پۆکێتبەیس",
+			"Available in Kurdish and English": "بەردەستە بە زمانی کوردی و ئینگلیزی",
 		},
 	},
 };
