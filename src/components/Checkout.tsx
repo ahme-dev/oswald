@@ -14,9 +14,9 @@ import { dineroFormat } from "../utils/currency";
 
 export function Checkout(props: {
 	state: CheckoutType;
-	clear: () => void;
-	apply: () => void;
-	changeQuantity: (index: number, qty: number) => void;
+	clearItems: () => void;
+	processItems: () => void;
+	changeItemQty: (index: number, qty: number) => void;
 }) {
 	const { t } = useTranslation();
 
@@ -45,7 +45,7 @@ export function Checkout(props: {
 										sx={{ width: "4rem" }}
 										value={chItem.qtyWanted}
 										onChange={(evt: any) => {
-											props.changeQuantity(index, evt);
+											props.changeItemQty(index, evt);
 										}}
 									></NumberInput>
 								</Group>
@@ -71,10 +71,10 @@ export function Checkout(props: {
 				</Card>
 				{/* Buttons */}
 				<Group>
-					<Button variant="filled" onClick={() => props.apply()}>
+					<Button variant="filled" onClick={() => props.processItems()}>
 						{t("Checkout")}
 					</Button>
-					<Button variant="light" onClick={() => props.clear()}>
+					<Button variant="light" onClick={() => props.clearItems()}>
 						{t("Clear")}
 					</Button>
 				</Group>

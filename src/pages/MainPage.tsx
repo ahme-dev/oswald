@@ -114,15 +114,15 @@ export function MainPage() {
 							<Tabs.Panel value={i.toString()}>
 								<Checkout
 									state={checkout}
-									apply={() => {
+									processItems={() => {
 										showNotification({
 											message: t("Saving checkout..."),
 											autoClose: 1500,
 										});
 										dispatch(createTransaction(checkout.items));
 									}}
-									clear={() => dispatch(checkoutActions.clear())}
-									changeQuantity={qtyFunc}
+									clearItems={() => dispatch(checkoutActions.clear())}
+									changeItemQty={qtyFunc}
 								></Checkout>
 							</Tabs.Panel>
 						))}

@@ -124,7 +124,7 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 		},
 	},
 	extraReducers: (builder) => {
-		// when apply is done, clear out checkout items and reset total
+		// when done, clear out checkout items and reset total
 		builder.addCase(createTransaction.fulfilled, (state) => {
 			state.checkouts[state.current].items = [];
 			state.checkouts[state.current].total = 0;
