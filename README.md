@@ -33,7 +33,7 @@ A POS System for small shops, available in kurdish and english.
   <img src="img/productsEdit.png" width="650">
   <img src="img/categories.png" width="650">
 
-- [TODO] Multiple checkouts for multitasking.
+- Multiple checkouts for multitasking.
 
 - View transactions and refund them.
 

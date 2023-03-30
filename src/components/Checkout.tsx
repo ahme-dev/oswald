@@ -9,11 +9,11 @@ import {
 	NumberInput,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
-import { CheckoutState } from "../stores/checkout";
+import { CheckoutType } from "../stores/checkout";
 import { dineroFormat } from "../utils/currency";
 
 export function Checkout(props: {
-	state: CheckoutState;
+	state: CheckoutType;
 	clear: () => void;
 	apply: () => void;
 	changeQuantity: (index: number, qty: number) => void;

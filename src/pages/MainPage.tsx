@@ -1,4 +1,4 @@
-import { Stack, Grid } from "@mantine/core";
+import { Stack, Grid, Tabs } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
@@ -53,18 +53,46 @@ export function MainPage() {
 					></ProductList>
 				</Grid.Col>
 				<Grid.Col span={12} sm={5}>
-					<Checkout
-						state={checkoutState}
-						apply={() => {
-							showNotification({
-								message: t("Saving checkout..."),
-								autoClose: 1500,
-							});
-							dispatch(apply(checkoutState.items));
-						}}
-						clear={() => dispatch(checkoutActions.clear())}
-						changeQuantity={qtyFunc}
-					></Checkout>
+					{/* checkout tabs */}
+					<Tabs
+						variant="pills"
+						defaultValue={"0"}
+						styles={(theme) => ({
+							tab: {
+								backgroundColor: theme.colors.gray,
+								fontWeight: "bolder",
+							},
+						})}
+					>
+						<Tabs.List position="right">
+							{checkoutState.checkouts.map((_, i) => (
+								<Tabs.Tab
+									onClick={() => dispatch(checkoutActions.changeCurrent(i))}
+									value={i.toString()}
+								>
+									{i}
+								</Tabs.Tab>
+							))}
+						</Tabs.List>
+
+						{checkoutState.checkouts.map((checkout, i) => (
+							<Tabs.Panel value={i.toString()}>
+								<Checkout
+									state={checkout}
+									apply={() => {
+										showNotification({
+											message: t("Saving checkout..."),
+											autoClose: 1500,
+										});
+										dispatch(apply(checkout.items));
+									}}
+									clear={() => dispatch(checkoutActions.clear())}
+									changeQuantity={qtyFunc}
+								></Checkout>
+							</Tabs.Panel>
+						))}
+					</Tabs>
+					{/* checkout tabs end */}
 				</Grid.Col>
 			</Grid>
 		</Stack>
