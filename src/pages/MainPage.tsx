@@ -56,15 +56,25 @@ export function MainPage() {
 					{/* checkout tabs */}
 					<Tabs
 						variant="pills"
+						orientation="vertical"
+						placement="right"
 						defaultValue={"0"}
 						styles={(theme) => ({
 							tab: {
-								backgroundColor: theme.colors.gray,
+								backgroundColor:
+									theme.colorScheme === "dark"
+										? theme.colors.gray[9]
+										: theme.colors.gray[0],
 								fontWeight: "bolder",
+								border: `1px ${
+									theme.colorScheme === "dark"
+										? theme.colors.gray[7]
+										: theme.colors.gray[4]
+								} solid`,
 							},
 						})}
 					>
-						<Tabs.List position="right">
+						<Tabs.List sx={{ paddingLeft: "1rem" }}>
 							{checkoutState.checkouts.map((_, i) => (
 								<Tabs.Tab
 									onClick={() => dispatch(checkoutActions.changeCurrent(i))}
