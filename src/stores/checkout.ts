@@ -39,23 +39,11 @@ type CheckoutActions = {
 
 const initialCheckout: CheckoutState = {
 	current: 0,
-	checkouts: [
-		{
-			items: [],
-			total: 0,
-			count: 0,
-		},
-		{
-			items: [],
-			total: 0,
-			count: 0,
-		},
-		{
-			items: [],
-			total: 0,
-			count: 0,
-		},
-	],
+	checkouts: new Array(3).fill({
+		items: [],
+		total: 0,
+		count: 0,
+	}),
 };
 
 export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
@@ -88,12 +76,14 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			state.checkouts[state.current].total += action.payload.price_current * 1;
 			state.checkouts[state.current].count += 1;
 		},
+
 		// clear all items in checkout and reset total
 		clear: (state) => {
 			state.checkouts[state.current].items = [];
 			state.checkouts[state.current].total = 0;
 			state.checkouts[state.current].count = 0;
 		},
+
 		// set quantity of an item in checkout
 		setItemQty: (state, action) => {
 			const itemIndex = action.payload.index;
