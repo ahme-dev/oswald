@@ -19,7 +19,7 @@ export function AboutLink(props: {
 				target="_blank"
 				href={props.link}
 			>
-				<Text sx={{ display: "inline" }} color={settingsState.color}>
+				<Text sx={{ display: "inline" }} color={settingsState.color} underline>
 					{props.title}
 				</Text>
 			</a>

@@ -4,6 +4,8 @@ import { initReactI18next } from "react-i18next";
 const resources = {
 	ku: {
 		translation: {
+			Oswald: "ئۆزواڵد",
+
 			// settings
 			Colour: "ڕەنگ",
 			Theme: "شێواز",
