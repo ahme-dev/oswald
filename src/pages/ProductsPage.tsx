@@ -9,7 +9,6 @@ import {
 	Flex,
 	Group,
 	Input,
-	Stack,
 	MultiSelect,
 	NumberInput,
 } from "@mantine/core";
@@ -59,9 +58,10 @@ export function ProductsPage() {
 
 	// render
 	return (
-		<Stack h={"100%"}>
+		<>
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
 				<TitleText title="Products" />
+
 				{/* search section */}
 				<Group>
 					<NumberInput
@@ -112,6 +112,7 @@ export function ProductsPage() {
 				</Group>
 				{/* search section end */}
 			</Flex>
+
 			<ProductList
 				data={productsState.list}
 				loading={productsState.loading}
@@ -158,6 +159,6 @@ export function ProductsPage() {
 				</ActionIcon>
 			</Affix>
 			{/* Add product button end */}
-		</Stack>
+		</>
 	);
 }

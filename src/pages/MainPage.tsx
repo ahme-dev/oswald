@@ -1,4 +1,4 @@
-import { Stack, Grid, Tabs } from "@mantine/core";
+import { Grid, Tabs } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
@@ -30,8 +30,9 @@ export function MainPage() {
 	};
 
 	return (
-		<Stack h={"100%"}>
+		<>
 			<TitleText title={"Sell"} />
+
 			<Grid>
 				<Grid.Col span={12} sm={7}>
 					<ProductList
@@ -105,6 +106,6 @@ export function MainPage() {
 					{/* checkout tabs end */}
 				</Grid.Col>
 			</Grid>
-		</Stack>
+		</>
 	);
 }

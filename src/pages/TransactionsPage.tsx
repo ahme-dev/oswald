@@ -48,22 +48,23 @@ export function TransactionsPage() {
 	}, [transactionsState.error]);
 
 	return (
-		<Stack h={"100%"}>
+		<>
 			<Flex justify={"space-between"} align="center" gap={"lg"}>
 				<TitleText title="Transactions" />
 			</Flex>
+
 			<Stack h={"100%"}>
-				<Accordion variant="separated" h={"100%"}>
-					{transactionsState.loading ? (
-						<Center h={"100%"}>
-							<Loader></Loader>
-						</Center>
-					) : transactionsState.list.length === 0 ? (
-						<Center h={"100%"}>
-							<Text>{t("No transactions found")}</Text>
-						</Center>
-					) : (
-						transactionsState.list.map((transaction) => {
+				{transactionsState.loading ? (
+					<Center h={"100%"}>
+						<Loader></Loader>
+					</Center>
+				) : transactionsState.list.length === 0 ? (
+					<Center h={"100%"}>
+						<Text>{t("No transactions found")}</Text>
+					</Center>
+				) : (
+					<Accordion variant="separated" h={"100%"}>
+						{transactionsState.list.map((transaction) => {
 							return (
 								// Single transaction
 								<Accordion.Item key={transaction.id} value={transaction.id}>
@@ -161,10 +162,10 @@ export function TransactionsPage() {
 								</Accordion.Item>
 								// Single transaction end
 							);
-						})
-					)}
-				</Accordion>
+						})}
+					</Accordion>
+				)}
 			</Stack>
-		</Stack>
+		</>
 	);
 }

@@ -11,8 +11,9 @@ export function AboutPage() {
 	let settingsState = useAppSelector((state) => state.settings);
 
 	return (
-		<Stack h={"100%"}>
+		<>
 			<TitleText title={"About"} />
+
 			<Stack align={"center"} justify="center" h={"100%"}>
 				<Group>
 					<Image
@@ -52,6 +53,6 @@ export function AboutPage() {
 					</Stack>
 				</Group>
 			</Stack>
-		</Stack>
+		</>
 	);
 }

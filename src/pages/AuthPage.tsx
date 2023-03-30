@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "@mantine/form";
 import { pb } from "../utils/pbase";
 import { useTranslation } from "react-i18next";
+import { TitleText } from "../components/TitleText";
 
 export function AuthPage() {
 	// store user auth state
@@ -70,19 +71,23 @@ export function AuthPage() {
 	}
 
 	return (
-		<Center h={"100%"}>
-			<Stack spacing={8}>
-				<TextInput
-					placeholder={t("username") || "username"}
-					{...form.getInputProps("username")}
-				></TextInput>
-				<TextInput
-					type={"password"}
-					placeholder={t("password") || "password"}
-					{...form.getInputProps("password")}
-				></TextInput>
-				<Button onClick={doLogin}>{t("Login")}</Button>
-			</Stack>
-		</Center>
+		<>
+			<TitleText title={"Auth"} />
+
+			<Center h={"100%"}>
+				<Stack spacing={8}>
+					<TextInput
+						placeholder={t("username") || "username"}
+						{...form.getInputProps("username")}
+					></TextInput>
+					<TextInput
+						type={"password"}
+						placeholder={t("password") || "password"}
+						{...form.getInputProps("password")}
+					></TextInput>
+					<Button onClick={doLogin}>{t("Login")}</Button>
+				</Stack>
+			</Center>
+		</>
 	);
 }

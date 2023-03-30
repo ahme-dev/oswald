@@ -34,7 +34,7 @@ export function Layout(props: { children: ReactNode; rtl: boolean }) {
 	return (
 		<div dir={props.rtl ? "rtl" : "ltr"}>
 			<AppShell layout="alt" padding={"xl"} navbar={<NavBar></NavBar>}>
-				{props.children}
+				<Stack h={"100%"}>{props.children}</Stack>
 			</AppShell>
 		</div>
 	);
