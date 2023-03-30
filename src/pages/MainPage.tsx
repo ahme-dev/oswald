@@ -1,12 +1,15 @@
+import { XMarkIcon } from "@heroicons/react/24/solid";
 import { Grid, Tabs } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Checkout } from "../components/Checkout";
 import { ProductList } from "../components/ProductList";
 import { TitleText } from "../components/TitleText";
-import { apply } from "../stores/checkout";
+import { createTransaction } from "../stores/checkout";
 import {
 	checkoutActions,
+	productsActions,
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
@@ -16,8 +19,29 @@ export function MainPage() {
 
 	let checkoutState = useAppSelector((state) => state.checkout);
 	let productsState = useAppSelector((state) => state.products);
-
 	let dispatch = useAppDispatch();
+
+	useEffect(() => {
+		// checkout errors
+		if (checkoutState.error !== null) {
+			showNotification({
+				message: t(checkoutState.error),
+				icon: <XMarkIcon />,
+				autoClose: false,
+				onClose: async () => dispatch(checkoutActions.clearError()),
+			});
+		}
+
+		// products errors
+		if (productsState.error !== null) {
+			showNotification({
+				message: t(productsState.error),
+				icon: <XMarkIcon />,
+				autoClose: false,
+				onClose: async () => dispatch(productsActions.clearError()),
+			});
+		}
+	}, [checkoutState.error, productsState.error]);
 
 	// function to dispatch checkout action of set quantity
 	const qtyFunc = (index: number, qty: number) => {
@@ -95,7 +119,7 @@ export function MainPage() {
 											message: t("Saving checkout..."),
 											autoClose: 1500,
 										});
-										dispatch(apply(checkout.items));
+										dispatch(createTransaction(checkout.items));
 									}}
 									clear={() => dispatch(checkoutActions.clear())}
 									changeQuantity={qtyFunc}

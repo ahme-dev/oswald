@@ -3,6 +3,7 @@ import { pb } from "../utils/pbase";
 import { getProducts, Product } from "./products";
 import { getTransactions } from "./transactions";
 import { DateTime } from "luxon";
+import { isError, result } from "../utils/errors";
 
 // types
 
@@ -21,11 +22,13 @@ export type CheckoutType = {
 };
 
 export type CheckoutState = {
+	error: null | string;
 	current: number;
 	checkouts: CheckoutType[];
 };
 
 type CheckoutActions = {
+	clearError: (state: CheckoutState) => void;
 	changeCurrent: (state: CheckoutState, action: PayloadAction<number>) => void;
 	add: (state: CheckoutState, action: PayloadAction<Product>) => void;
 	clear: (state: CheckoutState) => void;
@@ -38,6 +41,7 @@ type CheckoutActions = {
 // data
 
 const initialCheckout: CheckoutState = {
+	error: null,
 	current: 0,
 	checkouts: new Array(3).fill({
 		items: [],
@@ -50,6 +54,10 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 	name: "checkout",
 	initialState: initialCheckout,
 	reducers: {
+		clearError: (state) => {
+			state.error = null;
+		},
+
 		// change the current selected checkout
 		changeCurrent: (state, action) => {
 			state.current = action.payload;
@@ -117,10 +125,13 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 	},
 	extraReducers: (builder) => {
 		// when apply is done, clear out checkout items and reset total
-		builder.addCase(apply.fulfilled, (state) => {
+		builder.addCase(createTransaction.fulfilled, (state) => {
 			state.checkouts[state.current].items = [];
 			state.checkouts[state.current].total = 0;
 			state.checkouts[state.current].count = 0;
+		});
+		builder.addCase(createTransaction.rejected, (state, action) => {
+			state.error = action.payload as string;
 		});
 	},
 });
@@ -128,29 +139,42 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 // thunks
 
 // create a new transaction using the items (transactionProducts)
-export const apply = createAsyncThunk(
-	"checkout/apply",
-	async (items: CheckoutItemType[], { dispatch }) => {
+export const createTransaction = createAsyncThunk(
+	"checkout/createTransaction",
+	async (items: CheckoutItemType[], { dispatch, rejectWithValue }) => {
 		let transactionProductsIDs = [];
 
 		// go through each item
 		for (let i = 0; i < items.length; i++) {
 			// create a new transactionProduct with the item
-			const transactionProduct = await pb
-				.collection("transaction_products")
-				.create({
+			const transactionProduct = await result(
+				pb.collection("transaction_products").create({
 					product_id: items[i].id,
 					price_sold: items[i].price,
 					qty_sold: items[i].qtyWanted,
-				});
+				}),
+			);
+
+			if (isError(transactionProduct))
+				return rejectWithValue("Could not add transaction product");
 
 			// get the product record
-			const product = await pb.collection("products").getOne(items[i].id);
+			const product = await result(
+				pb.collection("products").getOne(items[i].id),
+			);
+
+			if (isError(product))
+				return rejectWithValue("Could not get product info");
 
 			// substract the transaction quantity from the product available quantity
-			await pb.collection("products").update(items[i].id, {
-				quantity_available: product.quantity_available - items[i].qtyWanted,
-			});
+			const error = await result(
+				pb.collection("products").update(items[i].id, {
+					quantity_available: product.quantity_available - items[i].qtyWanted,
+				}),
+			);
+
+			if (isError(error))
+				return rejectWithValue("Could not substract product quantity");
 
 			// add the product id to the transactionProductsIDs array
 			transactionProductsIDs.push(transactionProduct.id);
@@ -159,15 +183,21 @@ export const apply = createAsyncThunk(
 		// get datetime of now
 		const nowDateTime = DateTime.now().toFormat("yyyy-MM-dd HH:mm:ss");
 
-		// create the transaction data using the transactionProductsIDs array
+		// create the data using the transactionProductsIDs array
 		const data = {
 			date: nowDateTime,
 			transaction_product_ids: transactionProductsIDs,
 			isRefund: false,
 		};
-		await pb.collection("transactions").create(data);
+
+		// create transaction using checkout data
+		const error = await result(pb.collection("transactions").create(data));
+		if (isError(error)) return rejectWithValue("Could not create transaction");
 
 		dispatch(getProducts());
 		dispatch(getTransactions());
+
+		// to fix not all code paths return a value error
+		return;
 	},
 );
