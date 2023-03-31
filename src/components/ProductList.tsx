@@ -6,6 +6,7 @@ import {
 	Center,
 	Group,
 	Loader,
+	ScrollArea,
 	SimpleGrid,
 	Stack,
 	Text,
@@ -112,72 +113,76 @@ export function ProductList(props: {
 	}
 
 	return (
-		<SimpleGrid
-			cols={props.smaller ? 3 : 4}
-			spacing="sm"
-			breakpoints={[
-				{ maxWidth: 980, cols: props.smaller ? 2 : 3, spacing: "md" },
-				{ maxWidth: 755, cols: 2, spacing: "sm" },
-				{ maxWidth: 600, cols: 1, spacing: "sm" },
-			]}
-		>
-			{/* filtered data items */}
-			{filteredData.map((item) => {
-				if (props.smaller && item.quantity_available === 0) return null;
+		<Stack h={"83vh"}>
+			<ScrollArea offsetScrollbars>
+				<SimpleGrid
+					cols={props.smaller ? 3 : 4}
+					spacing="sm"
+					breakpoints={[
+						{ maxWidth: 980, cols: props.smaller ? 2 : 3, spacing: "md" },
+						{ maxWidth: 755, cols: 2, spacing: "sm" },
+						{ maxWidth: 600, cols: 1, spacing: "sm" },
+					]}
+				>
+					{/* filtered data items */}
+					{filteredData.map((item) => {
+						if (props.smaller && item.quantity_available === 0) return null;
 
-				return (
-					<Card
-						onClick={() => {
-							props.itemClickFunc({
-								...item,
-							});
-						}}
-						key={item.id}
-						withBorder
-						sx={{ cursor: "pointer" }}
-					>
-						<Stack>
-							<Text weight="bolder">{item.name}</Text>
-							<Group>
-								<Badge
-									pl={0}
-									leftSection={
-										<ActionIcon color={settingsState.color}>
-											<CurrencyEuroIcon />
-										</ActionIcon>
-									}
-									size="lg"
-								>
-									{dineroFormat(item.price_current)}
-								</Badge>
-								<Badge
-									pl={0}
-									size="lg"
-									leftSection={
-										<ActionIcon color={settingsState.color}>
-											<MinusIcon />
-										</ActionIcon>
-									}
-								>
-									{item.quantity_available}
-								</Badge>
-							</Group>
-							{!props.smaller && item.category.name && (
-								<Text size={"sm"} weight="lighter">
-									{item.category.name}
-								</Text>
-							)}
+						return (
+							<Card
+								onClick={() => {
+									props.itemClickFunc({
+										...item,
+									});
+								}}
+								key={item.id}
+								withBorder
+								sx={{ cursor: "pointer" }}
+							>
+								<Stack>
+									<Text weight="bolder">{item.name}</Text>
+									<Group>
+										<Badge
+											pl={0}
+											leftSection={
+												<ActionIcon color={settingsState.color}>
+													<CurrencyEuroIcon />
+												</ActionIcon>
+											}
+											size="lg"
+										>
+											{dineroFormat(item.price_current)}
+										</Badge>
+										<Badge
+											pl={0}
+											size="lg"
+											leftSection={
+												<ActionIcon color={settingsState.color}>
+													<MinusIcon />
+												</ActionIcon>
+											}
+										>
+											{item.quantity_available}
+										</Badge>
+									</Group>
+									{!props.smaller && item.category.name && (
+										<Text size={"sm"} weight="lighter">
+											{item.category.name}
+										</Text>
+									)}
 
-							{!props.smaller && (
-								<Text italic weight="lighter">
-									{item.about}
-								</Text>
-							)}
-						</Stack>
-					</Card>
-				);
-			})}
-			{/* filtered data items end */}
-		</SimpleGrid>
+									{!props.smaller && (
+										<Text italic weight="lighter">
+											{item.about}
+										</Text>
+									)}
+								</Stack>
+							</Card>
+						);
+					})}
+					{/* filtered data items end */}
+				</SimpleGrid>
+			</ScrollArea>
+		</Stack>
 	);
 }
