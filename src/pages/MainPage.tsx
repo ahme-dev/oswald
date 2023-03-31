@@ -119,6 +119,7 @@ export function MainPage() {
 										showNotification({
 											message: t("Saving checkout..."),
 											autoClose: 1500,
+											loading: true,
 										});
 										dispatch(createTransaction(checkout.items));
 									}}
