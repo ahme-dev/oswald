@@ -102,6 +102,7 @@ export function MainPage() {
 						<Tabs.List sx={{ paddingLeft: "1rem" }}>
 							{checkoutState.checkouts.map((_, i) => (
 								<Tabs.Tab
+									key={i}
 									onClick={() => dispatch(checkoutActions.changeCurrent(i))}
 									value={i.toString()}
 								>
