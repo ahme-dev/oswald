@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
 	ActionIcon,
 	AppShell,
@@ -28,6 +28,7 @@ import { settingsActions, useAppDispatch, useAppSelector } from "./stores/root";
 import { useLocation } from "wouter";
 import { Colours } from "./stores/settings";
 import { useTranslation } from "react-i18next";
+import { pb } from "./utils/pbase";
 
 // the overall layout of the app
 export function Layout(props: { children: ReactNode; rtl: boolean }) {
@@ -45,6 +46,12 @@ function NavBar() {
 
 	// get browser url (i.e. /products)
 	let [browserURL] = useLocation();
+
+	let [auth, setAuth] = useState(pb.authStore.isValid);
+
+	useEffect(() => {
+		pb.authStore.onChange(() => setAuth(pb.authStore.isValid));
+	}, []);
 
 	// get settings state and dispatch
 	let settingsState = useAppSelector((state) => state.settings);
@@ -114,7 +121,7 @@ function NavBar() {
 				{/* Upper End */}
 				{/* Lower */}
 				<Stack align={"center"} spacing={16}>
-					<Popover>
+					<Popover disabled={!auth}>
 						<Popover.Target>
 							<ActionIcon size={"lg"}>
 								<CogIcon></CogIcon>
