@@ -1,4 +1,4 @@
-import { Route } from "wouter";
+import { useLocation } from "wouter";
 import { useEffect } from "react";
 
 import { createEmotionCache, MantineProvider } from "@mantine/core";
@@ -20,6 +20,7 @@ import { store, useAppDispatch, useAppSelector } from "./stores/root";
 import { getCategories, getProducts } from "./stores/products";
 import { getTransactions } from "./stores/transactions";
 import { AboutPage } from "./pages/AboutPage";
+import { pb } from "./utils/pbase";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -39,8 +40,10 @@ function App() {
 function AppInner() {
 	// get settings state
 	const settingsState = useAppSelector((state) => state.settings);
-
 	const dispatch = useAppDispatch();
+
+	// hook to control router
+	const [location, setLocation] = useLocation();
 
 	// set language on app init according to settings state
 	useEffect(() => {
@@ -49,6 +52,36 @@ function AppInner() {
 		dispatch(getCategories());
 		dispatch(getTransactions());
 	}, []);
+
+	const router = () => {
+		// no auth pages
+		switch (location) {
+			case "/about":
+				return <AboutPage />;
+			case "/auth":
+				return <AuthPage />;
+		}
+
+		// if not authorized return auth page
+		if (!pb.authStore.isValid) {
+			setLocation("/auth");
+			return <AuthPage />;
+		}
+
+		// else if auth, make pages available
+		switch (location) {
+			case "/":
+				return <MainPage />;
+			case "/products":
+				return <ProductsPage />;
+			case "/transactions":
+				return <TransactionsPage />;
+			case "/overview":
+				return <OverviewPage />;
+			default:
+				return <AuthPage />;
+		}
+	};
 
 	return (
 		<MantineProvider
@@ -66,16 +99,7 @@ function AppInner() {
 		>
 			<NotificationsProvider>
 				<CustomFonts></CustomFonts>
-				<Layout rtl={settingsState.rightToLeft}>
-					{/* Routes */}
-					<Route path="/" component={MainPage} />
-					<Route path="/about" component={AboutPage} />
-					<Route path="/products" component={ProductsPage} />
-					<Route path="/transactions" component={TransactionsPage} />
-					<Route path="/overview" component={OverviewPage} />
-					<Route path="/auth" component={AuthPage} />
-					{/* Routes end */}
-				</Layout>
+				<Layout rtl={settingsState.rightToLeft}>{router()}</Layout>
 			</NotificationsProvider>
 		</MantineProvider>
 	);
