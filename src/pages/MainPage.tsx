@@ -110,7 +110,7 @@ export function MainPage() {
 						</Tabs.List>
 
 						{checkoutState.checkouts.map((checkout, i) => (
-							<Tabs.Panel value={i.toString()}>
+							<Tabs.Panel value={i.toString()} key={i}>
 								<Checkout
 									state={checkout}
 									processItems={() => {

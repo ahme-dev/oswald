@@ -31,6 +31,10 @@ type CheckoutActions = {
 	clearError: (state: CheckoutState) => void;
 	changeCurrent: (state: CheckoutState, action: PayloadAction<number>) => void;
 	add: (state: CheckoutState, action: PayloadAction<Product>) => void;
+	remove: (
+		state: CheckoutState,
+		action: PayloadAction<{ index: number }>,
+	) => void;
 	clear: (state: CheckoutState) => void;
 	setItemQty: (
 		state: CheckoutState,
@@ -83,6 +87,22 @@ export const checkoutSlice = createSlice<CheckoutState, CheckoutActions>({
 			// price * quantity
 			state.checkouts[state.current].total += action.payload.price_current * 1;
 			state.checkouts[state.current].count += 1;
+		},
+
+		remove: (state, action) => {
+			// find item to remove and calc price
+			const itemToRemove =
+				state.checkouts[state.current].items[action.payload.index];
+			const itemTotalPrice = itemToRemove.price * itemToRemove.qtyWanted;
+
+			// reduce price and qty from checkout
+			state.checkouts[state.current].total -= itemTotalPrice;
+			state.checkouts[state.current].count -= itemToRemove.qtyWanted;
+
+			// remove item from checkout list
+			state.checkouts[state.current].items = state.checkouts[
+				state.current
+			].items.filter((_, i) => action.payload.index !== i);
 		},
 
 		// clear all items in checkout and reset total

@@ -1,3 +1,4 @@
+import { QueueListIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import {
 	Card,
 	Stack,
@@ -8,9 +9,13 @@ import {
 	Divider,
 	NumberInput,
 	ScrollArea,
+	ActionIcon,
+	Box,
+	Tooltip,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { CheckoutType } from "../stores/checkout";
+import { checkoutActions, useAppDispatch } from "../stores/root";
 import { dineroFormat } from "../utils/currency";
 
 export function Checkout(props: {
@@ -20,6 +25,7 @@ export function Checkout(props: {
 	changeItemQty: (index: number, qty: number) => void;
 }) {
 	const { t } = useTranslation();
+	let dispatch = useAppDispatch();
 
 	return (
 		<Stack spacing={"md"} justify={"space-between"}>
@@ -51,6 +57,16 @@ export function Checkout(props: {
 													props.changeItemQty(index, evt);
 												}}
 											></NumberInput>
+											<Tooltip position="right" label={t("Remove from list")}>
+												<ActionIcon
+													size={"sm"}
+													onClick={() =>
+														dispatch(checkoutActions.remove({ index }))
+													}
+												>
+													<QueueListIcon />
+												</ActionIcon>
+											</Tooltip>
 										</Group>
 									</Group>
 								</Card>

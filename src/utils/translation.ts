@@ -24,6 +24,14 @@ const resources = {
 			"No items in checkout": "هیچ بەرهەمێک هەڵنەبژێردراوە",
 			Clear: "بەتاڵبکرەوە",
 			Checkout: "پەسەندبکە",
+			"Remove from list": "لە لیستەکە لایبە",
+
+			// checkout errors
+			"Could not add transaction product": "بەرهەمی مامەڵەکە نەکرا زیادبکرێت",
+			"Could not get product info": "زانیاری بەرهەمی مامەڵەکە نەکرا وەربگیرێ",
+			"Could not substract product quantity":
+				"ژمارەی بەرهەمەکە نەکرا کەمبکرێتەوە",
+			"Could not create transaction": "مامەڵەکە نەکرا دروستبکرێت",
 
 			// products
 			"Product name": "ناوی بەرهەم",
@@ -112,13 +120,6 @@ const resources = {
 			"Uses React and Pocketbase":
 				"دروستکراوە بە بەکارهێنانی ڕیاکت و پۆکێتبەیس",
 			"Available in Kurdish and English": "بەردەستە بە زمانی کوردی و ئینگلیزی",
-
-			// checkout errors
-			"Could not add transaction product": "بەرهەمی مامەڵەکە نەکرا زیادبکرێت",
-			"Could not get product info": "زانیاری بەرهەمی مامەڵەکە نەکرا وەربگیرێ",
-			"Could not substract product quantity":
-				"ژمارەی بەرهەمەکە نەکرا کەمبکرێتەوە",
-			"Could not create transaction": "مامەڵەکە نەکرا دروستبکرێت",
 		},
 	},
 };
