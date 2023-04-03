@@ -26,6 +26,7 @@ export type Transaction = {
 	wasRefunded: boolean;
 	customer: { id: string; name: string };
 	transactionProducts: TransactionProduct[];
+	total: number;
 };
 
 export type TransactionsState = {
@@ -78,7 +79,7 @@ export const getTransactions = createAsyncThunk(
 		let transactions = await result(
 			pb.collection("transactions").getFullList({
 				expand: "transaction_product_ids.product_id.category_id, customer_id",
-				sort: "-date",
+				sort: "-created",
 			}),
 		);
 
@@ -87,10 +88,14 @@ export const getTransactions = createAsyncThunk(
 
 		const t = moveExpandsInline(transactions) as RecordExpandless[];
 
+		let total = 0;
+
 		const transactionsList = t.map((transaction: RecordExpandless) => {
 			// create a list of all the transactionProducts for the transaction
 			const transactionProducts = transaction.transaction_product_ids.map(
 				(transactionProduct: RecordExpandless) => {
+					total += transactionProduct.price_sold * transactionProduct.qty_sold;
+
 					return {
 						id: transactionProduct.id,
 						price_sold: transactionProduct.price_sold,
@@ -114,10 +119,11 @@ export const getTransactions = createAsyncThunk(
 
 			return {
 				id: transaction.id,
-				date: transaction.date,
+				date: transaction.created,
 				customer,
 				wasRefunded: transaction.wasRefunded,
 				transactionProducts,
+				total,
 			} satisfies Transaction;
 		});
 

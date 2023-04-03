@@ -89,12 +89,7 @@ export function TransactionsPage() {
 															</ActionIcon>
 														}
 													>
-														{dineroFormat(
-															transaction.transactionProducts.reduce(
-																(sum, pr) => sum + pr.qty_sold * pr.price_sold,
-																0,
-															),
-														)}
+														{dineroFormat(transaction.total)}
 													</Badge>
 												</Group>
 
