@@ -36,7 +36,6 @@ export function ProductDrawer(props: {
 	const notify = (message: string) => {
 		showNotification({
 			message: t(message),
-			autoClose: 1500,
 			loading: true,
 		});
 	};

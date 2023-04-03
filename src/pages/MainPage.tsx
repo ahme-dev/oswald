@@ -27,7 +27,6 @@ export function MainPage() {
 			showNotification({
 				message: t(checkoutState.error),
 				icon: <XMarkIcon />,
-				autoClose: false,
 				onClose: async () => dispatch(checkoutActions.clearError()),
 			});
 		}
@@ -37,7 +36,6 @@ export function MainPage() {
 			showNotification({
 				message: t(productsState.error),
 				icon: <XMarkIcon />,
-				autoClose: false,
 				onClose: async () => dispatch(productsActions.clearError()),
 			});
 		}
@@ -118,7 +116,6 @@ export function MainPage() {
 									processItems={() => {
 										showNotification({
 											message: t("Saving checkout..."),
-											autoClose: 1500,
 											loading: true,
 										});
 										dispatch(createTransaction(checkout.items));

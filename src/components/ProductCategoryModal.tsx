@@ -58,7 +58,6 @@ export function ProductCategoryModal(props: {
 	const tryEditCategory = async () => {
 		showNotification({
 			message: t("Editing category..."),
-			autoClose: 1500,
 			loading: true,
 		});
 
@@ -73,7 +72,6 @@ export function ProductCategoryModal(props: {
 	const tryAddCategory = async () => {
 		showNotification({
 			message: t("Adding category..."),
-			autoClose: 1500,
 			loading: true,
 		});
 
@@ -83,7 +81,6 @@ export function ProductCategoryModal(props: {
 	const tryDeleteCategory = async (id: string) => {
 		showNotification({
 			message: t("Deleting category..."),
-			autoClose: 1500,
 			loading: true,
 		});
 

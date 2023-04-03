@@ -43,7 +43,6 @@ export function TransactionsPage() {
 		showNotification({
 			message: t(transactionsState.error),
 			icon: <XMarkIcon />,
-			autoClose: false,
 			onClose: async () => dispatch(transactionsActions.clearError()),
 		});
 	}, [transactionsState.error]);

@@ -38,7 +38,6 @@ export function ProductsPage() {
 		showNotification({
 			message: t(productsState.error),
 			icon: <XMarkIcon />,
-			autoClose: false,
 			onClose: async () => dispatch(productsActions.clearError()),
 		});
 	}, [productsState.error]);
