@@ -1,4 +1,4 @@
-import { QueueListIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { QueueListIcon } from "@heroicons/react/24/solid";
 import {
 	Card,
 	Stack,
@@ -10,7 +10,6 @@ import {
 	NumberInput,
 	ScrollArea,
 	ActionIcon,
-	Box,
 	Tooltip,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
