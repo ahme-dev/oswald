@@ -114,7 +114,7 @@ export function ProductList(props: {
 
 	return (
 		<Stack h={"83vh"}>
-			<ScrollArea offsetScrollbars>
+			<ScrollArea offsetScrollbars type="auto">
 				<SimpleGrid
 					cols={props.smaller ? 3 : 4}
 					spacing="sm"

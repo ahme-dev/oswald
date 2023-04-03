@@ -54,7 +54,7 @@ export function TransactionsPage() {
 			</Flex>
 
 			<Stack h={"83vh"}>
-				<ScrollArea offsetScrollbars>
+				<ScrollArea offsetScrollbars type="auto">
 					{transactionsState.loading ? (
 						<Center h={"100%"}>
 							<Loader></Loader>

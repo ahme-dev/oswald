@@ -7,6 +7,7 @@ import {
 	Group,
 	Divider,
 	NumberInput,
+	ScrollArea,
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import { CheckoutType } from "../stores/checkout";
@@ -26,33 +27,37 @@ export function Checkout(props: {
 				<Title size={"h3"}>{t("Customer")}</Title>
 			</Group>
 			{/* Checkout items from store */}
-			<Stack spacing={"sm"}>
-				{props.state.items.length === 0 ? (
-					<Text>{t("No items in checkout")}</Text>
-				) : (
-					props.state.items.map((chItem, index: number) => (
-						<Card withBorder py="xs" key={chItem.id}>
-							<Group position="apart">
-								<Group spacing={"sm"}>
-									<Text weight={"bold"}>{dineroFormat(chItem.price)}</Text>
-									<Divider size="sm" orientation="vertical"></Divider>
-									<Text weight={"bold"}>{chItem.name}</Text>
-								</Group>
-								<Group spacing={"sm"}>
-									<NumberInput
-										min={1}
-										max={chItem.qtyLimit}
-										sx={{ width: "4rem" }}
-										value={chItem.qtyWanted}
-										onChange={(evt: any) => {
-											props.changeItemQty(index, evt);
-										}}
-									></NumberInput>
-								</Group>
-							</Group>
-						</Card>
-					))
-				)}
+			<Stack h={"55vh"}>
+				<ScrollArea offsetScrollbars type="auto">
+					<Stack spacing={"sm"} h={"100%"}>
+						{props.state.items.length === 0 ? (
+							<Text>{t("No items in checkout")}</Text>
+						) : (
+							props.state.items.map((chItem, index: number) => (
+								<Card withBorder py="xs" key={chItem.id}>
+									<Group position="apart">
+										<Group spacing={"sm"}>
+											<Text weight={"bold"}>{dineroFormat(chItem.price)}</Text>
+											<Divider size="sm" orientation="vertical"></Divider>
+											<Text weight={"bold"}>{chItem.name}</Text>
+										</Group>
+										<Group spacing={"sm"}>
+											<NumberInput
+												min={1}
+												max={chItem.qtyLimit}
+												sx={{ width: "4rem" }}
+												value={chItem.qtyWanted}
+												onChange={(evt: any) => {
+													props.changeItemQty(index, evt);
+												}}
+											></NumberInput>
+										</Group>
+									</Group>
+								</Card>
+							))
+						)}
+					</Stack>
+				</ScrollArea>
 			</Stack>
 			{/* Checkout items from store end */}
 			<Group position="apart" align={"center"}>
