@@ -27,7 +27,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
-import { refundTransaction } from "../stores/transactions";
+import { TransactionsState, refundTransaction } from "../stores/transactions";
 import { dineroFormat } from "../utils/currency";
 
 export function TransactionsPage() {
@@ -54,16 +54,16 @@ export function TransactionsPage() {
 			</Flex>
 
 			<Stack h={"83vh"}>
-				<ScrollArea offsetScrollbars type="auto">
-					{transactionsState.loading ? (
-						<Center h={"100%"}>
-							<Loader></Loader>
-						</Center>
-					) : transactionsState.list.length === 0 ? (
-						<Center h={"100%"}>
-							<Text>{t("No transactions found")}</Text>
-						</Center>
-					) : (
+				{transactionsState.loading ? (
+					<Center h={"100%"}>
+						<Loader></Loader>
+					</Center>
+				) : transactionsState.list.length <= 0 ? (
+					<Center h={"100%"}>
+						<Text>{t("No transactions found")}</Text>
+					</Center>
+				) : (
+					<ScrollArea offsetScrollbars type="auto">
 						<Accordion variant="separated" h={"100%"}>
 							{transactionsState.list.map((transaction) => {
 								return (
@@ -164,8 +164,9 @@ export function TransactionsPage() {
 								);
 							})}
 						</Accordion>
-					)}
-				</ScrollArea>
+						)
+					</ScrollArea>
+				)}
 			</Stack>
 		</>
 	);
