@@ -101,6 +101,7 @@ const resources = {
 			"Logged in as": "داخڵبوویت بە ناوی",
 			Logout: "بچۆرە دەرەوە",
 			"Level of permissions": "ئاستی ڕێگەپێدان",
+			"You're not permitted to access that page": "تۆ ناتوانیت ئەم بەشە ببینیت",
 
 			// overview
 			Overview: "گشتی",

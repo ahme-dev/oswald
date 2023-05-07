@@ -68,7 +68,7 @@ function AppInner() {
 
 		// notify user
 		showNotification({
-			message: "You're not permitted to access that page",
+			message: t("You're not permitted to access that page"),
 			icon: <XMarkIcon />,
 			autoClose: 2500,
 		});
