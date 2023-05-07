@@ -46,6 +46,7 @@ A POS System for small shops, available in kurdish and english.
 
 - [TODO] View your sales data in elegant charts and diagrams.
 - [TODO] Multiple users and roles with auth between them.
+- [TODO] Attribute transactions to users.
 - [TODO] Handle multiple currencies
 - [TODO] Scan product codes for checkout and product addition
 - [TODO] Generate printable transaction logs

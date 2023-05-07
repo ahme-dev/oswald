@@ -96,11 +96,15 @@ export function AuthPage() {
 									<Text weight="bolder" fz="lg">
 										{t("Logged in as")}
 									</Text>
-									<Badge size="xl">
-										{/* <Text weight="bolder" fz="lg" color={settingsState.color}> */}
-										{user.username}
-										{/* </Text> */}
-									</Badge>
+									<Badge size="xl">{user.username}</Badge>
+								</Group>
+							</Card>
+							<Card>
+								<Group spacing={"sm"}>
+									<Text weight="bolder" fz="lg">
+										{t("Level of permissions")}
+									</Text>
+									<Badge size="xl">{user.permit}</Badge>
 								</Group>
 							</Card>
 							<Button onClick={doLogout} size="md" loading={isLoading}>

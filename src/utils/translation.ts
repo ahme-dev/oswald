@@ -100,6 +100,7 @@ const resources = {
 			Auth: "خۆناساندن",
 			"Logged in as": "داخڵبوویت بە ناوی",
 			Logout: "بچۆرە دەرەوە",
+			"Level of permissions": "ئاستی ڕێگەپێدان",
 
 			// overview
 			Overview: "گشتی",
