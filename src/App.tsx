@@ -2,7 +2,10 @@ import { useLocation } from "wouter";
 import { useEffect } from "react";
 
 import { createEmotionCache, MantineProvider } from "@mantine/core";
-import { NotificationsProvider } from "@mantine/notifications";
+import {
+	NotificationsProvider,
+	showNotification,
+} from "@mantine/notifications";
 
 import { Layout } from "./Layout";
 import { AuthPage } from "./pages/AuthPage";
@@ -21,6 +24,8 @@ import { getCategories, getProducts } from "./stores/products";
 import { getTransactions } from "./stores/transactions";
 import { AboutPage } from "./pages/AboutPage";
 import { pb } from "./utils/pbase";
+import { XMarkIcon } from "@heroicons/react/24/solid";
+import { useTranslation } from "react-i18next";
 
 // right to left caching for emotion
 const rtlCache = createEmotionCache({
@@ -45,6 +50,9 @@ function AppInner() {
 	// hook to control router
 	const [location, setLocation] = useLocation();
 
+	// hook to translate
+	const { t } = useTranslation();
+
 	// set language on app init according to settings state
 	useEffect(() => {
 		i18n.changeLanguage(settingsState.rightToLeft ? "ku" : "en");
@@ -52,6 +60,22 @@ function AppInner() {
 		dispatch(getCategories());
 		dispatch(getTransactions());
 	}, []);
+
+	// function to redirect to auth page and notify of not permitted
+	const notPermitted = () => {
+		// set location (url) to auth page
+		setLocation("/auth");
+
+		// notify user
+		showNotification({
+			message: "You're not permitted to access that page",
+			icon: <XMarkIcon />,
+			autoClose: 2500,
+		});
+
+		// return (render) auth page
+		return <AuthPage />;
+	};
 
 	const router = () => {
 		// no auth pages
@@ -62,11 +86,9 @@ function AppInner() {
 				return <AuthPage />;
 		}
 
-		// if not authorized return auth page
-		if (!pb.authStore.isValid) {
-			setLocation("/auth");
-			return <AuthPage />;
-		}
+		// if not auth, redirect to auth page for other pages
+		if (!pb.authStore.isValid || pb.authStore.model === null)
+			return notPermitted();
 
 		// else if auth, make pages available
 		switch (location) {
@@ -76,11 +98,16 @@ function AppInner() {
 				return <ProductsPage />;
 			case "/transactions":
 				return <TransactionsPage />;
-			case "/overview":
+			case "/overview": {
+				// if not manager, redirect to auth page
+				if (pb.authStore.model.permit !== "manager") return notPermitted();
+				// else if manager, return overview page
 				return <OverviewPage />;
-			default:
-				return <AuthPage />;
+			}
 		}
+
+		// if nothing matched, return auth page
+		return notPermitted();
 	};
 
 	return (
