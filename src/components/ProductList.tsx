@@ -38,8 +38,15 @@ export function ProductList(props: {
 
 	// filter data on loading finish and filter changes
 	useEffect(() => {
-		// if loading or no data don't filter
-		if (props.loading || !props.data || props.data.length === 0) return;
+		// if loading, don't filter
+		if (props.loading) return;
+
+		// if there is no data, don't filter
+		// and indicate that filtering is done
+		if (!props.data || props.data.length === 0) {
+			setIsFiltering(false);
+			return;
+		}
 
 		// make new data using filters
 		let data = props.data.filter((item) => {
@@ -95,7 +102,7 @@ export function ProductList(props: {
 	// render
 
 	// if result is loading, show loader
-	if (props.loading || isFiltering) {
+	if (isFiltering) {
 		return (
 			<Center h={"100%"}>
 				<Loader></Loader>
