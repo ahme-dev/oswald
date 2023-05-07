@@ -36,9 +36,9 @@ export function AuthPage() {
 
 		validate: {
 			username: (value) =>
-				value.length > 4 ? null : t("Username is required"),
+				value.length > 0 ? null : t("Username is required"),
 			password: (value) =>
-				value.length > 4 ? null : t("Password is required"),
+				value.length > 7 ? null : t("Password is required"),
 		},
 	});
 
