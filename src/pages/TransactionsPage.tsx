@@ -27,7 +27,7 @@ import {
 	useAppDispatch,
 	useAppSelector,
 } from "../stores/root";
-import { TransactionsState, refundTransaction } from "../stores/transactions";
+import { refundTransaction } from "../stores/transactions";
 import { dineroFormat } from "../utils/currency";
 
 export function TransactionsPage() {
@@ -164,7 +164,6 @@ export function TransactionsPage() {
 								);
 							})}
 						</Accordion>
-						)
 					</ScrollArea>
 				)}
 			</Stack>

@@ -175,9 +175,10 @@ export function ProductDrawer(props: {
 				{productFormState.mode === "edit" ? (
 					<SimpleGrid cols={2} mt={16}>
 						<Button onClick={() => tryEditProduct()}>{t("Change")}</Button>
-						<Button variant="light" onClick={() => tryDeleteProduct()}>
+						{/* Deleting a product is really not a good idea */}
+						{/* <Button variant="light" onClick={() => tryDeleteProduct()}>
 							{t("Delete")}
-						</Button>
+						</Button> */}
 					</SimpleGrid>
 				) : (
 					<Button color={settingsState.color} onClick={tryAddProduct} mt={16}>
