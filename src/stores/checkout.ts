@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { getProducts, Product } from "./products";
 import { getTransactions } from "./transactions";
-import { isError, result } from "../utils/errors";
+import { hasError, resultAsync } from "tryresult";
 
 // types
 
@@ -166,7 +166,7 @@ export const createTransaction = createAsyncThunk(
 		// go through each item
 		for (let i = 0; i < items.length; i++) {
 			// create a new transactionProduct with the item
-			const transactionProduct = await result(
+			const transactionProduct = await resultAsync(
 				pb.collection("transaction_products").create({
 					product_id: items[i].id,
 					price_sold: items[i].price,
@@ -174,25 +174,25 @@ export const createTransaction = createAsyncThunk(
 				}),
 			);
 
-			if (isError(transactionProduct))
+			if (hasError(transactionProduct))
 				return rejectWithValue("Could not add transaction product");
 
 			// get the product record
-			const product = await result(
+			const product = await resultAsync(
 				pb.collection("products").getOne(items[i].id),
 			);
 
-			if (isError(product))
+			if (hasError(product))
 				return rejectWithValue("Could not get product info");
 
 			// substract the transaction quantity from the product available quantity
-			const error = await result(
+			const error = await resultAsync(
 				pb.collection("products").update(items[i].id, {
 					quantity_available: product.quantity_available - items[i].qtyWanted,
 				}),
 			);
 
-			if (isError(error))
+			if (hasError(error))
 				return rejectWithValue("Could not substract product quantity");
 
 			// add the product id to the transactionProductsIDs array
@@ -206,8 +206,9 @@ export const createTransaction = createAsyncThunk(
 		};
 
 		// create transaction using checkout data
-		const error = await result(pb.collection("transactions").create(data));
-		if (isError(error)) return rejectWithValue("Could not create transaction");
+		const error = await resultAsync(pb.collection("transactions").create(data));
+
+		if (hasError(error)) return rejectWithValue("Could not create transaction");
 
 		dispatch(getProducts());
 		dispatch(getTransactions());

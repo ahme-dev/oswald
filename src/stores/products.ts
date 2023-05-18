@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { isError, result } from "../utils/errors";
 import { pb } from "../utils/pbase";
+import { hasError, resultAsync } from "tryresult";
 
 // types
 
@@ -142,11 +142,11 @@ export const getProducts = createAsyncThunk(
 	"products/get",
 	async (_, { rejectWithValue }): Promise<any> => {
 		// get the products from the database
-		let products = await result(
+		let products = await resultAsync(
 			pb.collection("products").getFullList({ expand: "category_id" }),
 		);
 
-		if (isError(products))
+		if (hasError(products))
 			return rejectWithValue("Could not fetch products list");
 
 		// change them into a product list
@@ -186,9 +186,9 @@ export const createProduct = createAsyncThunk(
 			category_id: product.category.id,
 		};
 
-		const error = await result(pb.collection("products").create(data));
+		const error = await resultAsync(pb.collection("products").create(data));
 
-		if (isError(error)) return rejectWithValue("Could not create product");
+		if (hasError(error)) return rejectWithValue("Could not create product");
 
 		dispatch(getProducts());
 
@@ -209,11 +209,11 @@ export const editProduct = createAsyncThunk(
 			category_id: product.category.id,
 		};
 
-		const error = await result(
+		const error = await resultAsync(
 			pb.collection("products").update(product.id, data),
 		);
 
-		if (isError(error)) return rejectWithValue("Could not edit product");
+		if (hasError(error)) return rejectWithValue("Could not edit product");
 
 		dispatch(getProducts());
 
@@ -226,9 +226,11 @@ export const editProduct = createAsyncThunk(
 export const deleteProduct = createAsyncThunk(
 	"products/delete",
 	async (product: Pick<Product, "id">, { dispatch, rejectWithValue }) => {
-		const error = await result(pb.collection("products").delete(product.id));
+		const error = await resultAsync(
+			pb.collection("products").delete(product.id),
+		);
 
-		if (isError(error)) return rejectWithValue("Could not delete product");
+		if (hasError(error)) return rejectWithValue("Could not delete product");
 
 		dispatch(getProducts());
 
@@ -241,11 +243,11 @@ export const deleteProduct = createAsyncThunk(
 export const getCategories = createAsyncThunk(
 	"products/getCategories",
 	async (_, { rejectWithValue }) => {
-		let categories = await result(
+		let categories = await resultAsync(
 			pb.collection("product_categories").getFullList(1),
 		);
 
-		if (isError(categories))
+		if (hasError(categories))
 			return rejectWithValue("Could not get categories list");
 
 		let categoriesList = categories.map((category) => {
@@ -267,11 +269,11 @@ export const createCategory = createAsyncThunk(
 			name: product.name,
 		};
 
-		const error = await result(
+		const error = await resultAsync(
 			pb.collection("product_categories").create(data),
 		);
 
-		if (isError(error)) return rejectWithValue("Could not create category");
+		if (hasError(error)) return rejectWithValue("Could not create category");
 
 		dispatch(getCategories());
 
@@ -290,11 +292,11 @@ export const editCategory = createAsyncThunk(
 			name: product.name,
 		};
 
-		const error = await result(
+		const error = await resultAsync(
 			pb.collection("product_categories").update(product.id, data),
 		);
 
-		if (isError(error)) return rejectWithValue("Could not edit category");
+		if (hasError(error)) return rejectWithValue("Could not edit category");
 
 		dispatch(getCategories());
 
@@ -306,11 +308,11 @@ export const editCategory = createAsyncThunk(
 export const deleteCategory = createAsyncThunk(
 	"products/deleteCategory",
 	async (product: { id: string }, { dispatch, rejectWithValue }) => {
-		const error = await result(
+		const error = await resultAsync(
 			pb.collection("product_categories").delete(product.id),
 		);
 
-		if (isError(error)) return rejectWithValue("Could not delete category");
+		if (hasError(error)) return rejectWithValue("Could not delete category");
 
 		dispatch(getCategories());
 
