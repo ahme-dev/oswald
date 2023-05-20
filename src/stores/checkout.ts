@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { getProducts, Product } from "./products";
 import { getTransactions } from "./transactions";
-import { hasError, resultAsync } from "tryresult";
+import { isError, tryAsync } from "tryresult";
 
 // types
 
@@ -166,7 +166,7 @@ export const createTransaction = createAsyncThunk(
 		// go through each item
 		for (let i = 0; i < items.length; i++) {
 			// create a new transactionProduct with the item
-			const transactionProduct = await resultAsync(
+			const transactionProduct = await tryAsync(
 				pb.collection("transaction_products").create({
 					product_id: items[i].id,
 					price_sold: items[i].price,
@@ -174,25 +174,25 @@ export const createTransaction = createAsyncThunk(
 				}),
 			);
 
-			if (hasError(transactionProduct))
+			if (isError(transactionProduct))
 				return rejectWithValue("Could not add transaction product");
 
 			// get the product record
-			const product = await resultAsync(
+			const product = await tryAsync(
 				pb.collection("products").getOne(items[i].id),
 			);
 
-			if (hasError(product))
+			if (isError(product))
 				return rejectWithValue("Could not get product info");
 
 			// substract the transaction quantity from the product available quantity
-			const error = await resultAsync(
+			const error = await tryAsync(
 				pb.collection("products").update(items[i].id, {
 					quantity_available: product.quantity_available - items[i].qtyWanted,
 				}),
 			);
 
-			if (hasError(error))
+			if (isError(error))
 				return rejectWithValue("Could not substract product quantity");
 
 			// add the product id to the transactionProductsIDs array
@@ -206,9 +206,9 @@ export const createTransaction = createAsyncThunk(
 		};
 
 		// create transaction using checkout data
-		const error = await resultAsync(pb.collection("transactions").create(data));
+		const error = await tryAsync(pb.collection("transactions").create(data));
 
-		if (hasError(error)) return rejectWithValue("Could not create transaction");
+		if (isError(error)) return rejectWithValue("Could not create transaction");
 
 		dispatch(getProducts());
 		dispatch(getTransactions());

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { pb } from "../utils/pbase";
 import { moveExpandsInline, RecordExpandless } from "pocketbase-expandless";
 import { getProducts } from "./products";
-import { isError, result } from "../utils/errors";
+import { isError, tryAsync } from "tryresult";
 
 // trypes
 
@@ -76,7 +76,7 @@ export const transactionsSlice = createSlice<
 export const getTransactions = createAsyncThunk(
 	"transactions/get",
 	async (_, { rejectWithValue }) => {
-		let transactions = await result(
+		let transactions = await tryAsync(
 			pb.collection("transactions").getFullList({
 				expand: "transaction_product_ids.product_id.category_id, customer_id",
 				sort: "-created",
@@ -134,7 +134,7 @@ export const getTransactions = createAsyncThunk(
 export const refundTransaction = createAsyncThunk(
 	"transactions/refund",
 	async (transaction: { id: string }, { dispatch, rejectWithValue }) => {
-		const transactionData = await result(
+		const transactionData = await tryAsync(
 			pb.collection("transactions").getOne(transaction.id, {
 				expand: "transaction_product_ids.product_id.category_id, customer_id",
 			}),
@@ -151,7 +151,7 @@ export const refundTransaction = createAsyncThunk(
 		// go through each transaction product
 		for (const transactionProduct of t.transaction_product_ids) {
 			// update quantity using qty_sold
-			const qtyUpdateError = await result(
+			const qtyUpdateError = await tryAsync(
 				pb.collection("products").update(transactionProduct.product_id.id, {
 					quantity_available:
 						transactionProduct.qty_sold +
@@ -167,7 +167,7 @@ export const refundTransaction = createAsyncThunk(
 		}
 
 		// add wasRefunded flag to transaction
-		const refundFlagError = await result(
+		const refundFlagError = await tryAsync(
 			pb.collection("transactions").update(t.id, {
 				wasRefunded: true,
 			}),
